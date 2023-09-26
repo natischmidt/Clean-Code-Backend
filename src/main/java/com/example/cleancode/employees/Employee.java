@@ -6,10 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @AllArgsConstructor
@@ -17,6 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Employee {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -29,4 +27,20 @@ public class Employee {
     private String adress;
     private Role role;
 
+
+    public Employee(String firstName,
+                    String lastName,
+                    String ssNumber,
+                    String email,
+                    int phoneNumber,
+                    String adress,
+                    Role role) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.ssNumber = ssNumber;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.adress = adress;
+        this.role = role;
+    }
 }
