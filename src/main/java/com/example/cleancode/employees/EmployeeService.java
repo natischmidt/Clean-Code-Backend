@@ -1,6 +1,7 @@
 package com.example.cleancode.employees;
 
 import com.example.cleancode.exceptions.PersonAlreadyExistsException;
+import com.example.cleancode.exceptions.PersonDoesNotExistException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -33,4 +34,15 @@ public class EmployeeService {
         }
     }
 
+    public Long deleteEmployee(Long id) {
+        Optional<Employee> optEmp = employeeRepository.findById(id);
+
+        if(optEmp.isPresent()) {
+            employeeRepository.deleteById(id);
+            return id;
+        } else {
+            throw new PersonDoesNotExistException("There is no employee with that id in database.");
+        }
+
+    }
 }

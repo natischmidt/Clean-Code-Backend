@@ -1,9 +1,6 @@
 package com.example.cleancode.employees;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/employee")
@@ -18,6 +15,12 @@ public class EmployeeController {
     @PostMapping("/addEmployee")
     public Long addEmployee(@RequestBody CreateEmployeeDTO employeeDTO) {
         return employeeService.addEmployee(employeeDTO);
+    }
+
+    @DeleteMapping("/deleteEmployee")
+    public Long deleteEmployee(@RequestBody Long id) {
+        return employeeService.deleteEmployee(id);
+
     }
 
 }
