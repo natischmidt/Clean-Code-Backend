@@ -2,10 +2,7 @@ package com.example.cleancode.employees;
 
 import com.example.cleancode.enums.CustomerType;
 import com.example.cleancode.enums.Role;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -18,13 +15,13 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     private String firstName;
     private String lastName;
     private String ssNumber;
     private String email;
     private int phoneNumber;
     private String adress;
+    @Enumerated(EnumType.STRING)
     private Role role;
 
 

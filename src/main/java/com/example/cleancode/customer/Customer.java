@@ -24,5 +24,17 @@ public class Customer {
     private String email;
     private String phoneNumber;
     private String adress;
-    private CustomerType costumerType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "customer_type")
+    private CustomerType customerType;
+
+    public Customer(String firstName, String lastName, String ssNumber, String email, String phoneNumber, String adress, CustomerType customerType) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.ssNumber = ssNumber;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.adress = adress;
+        this.customerType = customerType;
+    }
 }
