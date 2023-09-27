@@ -17,9 +17,11 @@ import java.util.List;
 public class StartUpConfig {
 
     private final EmployeeRepository employeeRepository;
+    private final CustomerRepository customerRepository;
 
-    public StartUpConfig(EmployeeRepository employeeRepository) {
+    public StartUpConfig(EmployeeRepository employeeRepository, CustomerRepository customerRepository) {
         this.employeeRepository = employeeRepository;
+        this.customerRepository = customerRepository;
     }
 
     @Bean
@@ -45,7 +47,8 @@ public class StartUpConfig {
     public CommandLineRunner initJobDatabase(JobRepository jobRepository){
         return args -> {
             jobRepository.save(new Job(Jobtype.BASIC, null, JobStatus.PENDING,
-                    55, PaymentOption.KLARNA, employeeRepository.findById(1L).get()));
+                    55, PaymentOption.KLARNA, employeeRepository.findById(1L).get(),
+                    customerRepository.findById(1L).get()));
         };
     }
 }

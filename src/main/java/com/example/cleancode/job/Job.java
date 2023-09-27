@@ -1,5 +1,6 @@
 package com.example.cleancode.job;
 
+import com.example.cleancode.customer.Customer;
 import com.example.cleancode.employees.Employee;
 import com.example.cleancode.enums.JobStatus;
 import com.example.cleancode.enums.Jobtype;
@@ -37,6 +38,11 @@ public class Job {
     @JsonIgnore
     private Employee employee;
 
+    @ManyToOne
+    @JoinColumn(name = "cus_id")
+    @JsonIgnore
+    private Customer customer;
+
 
     public Job(
             Jobtype jobtype,
@@ -44,12 +50,14 @@ public class Job {
             JobStatus jobStatus,
             int squareMeters,
             PaymentOption paymentOption,
-            Employee employee) {
+            Employee employee,
+            Customer customer) {
         this.jobtype = jobtype;
         this.date = date;
         this.jobStatus = jobStatus;
         this.squareMeters = squareMeters;
         this.paymentOption = paymentOption;
         this.employee = employee;
+        this.customer = customer;
     }
 }

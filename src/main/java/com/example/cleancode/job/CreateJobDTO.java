@@ -14,4 +14,5 @@ public class CreateJobDTO {
     private JobStatus jobStatus;
     private int squareMeters;
     private PaymentOption paymentOption;
+    private Long customerId;
 }
