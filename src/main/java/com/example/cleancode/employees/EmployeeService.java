@@ -4,6 +4,7 @@ import com.example.cleancode.exceptions.PersonAlreadyExistsException;
 import com.example.cleancode.exceptions.PersonDoesNotExistException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,7 +26,8 @@ public class EmployeeService {
                     employeeDTO.getEmail(),
                     employeeDTO.getPhoneNumber(),
                     employeeDTO.getAdress(),
-                    employeeDTO.getRole());
+                    employeeDTO.getRole(),
+                    List.of());
 
             employeeRepository.save(employee);
             return employee.getId();
