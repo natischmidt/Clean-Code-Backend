@@ -1,6 +1,5 @@
 package com.example.cleancode.employees;
 
-import com.example.cleancode.enums.CustomerType;
 import com.example.cleancode.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,13 +13,14 @@ public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ManyToOne(mappedBy = "job")
     private long id;
     private String firstName;
     private String lastName;
     private String ssNumber;
     private String email;
     private int phoneNumber;
-    private String adress;
+    private String address;
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -30,14 +30,14 @@ public class Employee {
                     String ssNumber,
                     String email,
                     int phoneNumber,
-                    String adress,
+                    String address,
                     Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.ssNumber = ssNumber;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.adress = adress;
+        this.address = address;
         this.role = role;
     }
 }

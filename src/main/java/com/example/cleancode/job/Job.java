@@ -29,7 +29,12 @@ public class Job {
     @Enumerated(EnumType.STRING)
     private PaymentOption paymentOption;
 
-    public Job(Jobtype jobtype, Date date, JobStatus jobStatus, int squareMeters, PaymentOption paymentOption) {
+    public Job(
+            Jobtype jobtype,
+            Date date,
+            JobStatus jobStatus,
+            int squareMeters,
+            PaymentOption paymentOption) {
         this.jobtype = jobtype;
         this.date = date;
         this.jobStatus = jobStatus;
