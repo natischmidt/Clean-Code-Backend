@@ -2,8 +2,10 @@ package com.example.cleancode.customer;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/customer")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CustomerController {
 
@@ -13,9 +15,26 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @PostMapping("/createCustomer")
+    @PostMapping("/create")
     public CustomerDTO createCustomer(@RequestBody CustomerDTO customerDTO){
         return customerService.createCustomer(customerDTO);
+    }
+    @DeleteMapping("/delete/{id}")
+    public String removeCustomer(@PathVariable Long id){
+        return customerService.deleteCustomer(id);
+    }
+    @PatchMapping("/update/{id}")
+    public CustomerDTO changeCustomerInfo(@PathVariable Long id,
+                                          @RequestBody CustomerDTO customerDTO){
+        return customerService.updateCustomerInfo(id, customerDTO);
+    }
+    @GetMapping("/all")
+    public List<CustomerDTO> getAllCustomers(){
+        return customerService.getAllCustomers();
+    }
+    @GetMapping("/{id}")
+    public CustomerDTO getCustomerById(@PathVariable Long id){
+        return customerService.getCustomerById(id);
     }
 
 }
