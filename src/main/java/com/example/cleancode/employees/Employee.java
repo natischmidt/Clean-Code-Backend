@@ -23,7 +23,7 @@ public class Employee {
     private String password;
     private String ssNumber;
     private String email;
-    private int phoneNumber;
+    private String phoneNumber;
     private String address;
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -36,7 +36,7 @@ public class Employee {
                     String password,
                     String ssNumber,
                     String email,
-                    int phoneNumber,
+                    String phoneNumber,
                     String address,
                     Role role,
                     List<Job> jobList) {

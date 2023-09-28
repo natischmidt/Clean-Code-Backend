@@ -58,7 +58,7 @@ public class StartUpConfig {
                     "password",
                     "5607144544",
                     "kent@kent.kent",
-                    0734123323,
+                    "0734123323",
                     "adressvägen 23",
                     Role.EMPLOYEE,
                     List.of()));
@@ -69,7 +69,7 @@ public class StartUpConfig {
                     "password",
                     "5607144543",
                     "kentadmin@admin.kent",
-                    0742424242,
+                    "0742424242",
                     "adressvägen 65",
                     Role.ADMIN,
                     List.of()));

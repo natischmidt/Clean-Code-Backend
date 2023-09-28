@@ -1,5 +1,6 @@
 package com.example.cleancode.employees;
 
+import com.example.cleancode.exceptions.InvalidRequestException;
 import com.example.cleancode.exceptions.PersonAlreadyExistsException;
 import com.example.cleancode.exceptions.PersonDoesNotExistException;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,12 @@ public class EmployeeService {
         this.employeeRepository = employeeRepository;
     }
 
-    public Long addEmployee(CreateEmployeeDTO employeeDTO) {
+    public Long createEmployee(CreateEmployeeDTO employeeDTO) {
+
+        if (!checkDTO(employeeDTO)) {
+            throw new InvalidRequestException("One or more fields have invalid or missing content.");
+        }
+
         Optional<Employee> optEmp = employeeRepository.findBySsNumber(employeeDTO.getSsNumber());
         if (optEmp.isEmpty()) {
             Employee employee = new Employee(
@@ -27,7 +33,7 @@ public class EmployeeService {
                     employeeDTO.getSsNumber(),
                     employeeDTO.getEmail(),
                     employeeDTO.getPhoneNumber(),
-                    employeeDTO.getAdress(),
+                    employeeDTO.getAddress(),
                     employeeDTO.getRole(),
                     List.of());
 
@@ -80,5 +86,17 @@ public class EmployeeService {
                 employee.getRole());
     }
 
+    private Boolean checkDTO(CreateEmployeeDTO dto) {
+        //Checks so that fields are not null, and that email and phone number are valid formats.
+
+        return dto.getFirstName() != null
+                && dto.getLastName() != null
+                && dto.getPassword() != null
+                && dto.getSsNumber() != null
+                && dto.getEmail().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
+                && dto.getPhoneNumber().matches("^\\D*(\\d\\D*){8,12}$")
+                && dto.getAddress() != null
+                && dto.getRole() != null;
+    }
 
 }

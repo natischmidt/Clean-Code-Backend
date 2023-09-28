@@ -12,7 +12,7 @@ public class GetEmployeeDTO {
     private String lastName;
     private String ssNumber;
     private String email;
-    private int phoneNumber;
+    private String phoneNumber;
     private String adress;
     private Role role;
 }

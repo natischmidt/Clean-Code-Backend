@@ -1,7 +1,6 @@
 package com.example.cleancode.employees;
 
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -14,9 +13,10 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    @PostMapping("/addEmployee")
-    public Long addEmployee(@RequestBody CreateEmployeeDTO employeeDTO) {
-        return employeeService.addEmployee(employeeDTO);
+    @PostMapping("/createEmployee")
+    public Long createEmployee(@RequestBody CreateEmployeeDTO employeeDTO) {
+
+        return employeeService.createEmployee(employeeDTO);
     }
 
     @DeleteMapping("/deleteEmployee")
@@ -33,5 +33,7 @@ public class EmployeeController {
     public List<GetEmployeeDTO> getAllEmployees() {
         return employeeService.getAllEmployees();
     }
+
+
 
 }
