@@ -1,5 +1,6 @@
 package com.example.cleancode.job;
 
+import com.example.cleancode.availability.Availability;
 import com.example.cleancode.customer.Customer;
 import com.example.cleancode.employees.Employee;
 import com.example.cleancode.enums.JobStatus;
@@ -16,6 +17,7 @@ import org.springframework.cglib.core.Local;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -35,6 +37,9 @@ public class Job {
     private int squareMeters;
     @Enumerated(EnumType.STRING)
     private PaymentOption paymentOption;
+
+    @ManyToMany(mappedBy = "jobs")
+    private List<Availability> availabilities;
 
     @ManyToOne
     @JoinColumn(name = "emp_id")

@@ -1,5 +1,6 @@
 package com.example.cleancode.employees;
 
+import com.example.cleancode.availability.Availability;
 import com.example.cleancode.enums.Role;
 import com.example.cleancode.job.Job;
 import jakarta.persistence.*;
@@ -27,6 +28,9 @@ public class Employee {
     private String address;
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @ManyToMany(mappedBy = "employees")
+    private List<Availability> availabilities;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Job> jobList = new ArrayList<>();
