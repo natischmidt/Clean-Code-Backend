@@ -1,6 +1,5 @@
 package com.example.cleancode.customer;
 
-import com.example.cleancode.enums.CustomerType;
 import com.example.cleancode.exceptions.CustomerAlreadyExistsException;
 import com.example.cleancode.exceptions.CustomerDoesNotExistException;
 import org.springframework.stereotype.Service;
