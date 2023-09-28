@@ -20,6 +20,7 @@ public class Employee {
     private long id;
     private String firstName;
     private String lastName;
+    private String password;
     private String ssNumber;
     private String email;
     private int phoneNumber;
@@ -32,6 +33,7 @@ public class Employee {
 
     public Employee(String firstName,
                     String lastName,
+                    String password,
                     String ssNumber,
                     String email,
                     int phoneNumber,
@@ -40,6 +42,7 @@ public class Employee {
                     List<Job> jobList) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.password = password;
         this.ssNumber = ssNumber;
         this.email = email;
         this.phoneNumber = phoneNumber;

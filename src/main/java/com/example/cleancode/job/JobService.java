@@ -4,6 +4,8 @@ import com.example.cleancode.customer.CustomerRepository;
 import com.example.cleancode.employees.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class JobService {
 
@@ -18,18 +20,18 @@ public class JobService {
         this.customerRepository = customerRepository;
     }
 
-
     public Long createJob(CreateJobDTO createJobDTO) {
+
         Job job = new Job(
+
                 createJobDTO.getJobtype(),
-                createJobDTO.getDate(),
+                createJobDTO.getDateAndTime(),
                 createJobDTO.getJobStatus(),
                 createJobDTO.getSquareMeters(),
                 createJobDTO.getPaymentOption(),
                 //Temporary fields
                 employeeRepository.findById(1L).get(),
                 customerRepository.findById(1L).get());
-
 
         jobRepository.save(job);
 

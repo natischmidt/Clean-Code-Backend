@@ -11,6 +11,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 
 @Configuration
@@ -27,29 +29,56 @@ public class StartUpConfig {
     @Bean
     public CommandLineRunner initCustomerDatabase(CustomerRepository customerRepository){
         return args -> {
-            customerRepository.save(new Customer("lars", "olof", "9105055555",
-                    "hej@hej.hej", "0730123123",
-                    "adressgatan 12", CustomerType.BUSINESS ));
-            customerRepository.save(new Customer("Hilfrid", "Ragnarsson", "2504306666",
-                    "hilfrid@supercompany.com", "0730424258",
-                    "Ragnargatan 25", CustomerType.PRIVATE));
+            customerRepository.save(new Customer(
+                    "lars",
+                    "olof",
+                    "9105055555",
+                    "hej@hej.hej",
+                    "0730123123",
+                    "adressgatan 12",
+                    CustomerType.BUSINESS
+            ));
+            customerRepository.save(new Customer(
+                    "Hilfrid",
+                    "Ragnarsson",
+                    "2504306666",
+                      "hilfrid@supercompany.com",
+                    "0730424258",
+                    "Ragnargatan 25",
+                    CustomerType.PRIVATE
+            ));
         };
     }
     @Bean
     public CommandLineRunner initEmployeeDatabase(EmployeeRepository employeeRepository){
         return args -> {
-            employeeRepository.save(new Employee("Kent","olofsson",
-                    "5607144544", "kent@kent.kent", 0734123323, "adressvägen 23",
-                    Role.EMPLOYEE, List.of()));
-            employeeRepository.save(new Employee("Admin","Adminsson",
-                    "5607144543", "kentadmin@admin.kent", 0742424242, "adressvägen 65",
-                    Role.ADMIN, List.of()));
+            employeeRepository.save(new Employee(
+                    "Kent",
+                    "olofsson",
+                    "password",
+                    "5607144544",
+                    "kent@kent.kent",
+                    0734123323,
+                    "adressvägen 23",
+                    Role.EMPLOYEE,
+                    List.of()));
+
+            employeeRepository.save(new Employee(
+                    "Admin",
+                    "Adminsson",
+                    "password",
+                    "5607144543",
+                    "kentadmin@admin.kent",
+                    0742424242,
+                    "adressvägen 65",
+                    Role.ADMIN,
+                    List.of()));
         };
     }
     @Bean
     public CommandLineRunner initJobDatabase(JobRepository jobRepository){
         return args -> {
-            jobRepository.save(new Job(Jobtype.BASIC, null, JobStatus.PENDING,
+            jobRepository.save(new Job(Jobtype.BASIC, "2023-11-24T12:00", JobStatus.PENDING,
                     55, PaymentOption.KLARNA, employeeRepository.findById(1L).get(),
                     customerRepository.findById(1L).get()));
         };
