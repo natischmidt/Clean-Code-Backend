@@ -81,7 +81,7 @@ public class StartUpConfig {
     @Bean
     public CommandLineRunner initJobDatabase(JobRepository jobRepository){
         return args -> {
-            jobRepository.save(new Job(Jobtype.BASIC, "2023-11-24T12:00", JobStatus.PENDING,
+            jobRepository.save(new Job(Jobtype.BASIC, "2023-11-24T12:00", TimeSlots.EVENING, JobStatus.PENDING,
                     55, PaymentOption.KLARNA, employeeRepository.findById(1L).get(),
                     customerRepository.findById(1L).get()));
         };

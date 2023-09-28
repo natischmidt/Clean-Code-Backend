@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,4 +28,13 @@ public class Availability {
 
     @ManyToMany
     private List<Job> jobs;
+
+
+    public void addEmployee(Employee employee) {
+        if (this.employees == null) {
+            this.employees = new ArrayList<>();
+        }
+        this.employees.add(employee);
+    }
+
 }

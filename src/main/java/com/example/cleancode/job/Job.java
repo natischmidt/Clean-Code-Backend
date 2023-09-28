@@ -6,6 +6,7 @@ import com.example.cleancode.employees.Employee;
 import com.example.cleancode.enums.JobStatus;
 import com.example.cleancode.enums.Jobtype;
 import com.example.cleancode.enums.PaymentOption;
+import com.example.cleancode.enums.TimeSlots;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -32,6 +33,7 @@ public class Job {
     @Enumerated(EnumType.STRING)
     private Jobtype jobtype;
     private LocalDateTime date;
+    private TimeSlots timeSlot;
     @Enumerated(EnumType.STRING)
     private JobStatus jobStatus;
     private int squareMeters;
@@ -53,15 +55,17 @@ public class Job {
 
     public Job(
             Jobtype jobtype,
-            String dateAndTime,
+            String date,
+            TimeSlots timeSlot,
             JobStatus jobStatus,
             int squareMeters,
             PaymentOption paymentOption,
             Employee employee,
             Customer customer) {
         this.jobtype = jobtype;
-        this.date = LocalDateTime.parse(dateAndTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        this.date = LocalDateTime.parse(date, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         this.jobStatus = jobStatus;
+        this.timeSlot = timeSlot;
         this.squareMeters = squareMeters;
         this.paymentOption = paymentOption;
         this.employee = employee;
