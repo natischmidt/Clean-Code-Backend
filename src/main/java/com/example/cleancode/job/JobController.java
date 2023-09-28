@@ -1,9 +1,8 @@
 package com.example.cleancode.job;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/jobs")
@@ -18,7 +17,16 @@ public class JobController {
     @PostMapping("/createJob")
     public Long createJob(@RequestBody CreateJobDTO createJobDTO) {
         return jobService.createJob(createJobDTO);
+    }
 
+    @DeleteMapping("/deleteJob")
+    public Long deleteJob(@RequestHeader Long jobId){
+        return jobService.deleteJob(jobId);
+    }
+
+    @GetMapping("/getJob")
+    public Optional<Job> getJob(@RequestHeader Long jobId){
+        return jobService.getJob(jobId);
     }
 
 }
