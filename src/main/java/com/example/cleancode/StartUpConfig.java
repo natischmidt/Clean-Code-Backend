@@ -11,6 +11,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 
 @Configuration
@@ -76,7 +78,7 @@ public class StartUpConfig {
     @Bean
     public CommandLineRunner initJobDatabase(JobRepository jobRepository){
         return args -> {
-            jobRepository.save(new Job(Jobtype.BASIC, null, JobStatus.PENDING,
+            jobRepository.save(new Job(Jobtype.BASIC, "2023-11-24T12:00", JobStatus.PENDING,
                     55, PaymentOption.KLARNA, employeeRepository.findById(1L).get(),
                     customerRepository.findById(1L).get()));
         };
