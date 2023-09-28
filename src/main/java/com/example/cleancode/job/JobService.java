@@ -5,7 +5,9 @@ import com.example.cleancode.employees.EmployeeRepository;
 import com.example.cleancode.exceptions.JobDoesNotExistException;
 import com.example.cleancode.exceptions.PersonDoesNotExistException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,10 +43,10 @@ public class JobService {
         return job.getJobId();
     }
 
-    public Long deleteJob(Long id){
+    public Long deleteJob(Long id) {
         Optional<Job> optJob = jobRepository.findById(id);
 
-        if(optJob.isPresent()){
+        if (optJob.isPresent()) {
             jobRepository.deleteById(id);
             return id;
         } else {
@@ -56,11 +58,52 @@ public class JobService {
 
         Optional<Job> optJob = jobRepository.findById(id);
 
-        if(optJob.isPresent()){
+        if (optJob.isPresent()) {
             jobRepository.findById(id);
             return optJob;
         } else {
             throw new JobDoesNotExistException("There is no job with that id in database.");
+        }
+
+    }
+
+    public Optional<List<Job>> getAllJobs() {
+
+        List<Job> optAllJobs = jobRepository.findAll();
+
+        if (!optAllJobs.isEmpty()) {
+            return Optional.of(optAllJobs);
+        } else {
+            throw new JobDoesNotExistException("There is no jobs in the database");
+        }
+
+    }
+
+    @Transactional
+    public Optional<Job> updateJobInfo(Long id, Job job) {
+
+        Optional<Job> optionalJob = jobRepository.findById(id);
+
+        // Behöver man ha med squareMeters?
+        if (optionalJob.isPresent()) {
+            Job jobUpdate = optionalJob.get();
+
+            if (job.getJobtype() != null) {
+                jobUpdate.setJobtype(job.getJobtype());
+            }
+            if (job.getDate() != null) {
+                jobUpdate.setDate(job.getDate());
+            }
+            if (job.getJobStatus() != null) {
+                jobUpdate.setJobStatus(job.getJobStatus());
+            }
+            if (job.getPaymentOption() != null) {
+                jobUpdate.setPaymentOption(job.getPaymentOption());
+            }
+            jobRepository.save(jobUpdate);
+            return Optional.of(jobUpdate);
+        } else {
+            throw new JobDoesNotExistException("Job does not exist");
         }
 
     }

@@ -27,7 +27,7 @@ public class StartUpConfig {
     }
 
     @Bean
-    public CommandLineRunner initCustomerDatabase(CustomerRepository customerRepository){
+    public CommandLineRunner initCustomerDatabase(CustomerRepository customerRepository) {
         return args -> {
             customerRepository.save(new Customer(
                     "lars",
@@ -42,15 +42,16 @@ public class StartUpConfig {
                     "Hilfrid",
                     "Ragnarsson",
                     "2504306666",
-                      "hilfrid@supercompany.com",
+                    "hilfrid@supercompany.com",
                     "0730424258",
                     "Ragnargatan 25",
                     CustomerType.PRIVATE
             ));
         };
     }
+
     @Bean
-    public CommandLineRunner initEmployeeDatabase(EmployeeRepository employeeRepository){
+    public CommandLineRunner initEmployeeDatabase(EmployeeRepository employeeRepository) {
         return args -> {
             employeeRepository.save(new Employee(
                     "Kent",
@@ -75,11 +76,26 @@ public class StartUpConfig {
                     List.of()));
         };
     }
+
     @Bean
-    public CommandLineRunner initJobDatabase(JobRepository jobRepository){
+    public CommandLineRunner initJobDatabase(JobRepository jobRepository) {
         return args -> {
-            jobRepository.save(new Job(Jobtype.BASIC, "2023-11-24T12:00", JobStatus.PENDING,
-                    55, PaymentOption.KLARNA, employeeRepository.findById(1L).get(),
+            jobRepository.save(new Job(
+                    Jobtype.BASIC,
+                    "2023-11-24T12:00",
+                    JobStatus.PENDING,
+                    55,
+                    PaymentOption.KLARNA,
+                    employeeRepository.findById(1L).get(),
+                    customerRepository.findById(1L).get()));
+
+            jobRepository.save(new Job(
+                    Jobtype.BASIC,
+                    "2020-11-24T12:00",
+                    JobStatus.PENDING,
+                    55,
+                    PaymentOption.KLARNA,
+                    employeeRepository.findById(1L).get(),
                     customerRepository.findById(1L).get()));
         };
     }
