@@ -5,15 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-public class CreateEmployeeDTO {
+@AllArgsConstructor
+public class GetEmployeeDTO {
 
     private String firstName;
     private String lastName;
-    private String password;
     private String ssNumber;
     private String email;
     private int phoneNumber;
     private String adress;
     private Role role;
-
 }
