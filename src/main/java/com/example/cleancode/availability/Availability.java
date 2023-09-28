@@ -27,8 +27,7 @@ public class Availability {
     private List<Employee> employees;
 
     @ManyToMany
-    private List<Job> jobs;
-
+    private List<Job> jobs = new ArrayList<>();
 
     public void addEmployee(Employee employee) {
         if (this.employees == null) {

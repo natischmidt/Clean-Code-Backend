@@ -13,7 +13,7 @@ import java.util.Date;
 public class CreateJobDTO {
 
     private Jobtype jobtype;
-    private LocalDateTime date;
+    private String date;
     private TimeSlots timeSlot;
     private JobStatus jobStatus;
     private int squareMeters;

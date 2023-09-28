@@ -17,6 +17,7 @@ import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class Job {
     private PaymentOption paymentOption;
 
     @ManyToMany(mappedBy = "jobs")
-    private List<Availability> availabilities;
+    private List<Availability> availabilities = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "emp_id")
@@ -55,7 +56,7 @@ public class Job {
 
     public Job(
             Jobtype jobtype,
-            String date,
+            LocalDateTime date,
             TimeSlots timeSlot,
             JobStatus jobStatus,
             int squareMeters,
@@ -63,7 +64,7 @@ public class Job {
             Employee employee,
             Customer customer) {
         this.jobtype = jobtype;
-        this.date = LocalDateTime.parse(date, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        this.date = date;
         this.jobStatus = jobStatus;
         this.timeSlot = timeSlot;
         this.squareMeters = squareMeters;

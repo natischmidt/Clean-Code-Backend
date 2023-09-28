@@ -11,6 +11,7 @@ import com.example.cleancode.exceptions.PersonDoesNotExistException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,41 +31,52 @@ public class JobService {
         this.availabilityRepository = availabilityRepository;
     }
 
-    public void updateAvailability(Employee selectedEmployee, LocalDateTime date, TimeSlots timeSlot) {
+    public void updateAvailability(Employee selectedEmployee, LocalDateTime date, TimeSlots timeSlot, Job job) {
 
-        Availability availability = availabilityRepository.findByDateAndTimeSlots(date, timeSlot).orElse(new Availability());
+        Optional<Availability> optionalAvailability = availabilityRepository.findByDateAndTimeSlots(date, timeSlot);
+        Availability availability;
 
-        if (availability.getId() == null) {
+        if (optionalAvailability.isPresent()) {
+            availability = optionalAvailability.get();
+        } else {
+            availability = new Availability();
             availability.setDate(date);
             availability.setTimeSlots(timeSlot);
         }
 
         availability.addEmployee(selectedEmployee);
 
+        availability.getJobs().add(job);
+        job.getAvailabilities().add(availability);
+
         availabilityRepository.save(availability);
     }
 
-    public List<Employee> checkEmployeeAvailability(LocalDateTime date, TimeSlots timeSlot){
-        return employeeRepository.findAvailableEmployees(date, timeSlot);
+    public List<Employee> findUnbookedEmployees(LocalDateTime date, TimeSlots timeSlot){
+        return employeeRepository.findUnbookedEmployees(date, timeSlot);
     }
+
 
     public Long createJob(CreateJobDTO createJobDTO) {
 
-        List<Employee> availableEmployees = checkEmployeeAvailability(
-                createJobDTO.getDate(),
-                createJobDTO.getTimeSlot()
-        );
+        LocalDateTime date = LocalDateTime.parse(createJobDTO.getDate() + "T00:00:00");
 
-        if (availableEmployees.isEmpty()){
-            throw new RuntimeException("Det blev fel");
+        TimeSlots timeSlot = createJobDTO.getTimeSlot();
+
+        List<Employee> unbookedEmployees = findUnbookedEmployees(date, timeSlot);
+
+
+
+        if (unbookedEmployees.isEmpty()){
+            throw new RuntimeException("No employees are available for this time slot.");
         }
 
-        Employee assignedEmployee = availableEmployees.get(0);
+        Employee assignedEmployee = unbookedEmployees.get(0);
 
         Job job = new Job(
                 createJobDTO.getJobtype(),
-                createJobDTO.getDate().toString(),
-                createJobDTO.getTimeSlot(),
+                date,
+                timeSlot,
                 createJobDTO.getJobStatus(),
                 createJobDTO.getSquareMeters(),
                 createJobDTO.getPaymentOption(),
@@ -78,7 +90,9 @@ public class JobService {
 
         jobRepository.save(job);
 
-        updateAvailability(assignedEmployee, createJobDTO.getDate(), createJobDTO.getTimeSlot());
+        updateAvailability(assignedEmployee, date, timeSlot, job);
+
+
 
         return job.getJobId();
     }
