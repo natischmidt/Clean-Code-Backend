@@ -32,21 +32,26 @@ public class CustomerService {
     }
 
     public CustomerDTO createCustomer(CustomerDTO customerDTO) {
-        Optional<Customer> optCust = customerRepository.findBySsNumber(customerDTO.getSsNumber());
-        if (optCust.isEmpty()){
-            Customer customer = new Customer(
-                    customerDTO.getFirstName(),
-                    customerDTO.getLastName(),
-                    customerDTO.getSsNumber(),
-                    customerDTO.getEmail(),
-                    customerDTO.getPhoneNumber(),
-                    customerDTO.getAdress(),
-                    customerDTO.getCustomerType());
+        Optional<Customer> optCustSSN = customerRepository.findBySsNumber(customerDTO.getSsNumber());
+        Optional<Customer> optCustEmail = customerRepository.findByEmail(customerDTO.getEmail());
 
-            customerRepository.save(customer);
-        } else {
-            throw new CustomerAlreadyExistsException("Customer with the chosen SS-Number already exists");
+        if (optCustSSN.isPresent()) {
+            throw new CustomerAlreadyExistsException("Customer with SSN: " + customerDTO.getSsNumber() + " already exist");
         }
+        if (optCustEmail.isPresent()){
+            throw new CustomerAlreadyExistsException("Customer with E-mail: " + customerDTO.getEmail() + " already exist");
+        }
+
+        Customer customer = new Customer(
+                customerDTO.getFirstName(),
+                customerDTO.getLastName(),
+                customerDTO.getSsNumber(),
+                customerDTO.getEmail(),
+                customerDTO.getPhoneNumber(),
+                customerDTO.getAdress(),
+                customerDTO.getCustomerType());
+
+        customerRepository.save(customer);
         return customerDTO;
     }
 
