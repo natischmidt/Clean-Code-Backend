@@ -7,5 +7,5 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface AvailabilityRepository extends JpaRepository<Availability, Long> {
-    Optional<Availability> findByDateAndTimeSlot(LocalDateTime date, TimeSlots timeSlot);
+    Optional<Availability> findByDateAndTimeSlots(LocalDateTime date, TimeSlots timeSlot);
 }

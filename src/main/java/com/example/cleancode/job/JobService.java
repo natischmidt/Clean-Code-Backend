@@ -32,7 +32,7 @@ public class JobService {
 
     public void updateAvailability(Employee selectedEmployee, LocalDateTime date, TimeSlots timeSlot) {
 
-        Availability availability = availabilityRepository.findByDateAndTimeSlot(date, timeSlot).orElse(new Availability());
+        Availability availability = availabilityRepository.findByDateAndTimeSlots(date, timeSlot).orElse(new Availability());
 
         if (availability.getId() == null) {
             availability.setDate(date);
