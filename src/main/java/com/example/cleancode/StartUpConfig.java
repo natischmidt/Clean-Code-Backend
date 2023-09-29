@@ -32,7 +32,8 @@ public class StartUpConfig {
             customerRepository.save(new Customer(
                     "lars",
                     "olof",
-                    "9105055555",
+                    "Larssas måleri AB",
+                    "123445660654-orgnr",
                     "hej@hej.hej",
                     "0730123123",
                     "adressgatan 12",
@@ -41,7 +42,6 @@ public class StartUpConfig {
             customerRepository.save(new Customer(
                     "Hilfrid",
                     "Ragnarsson",
-                    "2504306666",
                     "hilfrid@supercompany.com",
                     "0730424258",
                     "Ragnargatan 25",

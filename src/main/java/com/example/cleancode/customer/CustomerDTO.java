@@ -9,7 +9,8 @@ import lombok.Setter;
 public class CustomerDTO {
     String firstName;
     String lastName;
-    String ssNumber;
+    String companyName;
+    String orgNumber;
     String email;
     String phoneNumber;
     String adress;
