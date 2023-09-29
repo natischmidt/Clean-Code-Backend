@@ -75,8 +75,30 @@ public class EmployeeService {
 
     }
 
+    public GetEmployeeDTO editEmployee(EditEmployeeDTO employeeDTO) {
+        Optional<Employee> optEmp = employeeRepository.findById(employeeDTO.getId());
+
+        if (optEmp.isPresent()) {
+            optEmp.get().setFirstName(employeeDTO.getFirstName());
+            optEmp.get().setLastName(employeeDTO.getLastName());
+            optEmp.get().setPassword(employeeDTO.getPassword());
+            optEmp.get().setSsNumber(employeeDTO.getSsNumber());
+            optEmp.get().setEmail(employeeDTO.getEmail());
+            optEmp.get().setPhoneNumber(employeeDTO.getPhoneNumber());
+            optEmp.get().setAddress(employeeDTO.getAddress());
+            optEmp.get().setRole(employeeDTO.getRole());
+
+        } else {
+            throw new PersonDoesNotExistException("No employee with that id was found!");
+        }
+
+        employeeRepository.save(optEmp.get());
+        return employeeToGetEmployeeDto(optEmp.get());
+    }
+
     private GetEmployeeDTO employeeToGetEmployeeDto(Employee employee) {
         return new GetEmployeeDTO(
+                employee.getId(),
                 employee.getFirstName(),
                 employee.getLastName(),
                 employee.getSsNumber(),
@@ -98,5 +120,4 @@ public class EmployeeService {
                 && dto.getAddress() != null
                 && dto.getRole() != null;
     }
-
 }
