@@ -2,6 +2,7 @@ package com.example.cleancode.job;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -28,5 +29,19 @@ public class JobController {
     public Optional<Job> getJob(@RequestHeader Long jobId){
         return jobService.getJob(jobId);
     }
+
+    @GetMapping("/getAllJobs")
+    public Optional<List<Job>> getAllJobs(){
+        return jobService.getAllJobs();
+    }
+
+    @PutMapping("/update/{id}")
+    public Optional<Job> updateJobInfo(@PathVariable Long id,
+                                       @RequestBody Job job){
+        return jobService.updateJobInfo(id, job);
+    }
+
+
+
 
 }
