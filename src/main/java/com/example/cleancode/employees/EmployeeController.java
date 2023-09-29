@@ -34,6 +34,12 @@ public class EmployeeController {
         return employeeService.getAllEmployees();
     }
 
+    @PutMapping("/editEmployee")
+    public GetEmployeeDTO editEmployee(@RequestBody EditEmployeeDTO employee) {
+
+        return employeeService.editEmployee(employee);
+    }
+
 
 
 }
