@@ -1,7 +1,9 @@
 package com.example.cleancode.customer;
 
+import com.example.cleancode.enums.CustomerType;
 import com.example.cleancode.exceptions.CustomerAlreadyExistsException;
 import com.example.cleancode.exceptions.CustomerDoesNotExistException;
+import com.example.cleancode.exceptions.CustomerInfoMissmatchException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +18,8 @@ public class CustomerService {
         CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setFirstName(customer.getFirstName());
         customerDTO.setLastName(customer.getLastName());
-        customerDTO.setSsNumber(customer.getSsNumber());
+        customerDTO.setCompanyName(customer.getCompanyName());
+        customerDTO.setOrgNumber(customer.getOrgNumber());
         customerDTO.setEmail(customer.getEmail());
         customerDTO.setPhoneNumber(customer.getPhoneNumber());
         customerDTO.setAdress(customer.getAdress());
@@ -31,27 +34,52 @@ public class CustomerService {
     }
 
     public CustomerDTO createCustomer(CustomerDTO customerDTO) {
-        Optional<Customer> optCustSSN = customerRepository.findBySsNumber(customerDTO.getSsNumber());
+
         Optional<Customer> optCustEmail = customerRepository.findByEmail(customerDTO.getEmail());
+        //om det är en business så får vi ett värde i company fältet, annars null
 
-        if (optCustSSN.isPresent()) {
-            throw new CustomerAlreadyExistsException("Customer with SSN: " + customerDTO.getSsNumber() + " already exist");
-        }
         if (optCustEmail.isPresent()){
-            throw new CustomerAlreadyExistsException("Customer with E-mail: " + customerDTO.getEmail() + " already exist");
+            throw new CustomerAlreadyExistsException(customerDTO.getEmail());
         }
 
-        Customer customer = new Customer(
-                customerDTO.getFirstName(),
-                customerDTO.getLastName(),
-                customerDTO.getSsNumber(),
-                customerDTO.getEmail(),
-                customerDTO.getPhoneNumber(),
-                customerDTO.getAdress(),
-                customerDTO.getCustomerType());
+        try {
+            if (customerDTO.getCompanyName() == null && customerDTO.getOrgNumber() == null){
+                Customer customer = new Customer(
+                        customerDTO.getFirstName(),
+                        customerDTO.getLastName(),
+                        customerDTO.getEmail(),
+                        customerDTO.getPhoneNumber(),
+                        customerDTO.getAdress(),
+                        CustomerType.PRIVATE);
 
-        customerRepository.save(customer);
-        return customerDTO;
+                customerRepository.save(customer);
+                return customerDTO;
+            }
+            if (customerDTO.getCompanyName() != null && customerDTO.getOrgNumber() != null){
+                Customer customer = new Customer(
+                        customerDTO.getFirstName(),
+                        customerDTO.getLastName(),
+                        customerDTO.getCompanyName(),
+                        customerDTO.getOrgNumber(),
+                        customerDTO.getEmail(),
+                        customerDTO.getPhoneNumber(),
+                        customerDTO.adress,
+                        CustomerType.BUSINESS);
+
+                customerRepository.save(customer);
+                return customerDTO;
+            }
+            if(customerDTO.getCompanyName() != null && customerDTO.getOrgNumber() == null){
+                throw new CustomerInfoMissmatchException("If companyName isn't null, you need a orgNumber");
+            }
+            if (customerDTO.getCompanyName() == null && customerDTO.getOrgNumber() != null){
+                throw new CustomerInfoMissmatchException("if orgNumber isn't null, you need a company name");
+            }
+            // ^ dom klagar i if-satserna, men tycker dom ser nice ut...
+        } catch (Exception e){
+            throw new RuntimeException("ERROR -->" + e.getMessage());
+        }
+        throw new CustomerInfoMissmatchException("Should not get this :(");
     }
 
 
@@ -76,8 +104,11 @@ public class CustomerService {
             if (customerDTO.getLastName() != null){
                 customerUpdate.setLastName(customerDTO.getLastName());
             }
-            if (customerDTO.getSsNumber() != null){
-                customerUpdate.setSsNumber(customerDTO.getSsNumber());
+            if (customerDTO.getCompanyName() != null){
+                customerUpdate.setCompanyName(customerDTO.getCompanyName());
+            }
+            if (customerDTO.getOrgNumber() != null){
+                customerUpdate.setOrgNumber(customerDTO.getOrgNumber());
             }
             if (customerDTO.getEmail() != null){
                 customerUpdate.setEmail(customerDTO.getEmail());
@@ -115,4 +146,6 @@ public class CustomerService {
             throw new CustomerDoesNotExistException(id);
         }
     }
+
+    // lägga till filter för
 }
