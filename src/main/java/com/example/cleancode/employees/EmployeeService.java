@@ -26,6 +26,10 @@ public class EmployeeService {
 
         Optional<Employee> optEmp = employeeRepository.findBySsNumber(employeeDTO.getSsNumber());
         if (optEmp.isEmpty()) {
+
+            Salary salary = new Salary(employeeDTO.getSalary());
+
+
             Employee employee = new Employee(
                     employeeDTO.getFirstName(),
                     employeeDTO.getLastName(),
@@ -35,9 +39,13 @@ public class EmployeeService {
                     employeeDTO.getPhoneNumber(),
                     employeeDTO.getAddress(),
                     employeeDTO.getRole(),
+                    salary,
                     List.of());
 
+            salary.setEmployee(employee);
             employeeRepository.save(employee);
+
+
             return employee.getId();
         } else {
             throw new PersonAlreadyExistsException("That person is already registered as an employee.");
@@ -53,7 +61,6 @@ public class EmployeeService {
         } else {
             throw new PersonDoesNotExistException("There is no employee with that id in database.");
         }
-
     }
 
     public GetEmployeeDTO getEmployee(Long empId) {
@@ -66,13 +73,11 @@ public class EmployeeService {
     }
 
     public List<GetEmployeeDTO> getAllEmployees() {
-
         List<Employee> empList = employeeRepository.findAll();
         return empList
                 .stream()
                 .map(emp -> employeeToGetEmployeeDto(emp))
                 .collect(Collectors.toList());
-
     }
 
     public GetEmployeeDTO editEmployee(EditEmployeeDTO employeeDTO) {
@@ -91,7 +96,6 @@ public class EmployeeService {
         } else {
             throw new PersonDoesNotExistException("No employee with that id was found!");
         }
-
         employeeRepository.save(optEmp.get());
         return employeeToGetEmployeeDto(optEmp.get());
     }
@@ -110,7 +114,6 @@ public class EmployeeService {
 
     private Boolean checkDTO(CreateEmployeeDTO dto) {
         //Checks so that fields are not null, and that email and phone number are valid formats.
-
         return dto.getFirstName() != null
                 && dto.getLastName() != null
                 && dto.getPassword() != null

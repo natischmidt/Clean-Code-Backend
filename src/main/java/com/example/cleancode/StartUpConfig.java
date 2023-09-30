@@ -4,15 +4,13 @@ import com.example.cleancode.customer.Customer;
 import com.example.cleancode.customer.CustomerRepository;
 import com.example.cleancode.employees.Employee;
 import com.example.cleancode.employees.EmployeeRepository;
+import com.example.cleancode.employees.Salary;
 import com.example.cleancode.enums.*;
 import com.example.cleancode.job.Job;
 import com.example.cleancode.job.JobRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.List;
 
 @Configuration
@@ -52,28 +50,39 @@ public class StartUpConfig {
 
     @Bean
     public CommandLineRunner initEmployeeDatabase(EmployeeRepository employeeRepository) {
-        return args -> {
-            employeeRepository.save(new Employee(
-                    "Kent",
-                    "olofsson",
-                    "password",
-                    "5607144544",
-                    "kent@kent.kent",
-                    "0734123323",
-                    "adressvägen 23",
-                    Role.EMPLOYEE,
-                    List.of()));
+        Salary salary1 = new Salary(100);
+        Employee employee1 = new Employee(
+                "Kent",
+                "olofsson",
+                "password",
+                "5607144544",
+                "kent@kent.kent",
+                "0734123323",
+                "adressvägen 23",
+                Role.EMPLOYEE,
+                salary1,
+                List.of());
 
-            employeeRepository.save(new Employee(
-                    "Admin",
-                    "Adminsson",
-                    "password",
-                    "5607144543",
-                    "kentadmin@admin.kent",
-                    "0742424242",
-                    "adressvägen 65",
-                    Role.ADMIN,
-                    List.of()));
+        Salary salary2 = new Salary(150);
+        Employee employee2 = new Employee(
+                "Admin",
+                "Adminsson",
+                "password",
+                "5607144543",
+                "kentadmin@admin.kent",
+                "0742424242",
+                "adressvägen 65",
+                Role.ADMIN,
+                salary2,
+                List.of());
+
+        salary1.setEmployee(employee1);
+        salary2.setEmployee(employee2);
+
+        return args -> {
+            employeeRepository.save(employee1);
+
+            employeeRepository.save(employee2);
         };
     }
 
