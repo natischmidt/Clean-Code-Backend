@@ -25,14 +25,28 @@ public class JobController {
         return jobService.deleteJob(jobId);
     }
 
+    // Get a specific job
     @GetMapping("/getJob")
     public Optional<Job> getJob(@RequestHeader Long jobId){
         return jobService.getJob(jobId);
     }
 
+    // Get all jobs
     @GetMapping("/getAllJobs")
     public Optional<List<Job>> getAllJobs(){
         return jobService.getAllJobs();
+    }
+
+    // Get all jobs for a specific employee
+    @GetMapping("/getAllJobsForEmployee/{empId}")
+    public Optional<List<Job>> getAllJobsForEmployee(@PathVariable Long empId){
+        return jobService.getAllJobsForEmployee(empId);
+    }
+
+    // Get all jobs for a specific customer
+    @GetMapping("/getAllJobsForCustomer/{cusId}")
+    public Optional<List<Job>> getAllJobsForCustomer(@PathVariable Long cusId){
+        return jobService.getAllJobsForCustomer(cusId);
     }
 
     @PutMapping("/update/{id}")

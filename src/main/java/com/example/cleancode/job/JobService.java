@@ -3,12 +3,15 @@ package com.example.cleancode.job;
 import com.example.cleancode.customer.CustomerRepository;
 import com.example.cleancode.employees.EmployeeRepository;
 import com.example.cleancode.exceptions.JobDoesNotExistException;
+import com.example.cleancode.exceptions.NoJobsForCustomerException;
+import com.example.cleancode.exceptions.NoJobsForEmploeyyException;
 import com.example.cleancode.exceptions.PersonDoesNotExistException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class JobService {
@@ -76,7 +79,34 @@ public class JobService {
         } else {
             throw new JobDoesNotExistException("There is no jobs in the database");
         }
+    }
 
+    public Optional<List<Job>> getAllJobsForEmployee(Long empId) {
+
+        List<Job> optAllJobsForEmp = jobRepository.findAll()
+                .stream()
+                .filter(job -> job.getEmployee().getId() == empId)
+                .collect(Collectors.toList());
+
+        if (!optAllJobsForEmp.isEmpty()) {
+            return Optional.of(optAllJobsForEmp);
+        } else {
+            throw new NoJobsForEmploeyyException("There is no jobs for this employee");
+        }
+    }
+
+    public Optional<List<Job>> getAllJobsForCustomer(Long cusId) {
+
+        List<Job> optAllJobsForCustomer = jobRepository.findAll()
+                .stream()
+                .filter(job -> job.getCustomer().getId() == cusId)
+                .collect(Collectors.toList());
+
+        if (!optAllJobsForCustomer.isEmpty()) {
+            return Optional.of(optAllJobsForCustomer);
+        } else {
+            throw new NoJobsForCustomerException("There is no jobs attached to this this customer");
+        }
     }
 
     @Transactional
@@ -84,7 +114,7 @@ public class JobService {
 
         Optional<Job> optionalJob = jobRepository.findById(id);
 
-        // Behöver man ha med squareMeters?
+        // Do you need to be able to update squareMeters?
         if (optionalJob.isPresent()) {
             Job jobUpdate = optionalJob.get();
 

@@ -93,19 +93,20 @@ public class StartUpConfig {
                     Jobtype.BASIC,
                     "2023-11-24T12:00",
                     JobStatus.PENDING,
-                    55,
+                    50,
                     PaymentOption.KLARNA,
                     employeeRepository.findById(1L).get(),
-                    customerRepository.findById(1L).get()));
+                    customerRepository.findById(2L).get()));
 
             jobRepository.save(new Job(
                     Jobtype.BASIC,
-                    "2020-11-24T12:00",
+                    "2020-10-24T12:00",
                     JobStatus.PENDING,
                     55,
                     PaymentOption.KLARNA,
-                    employeeRepository.findById(1L).get(),
+                    employeeRepository.findById(2L).get(),
                     customerRepository.findById(1L).get()));
         };
+
     }
 }
