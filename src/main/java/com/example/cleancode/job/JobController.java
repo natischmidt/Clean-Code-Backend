@@ -15,7 +15,7 @@ public class JobController {
         this.jobService = jobService;
     }
 
-    @PostMapping("/createJob")
+    @PostMapping("/createJob/")
     public Long createJob(@RequestBody CreateJobDTO createJobDTO) {
         return jobService.createJob(createJobDTO);
     }

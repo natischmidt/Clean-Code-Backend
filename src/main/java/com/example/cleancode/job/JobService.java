@@ -39,7 +39,6 @@ public class JobService {
                 // TODO: Before an employee is assigned for the job, we must check if the employee
                 // is free this time and time in the calender.
                 employeeRepository.findById(1L).get(),
-
                 customerRepository.findById(createJobDTO.getCustomerId()).get());
 
         jobRepository.save(job);
