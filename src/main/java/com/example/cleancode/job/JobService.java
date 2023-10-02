@@ -186,6 +186,5 @@ public class JobService {
         } else {
             throw new JobDoesNotExistException("Job does not exist");
         }
-
     }
 }

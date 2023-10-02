@@ -5,6 +5,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/employee")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class EmployeeController {
 
     private final EmployeeService employeeService;
