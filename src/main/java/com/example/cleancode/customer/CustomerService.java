@@ -4,6 +4,8 @@ import com.example.cleancode.enums.CustomerType;
 import com.example.cleancode.exceptions.CustomerAlreadyExistsException;
 import com.example.cleancode.exceptions.CustomerDoesNotExistException;
 import com.example.cleancode.exceptions.CustomerInfoMissmatchException;
+import com.example.cleancode.mail.EmailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +29,9 @@ public class CustomerService {
 
         return customerDTO;
     }
+    @Autowired
+    private EmailService emailService;
+
     private final CustomerRepository customerRepository;
 
     public CustomerService(CustomerRepository customerRepository) {
@@ -53,6 +58,11 @@ public class CustomerService {
                         CustomerType.PRIVATE);
 
                 customerRepository.save(customer);
+
+                emailService.sendEmail(customerDTO.getEmail(),
+                        "StädaFint AB",
+                        "Du är nu registrerad som medlem på StädaFint AB. Välkommen!");
+
                 return customerDTO;
             }
             if (customerDTO.getCompanyName() != null && customerDTO.getOrgNumber() != null){
@@ -67,6 +77,11 @@ public class CustomerService {
                         CustomerType.BUSINESS);
 
                 customerRepository.save(customer);
+
+                emailService.sendEmail(customerDTO.getEmail(),
+                        "StädaFint AB",
+                        "Du är nu registrerad som medlem på StädaFint AB. Välkommen!");
+
                 return customerDTO;
             }
             if(customerDTO.getCompanyName() != null && customerDTO.getOrgNumber() == null){

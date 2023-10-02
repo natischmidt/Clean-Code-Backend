@@ -10,6 +10,7 @@ import com.example.cleancode.employees.Salary;
 import com.example.cleancode.enums.*;
 import com.example.cleancode.job.Job;
 import com.example.cleancode.job.JobRepository;
+import com.example.cleancode.mail.EmailService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
