@@ -5,7 +5,6 @@ import com.example.cleancode.enums.Role;
 import com.example.cleancode.job.Job;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
+@Table(name = "employee")
 public class Employee {
 
     @Id
@@ -26,11 +26,15 @@ public class Employee {
     private String email;
     private String phoneNumber;
     private String address;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @ManyToMany(mappedBy = "employees")
     private List<Availability> availabilities;
+
+    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Salary salary;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Job> jobList = new ArrayList<>();
@@ -43,6 +47,7 @@ public class Employee {
                     String phoneNumber,
                     String address,
                     Role role,
+                    Salary salary,
                     List<Job> jobList) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -53,5 +58,6 @@ public class Employee {
         this.address = address;
         this.role = role;
         this.jobList = jobList;
+        this.salary = salary;
     }
 }

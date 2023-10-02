@@ -21,7 +21,8 @@ public class Customer {
     private String firstName;
     private String lastName;
     private String password;
-    private String ssNumber;
+    private String companyName;
+    private String orgNumber; //company // org nr // utan > private , med > business
     private String email;
     private String phoneNumber;
     private String adress;
@@ -29,10 +30,21 @@ public class Customer {
     @Column(name = "customer_type")
     private CustomerType customerType;
 
-    public Customer(String firstName, String lastName, String ssNumber, String email, String phoneNumber, String adress, CustomerType customerType) {
+    public Customer(String firstName, String lastName, String companyName, String orgNumber, String email, String phoneNumber, String adress, CustomerType customerType) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.ssNumber = ssNumber;
+        this.companyName = companyName;
+        this.orgNumber = orgNumber;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.adress = adress;
+        this.customerType = customerType;
+    }
+    public Customer(String firstName, String lastName, String email, String phoneNumber, String adress, CustomerType customerType) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.companyName = companyName;
+        this.orgNumber = orgNumber;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.adress = adress;

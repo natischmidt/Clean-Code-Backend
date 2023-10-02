@@ -1,19 +1,22 @@
 package com.example.cleancode.employees;
 
 import com.example.cleancode.enums.Role;
-import lombok.AllArgsConstructor;
+import com.example.cleancode.job.Job;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
-@AllArgsConstructor
-public class GetEmployeeDTO {
+public class EditEmployeeDTO {
 
     private Long id;
     private String firstName;
     private String lastName;
+    private String password;
     private String ssNumber;
     private String email;
     private String phoneNumber;
-    private String adress;
+    private String address;
     private Role role;
+
 }
