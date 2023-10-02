@@ -85,13 +85,7 @@ public class JobService {
                 createJobDTO.getJobStatus(),
                 createJobDTO.getSquareMeters(),
                 createJobDTO.getPaymentOption(),
-
-                //Temporary field for employee
-                // TODO: Before an employee is assigned for the job, we must check if the employee
-                // is free this time and time in the calender.
                 assignedEmployee,
-
-                employeeRepository.findById(1L).get(),
                 customerRepository.findById(createJobDTO.getCustomerId()).get());
 
         jobRepository.save(job);

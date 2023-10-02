@@ -95,11 +95,20 @@ public class StartUpConfig {
     public CommandLineRunner initJobDatabase(JobRepository jobRepository) {
         return args -> {
             LocalDateTime date = LocalDateTime.parse("2023-11-24T12:00");
-            jobRepository.save(new Job(Jobtype.BASIC, date, TimeSlots.EVENING, JobStatus.PENDING,
-                    55, PaymentOption.KLARNA, employeeRepository.findById(1L).get(),
             jobRepository.save(new Job(
                     Jobtype.BASIC,
-                    "2023-11-24T12:00",
+                    date,
+                    TimeSlots.EVENING,
+                    JobStatus.PENDING,
+                    55,
+                    PaymentOption.KLARNA,
+                    employeeRepository.findById(1L).get(),
+                    customerRepository.findById(1L).get()));
+
+            jobRepository.save(new Job(
+                    Jobtype.BASIC,
+                    date,
+                    TimeSlots.NONE,
                     JobStatus.PENDING,
                     50,
                     PaymentOption.KLARNA,
@@ -108,7 +117,8 @@ public class StartUpConfig {
 
             jobRepository.save(new Job(
                     Jobtype.BASIC,
-                    "2020-10-24T12:00",
+                    date,
+                    TimeSlots.AFTER_NONE,
                     JobStatus.PENDING,
                     55,
                     PaymentOption.KLARNA,
