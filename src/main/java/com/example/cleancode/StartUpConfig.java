@@ -109,7 +109,7 @@ public class StartUpConfig {
             jobRepository.save(new Job(
                     Jobtype.BASIC,
                     date,
-                    TimeSlots.NONE,
+                    TimeSlots.NOON,
                     JobStatus.PENDING,
                     50,
                     PaymentOption.KLARNA,
@@ -119,7 +119,7 @@ public class StartUpConfig {
             jobRepository.save(new Job(
                     Jobtype.BASIC,
                     date,
-                    TimeSlots.AFTER_NONE,
+                    TimeSlots.AFTERNOON,
                     JobStatus.PENDING,
                     55,
                     PaymentOption.KLARNA,
