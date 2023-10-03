@@ -29,6 +29,21 @@ public class CustomerService {
 
         return customerDTO;
     }
+    //gåre o fixa detta smidigare, ist för 2???
+    public CreateCustomerDTO customerEntityToCreateDTO(Customer customer){
+        CreateCustomerDTO createDTO = new CreateCustomerDTO();
+        createDTO.setFirstName(customer.getFirstName());
+        createDTO.setLastName(customer.getLastName());
+        createDTO.setPassword(customer.getPassword());
+        createDTO.setCompanyName(customer.getCompanyName());
+        createDTO.setOrgNumber(customer.getOrgNumber());
+        createDTO.setEmail(customer.getEmail());
+        createDTO.setPhoneNumber(customer.getPhoneNumber());
+        createDTO.setAddress(customer.getAddress());
+        createDTO.setCustomerType(customer.getCustomerType());
+
+        return createDTO;
+    }
     @Autowired
     private EmailService emailService;
 
@@ -38,56 +53,56 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    public CustomerDTO createCustomer(CustomerDTO customerDTO) {
+    public CreateCustomerDTO createCustomer(CreateCustomerDTO createDTO) {
 
-        Optional<Customer> optCustEmail = customerRepository.findByEmail(customerDTO.getEmail());
+        Optional<Customer> optCustEmail = customerRepository.findByEmail(createDTO.getEmail());
         //om det är en business så får vi ett värde i company fältet, annars null
 
         if (optCustEmail.isPresent()){
-            throw new CustomerAlreadyExistsException(customerDTO.getEmail());
+            throw new CustomerAlreadyExistsException(createDTO.getEmail());
         }
 
         try {
-            if (customerDTO.getCompanyName() == null && customerDTO.getOrgNumber() == null){
+            if (createDTO.getCompanyName() == null && createDTO.getOrgNumber() == null){
                 Customer customer = new Customer(
-                        customerDTO.getFirstName(),
-                        customerDTO.getLastName(),
-                        customerDTO.getEmail(),
-                        customerDTO.getPhoneNumber(),
-                        customerDTO.getAddress(),
+                        createDTO.getFirstName(),
+                        createDTO.getLastName(),
+                        createDTO.getEmail(),
+                        createDTO.getPhoneNumber(),
+                        createDTO.getAddress(),
                         CustomerType.PRIVATE);
 
                 customerRepository.save(customer);
 
-                emailService.sendEmail(customerDTO.getEmail(),
+                emailService.sendEmail(createDTO.getEmail(),
                         "StädaFint AB",
                         "Du är nu registrerad som medlem på StädaFint AB. Välkommen!");
 
-                return customerDTO;
+                return createDTO;
             }
-            if (customerDTO.getCompanyName() != null && customerDTO.getOrgNumber() != null){
+            if (createDTO.getCompanyName() != null && createDTO.getOrgNumber() != null){
                 Customer customer = new Customer(
-                        customerDTO.getFirstName(),
-                        customerDTO.getLastName(),
-                        customerDTO.getCompanyName(),
-                        customerDTO.getOrgNumber(),
-                        customerDTO.getEmail(),
-                        customerDTO.getPhoneNumber(),
-                        customerDTO.address,
+                        createDTO.getFirstName(),
+                        createDTO.getLastName(),
+                        createDTO.getCompanyName(),
+                        createDTO.getOrgNumber(),
+                        createDTO.getEmail(),
+                        createDTO.getPhoneNumber(),
+                        createDTO.address,
                         CustomerType.BUSINESS);
 
                 customerRepository.save(customer);
 
-                emailService.sendEmail(customerDTO.getEmail(),
+                emailService.sendEmail(createDTO.getEmail(),
                         "StädaFint AB",
                         "Du är nu registrerad som medlem på StädaFint AB. Välkommen!");
 
-                return customerDTO;
+                return createDTO;
             }
-            if(customerDTO.getCompanyName() != null && customerDTO.getOrgNumber() == null){
+            if(createDTO.getCompanyName() != null && createDTO.getOrgNumber() == null){
                 throw new CustomerInfoMissmatchException("If companyName isn't null, you need a orgNumber");
             }
-            if (customerDTO.getCompanyName() == null && customerDTO.getOrgNumber() != null){
+            if (createDTO.getCompanyName() == null && createDTO.getOrgNumber() != null){
                 throw new CustomerInfoMissmatchException("if orgNumber isn't null, you need a company name");
             }
             // ^ dom klagar i if-satserna, men tycker dom ser nice ut...
