@@ -8,6 +8,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/jobs")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class JobController {
 
     private final JobService jobService;
