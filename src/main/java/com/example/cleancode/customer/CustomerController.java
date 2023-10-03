@@ -16,8 +16,8 @@ public class CustomerController {
     }
 
     @PostMapping("/create")
-    public CustomerDTO createCustomer(@RequestBody CustomerDTO customerDTO){
-        return customerService.createCustomer(customerDTO);
+    public CreateCustomerDTO createCustomer(@RequestBody CreateCustomerDTO createDTO){
+        return customerService.createCustomer(createDTO);
     }
     @DeleteMapping("/delete/{id}")
     public String removeCustomer(@PathVariable Long id){
