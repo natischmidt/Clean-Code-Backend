@@ -18,6 +18,7 @@ public class CustomerService {
 
     public CustomerDTO customerEntityToDTO(Customer customer){
         CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setId(customer.getId());
         customerDTO.setFirstName(customer.getFirstName());
         customerDTO.setLastName(customer.getLastName());
         customerDTO.setCompanyName(customer.getCompanyName());
@@ -71,6 +72,7 @@ public class CustomerService {
                         createDTO.getPhoneNumber(),
                         createDTO.getAddress(),
                         CustomerType.PRIVATE);
+                customer.setPassword(createDTO.getPassword());
 
                 customerRepository.save(customer);
 
@@ -90,7 +92,7 @@ public class CustomerService {
                         createDTO.getPhoneNumber(),
                         createDTO.address,
                         CustomerType.BUSINESS);
-
+                customer.setPassword(createDTO.getPassword());
                 customerRepository.save(customer);
 
                 emailService.sendEmail(createDTO.getEmail(),
