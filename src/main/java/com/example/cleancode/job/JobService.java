@@ -5,6 +5,7 @@ import com.example.cleancode.availability.AvailabilityRepository;
 import com.example.cleancode.customer.CustomerRepository;
 import com.example.cleancode.employees.Employee;
 import com.example.cleancode.employees.EmployeeRepository;
+import com.example.cleancode.enums.JobStatus;
 import com.example.cleancode.enums.TimeSlots;
 import com.example.cleancode.exceptions.JobDoesNotExistException;
 import com.example.cleancode.exceptions.NoJobsForCustomerException;
@@ -186,5 +187,9 @@ public class JobService {
         } else {
             throw new JobDoesNotExistException("Job does not exist");
         }
+    }
+
+    public Optional<List<Job>> getJobByStatus(JobStatus status) {
+       return Optional.ofNullable(jobRepository.findByJobStatus(status));
     }
 }

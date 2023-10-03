@@ -1,5 +1,6 @@
 package com.example.cleancode.job;
 
+import com.example.cleancode.enums.JobStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,6 +54,12 @@ public class JobController {
     public Optional<Job> updateJobInfo(@PathVariable Long id,
                                        @RequestBody Job job){
         return jobService.updateJobInfo(id, job);
+    }
+
+    @GetMapping("/getByStatus/{status}")
+    public Optional<List<Job>> getJobByStatus(@PathVariable String status){
+        JobStatus jobStatus = JobStatus.valueOf(status.toUpperCase());
+        return jobService.getJobByStatus(jobStatus);
     }
 
 

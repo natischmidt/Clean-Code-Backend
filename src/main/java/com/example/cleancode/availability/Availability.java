@@ -3,6 +3,7 @@ package com.example.cleancode.availability;
 import com.example.cleancode.employees.Employee;
 import com.example.cleancode.enums.TimeSlots;
 import com.example.cleancode.job.Job;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +28,7 @@ public class Availability {
     private List<Employee> employees;
 
     @ManyToMany
+    @JsonManagedReference
     private List<Job> jobs = new ArrayList<>();
 
     public void addEmployee(Employee employee) {

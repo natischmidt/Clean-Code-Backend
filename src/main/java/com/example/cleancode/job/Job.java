@@ -7,6 +7,7 @@ import com.example.cleancode.enums.JobStatus;
 import com.example.cleancode.enums.Jobtype;
 import com.example.cleancode.enums.PaymentOption;
 import com.example.cleancode.enums.TimeSlots;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -42,6 +43,7 @@ public class Job {
     private PaymentOption paymentOption;
 
     @ManyToMany(mappedBy = "jobs")
+    @JsonBackReference
     private List<Availability> availabilities = new ArrayList<>();
 
     @ManyToOne
