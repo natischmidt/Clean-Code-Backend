@@ -25,29 +25,29 @@ public class Customer {
     private String orgNumber; //company // org nr // utan > private , med > business
     private String email;
     private String phoneNumber;
-    private String adress;
+    private String address;
     @Enumerated(EnumType.STRING)
     @Column(name = "customer_type")
     private CustomerType customerType;
 
-    public Customer(String firstName, String lastName, String companyName, String orgNumber, String email, String phoneNumber, String adress, CustomerType customerType) {
+    public Customer(String firstName, String lastName, String companyName, String orgNumber, String email, String phoneNumber, String address, CustomerType customerType) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.companyName = companyName;
         this.orgNumber = orgNumber;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.adress = adress;
+        this.address = address;
         this.customerType = customerType;
     }
-    public Customer(String firstName, String lastName, String email, String phoneNumber, String adress, CustomerType customerType) {
+    public Customer(String firstName, String lastName, String email, String phoneNumber, String address, CustomerType customerType) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.companyName = companyName;
         this.orgNumber = orgNumber;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.adress = adress;
+        this.address = address;
         this.customerType = customerType;
     }
 }

@@ -24,7 +24,7 @@ public class CustomerService {
         customerDTO.setOrgNumber(customer.getOrgNumber());
         customerDTO.setEmail(customer.getEmail());
         customerDTO.setPhoneNumber(customer.getPhoneNumber());
-        customerDTO.setAdress(customer.getAdress());
+        customerDTO.setAddress(customer.getAddress());
         customerDTO.setCustomerType(customer.getCustomerType());
 
         return customerDTO;
@@ -54,7 +54,7 @@ public class CustomerService {
                         customerDTO.getLastName(),
                         customerDTO.getEmail(),
                         customerDTO.getPhoneNumber(),
-                        customerDTO.getAdress(),
+                        customerDTO.getAddress(),
                         CustomerType.PRIVATE);
 
                 customerRepository.save(customer);
@@ -73,7 +73,7 @@ public class CustomerService {
                         customerDTO.getOrgNumber(),
                         customerDTO.getEmail(),
                         customerDTO.getPhoneNumber(),
-                        customerDTO.adress,
+                        customerDTO.address,
                         CustomerType.BUSINESS);
 
                 customerRepository.save(customer);
@@ -131,8 +131,8 @@ public class CustomerService {
             if (customerDTO.getPhoneNumber() != null){
                 customerUpdate.setPhoneNumber(customerDTO.getPhoneNumber());
             }
-            if (customerDTO.getAdress() != null){
-                customerUpdate.setAdress(customerDTO.getAdress());
+            if (customerDTO.getAddress() != null){
+                customerUpdate.setAddress(customerDTO.getAddress());
             }if (customerDTO.getCustomerType() != null){
                 customerUpdate.setCustomerType(customerDTO.getCustomerType());
             }

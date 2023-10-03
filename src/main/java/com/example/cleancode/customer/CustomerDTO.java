@@ -13,6 +13,6 @@ public class CustomerDTO {
     String orgNumber;
     String email;
     String phoneNumber;
-    String adress;
+    String address;
     CustomerType customerType;
 }
