@@ -83,7 +83,7 @@ public class JobService {
                 createJobDTO.getJobtype(),
                 date,
                 timeSlot,
-                createJobDTO.getJobStatus(),
+                JobStatus.PENDING,
                 createJobDTO.getSquareMeters(),
                 createJobDTO.getPaymentOption(),
                 assignedEmployee,
