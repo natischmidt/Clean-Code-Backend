@@ -1,4 +1,4 @@
-package com.example.cleancode.availability;
+package com.example.cleancode.booked;
 
 import com.example.cleancode.employees.Employee;
 import com.example.cleancode.enums.TimeSlots;
@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Availability {
+public class Booked {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

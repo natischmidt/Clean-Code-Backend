@@ -1,11 +1,12 @@
 package com.example.cleancode.job;
 
-import com.example.cleancode.availability.Availability;
-import com.example.cleancode.availability.AvailabilityRepository;
+import com.example.cleancode.booked.Booked;
+import com.example.cleancode.booked.BookedRepository;
 import com.example.cleancode.customer.CustomerRepository;
 import com.example.cleancode.employees.Employee;
 import com.example.cleancode.employees.EmployeeRepository;
 import com.example.cleancode.enums.JobStatus;
+import com.example.cleancode.enums.Role;
 import com.example.cleancode.enums.TimeSlots;
 import com.example.cleancode.exceptions.JobDoesNotExistException;
 import com.example.cleancode.exceptions.NoJobsForCustomerException;
@@ -16,8 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -27,39 +26,42 @@ public class JobService {
     private final JobRepository jobRepository;
     private final EmployeeRepository employeeRepository;
     private final CustomerRepository customerRepository;
-    private final AvailabilityRepository availabilityRepository;
+    private final BookedRepository bookedRepository;
 
-    public JobService(JobRepository jobRepository, EmployeeRepository employeeRepository, CustomerRepository customerRepository, AvailabilityRepository availabilityRepository) {
+    public JobService(JobRepository jobRepository, EmployeeRepository employeeRepository, CustomerRepository customerRepository, BookedRepository bookedRepository) {
 
         this.jobRepository = jobRepository;
         this.employeeRepository = employeeRepository;
         this.customerRepository = customerRepository;
-        this.availabilityRepository = availabilityRepository;
+        this.bookedRepository = bookedRepository;
     }
 
     public void updateAvailability(Employee selectedEmployee, LocalDateTime date, TimeSlots timeSlot, Job job) {
 
-        Optional<Availability> optionalAvailability = availabilityRepository.findByDateAndTimeSlots(date, timeSlot);
-        Availability availability;
+        Optional<Booked> optionalAvailability = bookedRepository.findByDateAndTimeSlots(date, timeSlot);
+        Booked booked;
 
         if (optionalAvailability.isPresent()) {
-            availability = optionalAvailability.get();
+            booked = optionalAvailability.get();
         } else {
-            availability = new Availability();
-            availability.setDate(date);
-            availability.setTimeSlots(timeSlot);
+            booked = new Booked();
+            booked.setDate(date);
+            booked.setTimeSlots(timeSlot);
         }
 
-        availability.addEmployee(selectedEmployee);
+        booked.addEmployee(selectedEmployee);
 
-        availability.getJobs().add(job);
-        job.getAvailabilities().add(availability);
+        booked.getJobs().add(job);
+        job.getAvailabilities().add(booked);
 
-        availabilityRepository.save(availability);
+        bookedRepository.save(booked);
     }
 
     public List<Employee> findUnbookedEmployees(LocalDateTime date, TimeSlots timeSlot){
-        return employeeRepository.findUnbookedEmployees(date, timeSlot);
+
+        List<Employee> employees = employeeRepository.findUnbookedEmployees(date, timeSlot);
+
+        return employees.stream().filter(x -> x.getRole().equals(Role.EMPLOYEE)).toList();
     }
 
 

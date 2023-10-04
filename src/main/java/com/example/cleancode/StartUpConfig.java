@@ -1,7 +1,5 @@
 package com.example.cleancode;
 
-import com.example.cleancode.availability.Availability;
-import com.example.cleancode.availability.AvailabilityRepository;
 import com.example.cleancode.customer.Customer;
 import com.example.cleancode.customer.CustomerRepository;
 import com.example.cleancode.employees.Employee;
@@ -10,7 +8,6 @@ import com.example.cleancode.employees.Salary;
 import com.example.cleancode.enums.*;
 import com.example.cleancode.job.Job;
 import com.example.cleancode.job.JobRepository;
-import com.example.cleancode.mail.EmailService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -99,7 +96,7 @@ public class StartUpConfig {
             jobRepository.save(new Job(
                     Jobtype.BASIC,
                     date,
-                    TimeSlots.EVENING,
+                    TimeSlots.EIGHT,
                     JobStatus.PENDING,
                     55,
                     PaymentOption.KLARNA,
@@ -109,7 +106,7 @@ public class StartUpConfig {
             jobRepository.save(new Job(
                     Jobtype.BASIC,
                     date,
-                    TimeSlots.NOON,
+                    TimeSlots.TEN,
                     JobStatus.PENDING,
                     50,
                     PaymentOption.KLARNA,
@@ -119,7 +116,7 @@ public class StartUpConfig {
             jobRepository.save(new Job(
                     Jobtype.BASIC,
                     date,
-                    TimeSlots.AFTERNOON,
+                    TimeSlots.THIRTEEN,
                     JobStatus.PENDING,
                     55,
                     PaymentOption.KLARNA,
