@@ -1,6 +1,6 @@
 package com.example.cleancode.job;
 
-import com.example.cleancode.availability.Availability;
+import com.example.cleancode.booked.Booked;
 import com.example.cleancode.customer.Customer;
 import com.example.cleancode.employees.Employee;
 import com.example.cleancode.enums.JobStatus;
@@ -14,12 +14,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -35,6 +32,7 @@ public class Job {
     @Enumerated(EnumType.STRING)
     private Jobtype jobtype;
     private LocalDateTime date;
+    @Enumerated(EnumType.STRING)
     private TimeSlots timeSlot;
     @Enumerated(EnumType.STRING)
     private JobStatus jobStatus;
@@ -44,7 +42,7 @@ public class Job {
 
     @ManyToMany(mappedBy = "jobs")
     @JsonBackReference
-    private List<Availability> availabilities = new ArrayList<>();
+    private List<Booked> availabilities = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "emp_id")

@@ -1,6 +1,6 @@
 package com.example.cleancode.employees;
 
-import com.example.cleancode.availability.Availability;
+import com.example.cleancode.booked.Booked;
 import com.example.cleancode.enums.Role;
 import com.example.cleancode.job.Job;
 import jakarta.persistence.*;
@@ -31,7 +31,7 @@ public class Employee {
     private Role role;
 
     @ManyToMany(mappedBy = "employees")
-    private List<Availability> availabilities;
+    private List<Booked> availabilities;
 
     @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Salary salary;
