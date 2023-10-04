@@ -8,13 +8,14 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class CreateJobDTO {
 
     private Jobtype jobtype;
     private String date;
-    private TimeSlots timeSlot;
+    private List<TimeSlots> timeSlotList;
 //    private JobStatus jobStatus;
     private int squareMeters;
     private PaymentOption paymentOption;
