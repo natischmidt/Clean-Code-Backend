@@ -17,4 +17,5 @@ public class GetEmployeeDTO {
     private String phoneNumber;
     private String address;
     private Role role;
+    private int salary;
 }

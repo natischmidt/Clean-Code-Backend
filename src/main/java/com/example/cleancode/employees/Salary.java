@@ -11,6 +11,7 @@ import lombok.*;
 @Setter
 @Data
 public class Salary {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -110,7 +110,8 @@ public class EmployeeService {
                 employee.getEmail(),
                 employee.getPhoneNumber(),
                 employee.getAddress(),
-                employee.getRole());
+                employee.getRole(),
+                employee.getSalary().getHourlySalary());
     }
 
     private Boolean checkDTO(CreateEmployeeDTO dto) {
