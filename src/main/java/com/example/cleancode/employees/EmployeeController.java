@@ -36,9 +36,9 @@ public class EmployeeController {
     }
 
     @PutMapping("/editEmployee")
-    public GetEmployeeDTO editEmployee(@RequestBody EditEmployeeDTO employee) {
+    public GetEmployeeDTO editEmployee(@RequestHeader Long empId, @RequestBody EditEmployeeDTO employee) {
 
-        return employeeService.editEmployee(employee);
+        return employeeService.editEmployee(empId, employee);
     }
 
 

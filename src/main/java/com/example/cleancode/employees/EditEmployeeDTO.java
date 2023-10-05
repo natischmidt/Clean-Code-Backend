@@ -9,7 +9,6 @@ import java.util.List;
 @Data
 public class EditEmployeeDTO {
 
-    private Long id;
     private String firstName;
     private String lastName;
     private String password;
@@ -18,5 +17,6 @@ public class EditEmployeeDTO {
     private String phoneNumber;
     private String address;
     private Role role;
+    private int hourlySalary;
 
 }

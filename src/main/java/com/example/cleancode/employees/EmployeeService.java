@@ -80,8 +80,8 @@ public class EmployeeService {
                 .collect(Collectors.toList());
     }
 
-    public GetEmployeeDTO editEmployee(EditEmployeeDTO employeeDTO) {
-        Optional<Employee> optEmp = employeeRepository.findById(employeeDTO.getId());
+    public GetEmployeeDTO editEmployee(Long empId, EditEmployeeDTO employeeDTO) {
+        Optional<Employee> optEmp = employeeRepository.findById(empId);
 
         if (optEmp.isPresent()) {
             optEmp.get().setFirstName(employeeDTO.getFirstName());
@@ -92,6 +92,8 @@ public class EmployeeService {
             optEmp.get().setPhoneNumber(employeeDTO.getPhoneNumber());
             optEmp.get().setAddress(employeeDTO.getAddress());
             optEmp.get().setRole(employeeDTO.getRole());
+            optEmp.get().getSalary().setHourlySalary(employeeDTO.getHourlySalary());
+
 
         } else {
             throw new PersonDoesNotExistException("No employee with that id was found!");
