@@ -40,26 +40,26 @@ public class JobController {
 
     // Get all jobs
     @GetMapping("/getAllJobs")
-    public Optional<List<Job>> getAllJobs(){
+    public List<GetJobDTO> getAllJobs(){
         return jobService.getAllJobs();
     }
 
     // Get all jobs for a specific employee
     @GetMapping("/getAllJobsForEmployee/{empId}")
-    public Optional<List<Job>> getAllJobsForEmployee(@PathVariable Long empId){
+    public List<GetJobDTO> getAllJobsForEmployee(@PathVariable Long empId){
         return jobService.getAllJobsForEmployee(empId);
     }
 
     // Get all jobs for a specific customer
     @GetMapping("/getAllJobsForCustomer/{cusId}")
-    public Optional<List<Job>> getAllJobsForCustomer(@PathVariable Long cusId){
+    public List<GetJobDTO> getAllJobsForCustomer(@PathVariable Long cusId){
         return jobService.getAllJobsForCustomer(cusId);
     }
 
     @PutMapping("/update/{id}")
-    public Optional<Job> updateJobInfo(@PathVariable Long id,
-                                       @RequestBody Job job){
-        return jobService.updateJobInfo(id, job);
+    public GetJobDTO updateJobInfo(@PathVariable Long id,
+                                   @RequestBody GetJobDTO jobDTO){
+        return jobService.updateJobInfo(id, jobDTO);
     }
 
     @GetMapping("/getByStatus")
@@ -71,9 +71,12 @@ public class JobController {
     }
 
     @GetMapping("/getAvailableEmployees")
-    public HashMap<Integer, Boolean> getAvailableEmployees(@RequestBody GetAvailableEmployeeDTO getAvailableEmployeeDTO) {
+    public HashMap<Integer, Boolean> getAvailableEmployees(@RequestBody GetAvailableEmployeeDTO
+                                                                       getAvailableEmployeeDTO) {
 
-        return jobService.getAvailableEmployees(LocalDateTime.parse(getAvailableEmployeeDTO.getDate() + "T00:00:00"), getAvailableEmployeeDTO.getLookForAvailableThisManyHours());
+        return jobService.getAvailableEmployees(
+                LocalDateTime.parse(getAvailableEmployeeDTO.getDate() + "T00:00:00"),
+                getAvailableEmployeeDTO.getLookForAvailableThisManyHours());
 
     }
 

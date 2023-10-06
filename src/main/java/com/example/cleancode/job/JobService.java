@@ -248,72 +248,157 @@ public class JobService {
 
     }
 
-    public Optional<List<Job>> getAllJobs() {
 
-        List<Job> optAllJobs = jobRepository.findAll();
+//    public Optional<List<Job>> getAllJobs() {
+//
+//        List<Job> optAllJobs = jobRepository.findAll();
+//
+//        if (!optAllJobs.isEmpty()) {
+//            return Optional.of(optAllJobs);
+//        } else {
+//            throw new JobDoesNotExistException("There is no jobs in the database");
+//        }
+//    }
 
-        if (!optAllJobs.isEmpty()) {
-            return Optional.of(optAllJobs);
+    public List<GetJobDTO> getAllJobs() {
+        List<Job> allJobs = jobRepository.findAll();
+        if (!allJobs.isEmpty()) {
+            return convertToDTOList(allJobs);
         } else {
-            throw new JobDoesNotExistException("There is no jobs in the database");
+            throw new JobDoesNotExistException("There are no jobs in the database");
         }
     }
 
-    public Optional<List<Job>> getAllJobsForEmployee(Long empId) {
+    private List<GetJobDTO> convertToDTOList(List<Job> jobs) {
+        return jobs.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
 
-        List<Job> optAllJobsForEmp = jobRepository.findAll()
+    private GetJobDTO convertToDTO(Job job) {
+        return new GetJobDTO(
+                job.getJobId(),
+                job.getJobtype(),
+                job.getDate(),
+                job.getTimeSlot(),
+                job.getJobStatus(),
+                job.getSquareMeters(),
+                job.getPaymentOption()
+        );
+    }
+
+    public List<GetJobDTO> getAllJobsForEmployee(Long empId) {
+        List<Job> jobsForEmployee = jobRepository.findAll()
                 .stream()
                 .filter(job -> job.getEmployee().getId() == empId)
                 .collect(Collectors.toList());
 
-        if (!optAllJobsForEmp.isEmpty()) {
-            return Optional.of(optAllJobsForEmp);
+        if (!jobsForEmployee.isEmpty()) {
+            return convertToDTOList(jobsForEmployee);
         } else {
-            throw new NoJobsForEmploeyyException("There is no jobs for this employee");
+            throw new NoJobsForEmploeyyException("There are no jobs for this employee");
         }
     }
 
-    public Optional<List<Job>> getAllJobsForCustomer(Long cusId) {
+//    public Optional<List<Job>> getAllJobsForEmployee(Long empId) {
+//
+//        List<Job> optAllJobsForEmp = jobRepository.findAll()
+//                .stream()
+//                .filter(job -> job.getEmployee().getId() == empId)
+//                .collect(Collectors.toList());
+//
+//        if (!optAllJobsForEmp.isEmpty()) {
+//            return Optional.of(optAllJobsForEmp);
+//        } else {
+//            throw new NoJobsForEmploeyyException("There is no jobs for this employee");
+//        }
+//    }
 
-        List<Job> optAllJobsForCustomer = jobRepository.findAll()
+//    public Optional<List<Job>> getAllJobsForCustomer(Long cusId) {
+//
+//        List<Job> optAllJobsForCustomer = jobRepository.findAll()
+//                .stream()
+//                .filter(job -> job.getCustomer().getId() == cusId)
+//                .collect(Collectors.toList());
+//
+//        if (!optAllJobsForCustomer.isEmpty()) {
+//            return Optional.of(optAllJobsForCustomer);
+//        } else {
+//            throw new NoJobsForCustomerException("There is no jobs attached to this this customer");
+//        }
+//    }
+
+    public List<GetJobDTO> getAllJobsForCustomer(Long cusId) {
+        List<Job> jobsForCustomer = jobRepository.findAll()
                 .stream()
                 .filter(job -> job.getCustomer().getId() == cusId)
                 .collect(Collectors.toList());
-
-        if (!optAllJobsForCustomer.isEmpty()) {
-            return Optional.of(optAllJobsForCustomer);
+        if (!jobsForCustomer.isEmpty()) {
+            return convertToDTOList(jobsForCustomer);
         } else {
-            throw new NoJobsForCustomerException("There is no jobs attached to this this customer");
+            throw new NoJobsForCustomerException("There are no jobs attached to this customer");
         }
     }
 
     @Transactional
-    public Optional<Job> updateJobInfo(Long id, Job job) {
-
+    public GetJobDTO updateJobInfo(Long id, GetJobDTO jobDTO) {
         Optional<Job> optionalJob = jobRepository.findById(id);
 
-        // Do you need to be able to update squareMeters?
         if (optionalJob.isPresent()) {
-            Job jobUpdate = optionalJob.get();
+            Job jobToUpdate = optionalJob.get();
 
-            if (job.getJobtype() != null) {
-                jobUpdate.setJobtype(job.getJobtype());
+            // Update properties from the dto
+            if (jobDTO.getJobtype() != null) {
+                jobToUpdate.setJobtype(jobDTO.getJobtype());
             }
-            if (job.getDate() != null) {
-                jobUpdate.setDate(job.getDate());
+            if (jobDTO.getDate() != null) {
+                jobToUpdate.setDate(jobDTO.getDate());
             }
-            if (job.getJobStatus() != null) {
-                jobUpdate.setJobStatus(job.getJobStatus());
+            if (jobDTO.getJobStatus() != null) {
+                jobToUpdate.setJobStatus(jobDTO.getJobStatus());
             }
-            if (job.getPaymentOption() != null) {
-                jobUpdate.setPaymentOption(job.getPaymentOption());
+            if (jobDTO.getPaymentOption() != null) {
+                jobToUpdate.setPaymentOption(jobDTO.getPaymentOption());
             }
-            jobRepository.save(jobUpdate);
-            return Optional.of(jobUpdate);
+
+            jobRepository.save(jobToUpdate);
+
+            // return  updated jobb as DTO
+            return convertToDTO(jobToUpdate);
         } else {
             throw new JobDoesNotExistException("Job does not exist");
         }
     }
+
+
+//    @Transactional
+//    public Optional<Job> updateJobInfo(Long id, Job job) {
+//
+//        Optional<Job> optionalJob = jobRepository.findById(id);
+//
+//        // Do you need to be able to update squareMeters?
+//        if (optionalJob.isPresent()) {
+//            Job jobUpdate = optionalJob.get();
+//
+//            if (job.getJobtype() != null) {
+//                jobUpdate.setJobtype(job.getJobtype());
+//            }
+//            if (job.getDate() != null) {
+//                jobUpdate.setDate(job.getDate());
+//            }
+//            if (job.getJobStatus() != null) {
+//                jobUpdate.setJobStatus(job.getJobStatus());
+//            }
+//            if (job.getPaymentOption() != null) {
+//                jobUpdate.setPaymentOption(job.getPaymentOption());
+//            }
+//            jobRepository.save(jobUpdate);
+//            return Optional.of(jobUpdate);
+//        } else {
+//            throw new JobDoesNotExistException("Job does not exist");
+//        }
+//    }
+
 
     public List<Job> getJobsByStatus(List<JobStatus> statuses) {
         return jobRepository.findByJobStatusIn(statuses);

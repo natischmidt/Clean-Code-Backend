@@ -2,7 +2,6 @@ package com.example.cleancode.employees;
 
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-
 @RestController
 @RequestMapping("api/employee")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -16,7 +15,7 @@ public class EmployeeController {
 
     @PostMapping("/createEmployee")
     public Long createEmployee(@RequestBody CreateEmployeeDTO employeeDTO) {
-
+       System.out.println(employeeDTO);
         return employeeService.createEmployee(employeeDTO);
     }
 
