@@ -65,6 +65,8 @@ public class StartUpConfig {
                 Role.EMPLOYEE,
                 salary1,
                 List.of());
+        salary1.setEmployee(employee1);
+
 
         Salary salary2 = new Salary(150);
         Employee employee2 = new Employee(
@@ -78,14 +80,58 @@ public class StartUpConfig {
                 Role.ADMIN,
                 salary2,
                 List.of());
-
-        salary1.setEmployee(employee1);
         salary2.setEmployee(employee2);
+
+
+        Salary salary3 = new Salary(150);
+        Employee employee3 = new Employee(
+                "Cleany",
+                "McCleanFace",
+                "password",
+                "5707144543",
+                "mrclean@clean.se",
+                "0742424542",
+                "adressvägen 66",
+                Role.EMPLOYEE,
+                salary3,
+                List.of());
+        salary3.setEmployee(employee3);
+
+
+        Salary salary4 = new Salary(150);
+        Employee employee4 = new Employee(
+                "Sten",
+                "Sture",
+                "password",
+                "5607844543",
+                "stenis@sten.kent",
+                "07424212242",
+                "adressvägen 67",
+                Role.EMPLOYEE,
+                salary4,
+                List.of());
+        salary4.setEmployee(employee4);
+
+        Salary salary5 = new Salary(150);
+        Employee employee5 = new Employee(
+                "Namn",
+                "Namnsson",
+                "password",
+                "5607142243",
+                "namn@namn.namn",
+                "0742423342",
+                "adressvägen 68",
+                Role.EMPLOYEE,
+                salary5,
+                List.of());
+        salary5.setEmployee(employee5);
 
         return args -> {
             employeeRepository.save(employee1);
-
             employeeRepository.save(employee2);
+            employeeRepository.save(employee3);
+            employeeRepository.save(employee4);
+            employeeRepository.save(employee5);
         };
     }
 

@@ -12,8 +12,8 @@ public class CreateJobDTO {
     private Jobtype jobtype;
     private String date;
     private List<TimeSlots> timeSlotList;
-//    private JobStatus jobStatus;
     private int squareMeters;
     private PaymentOption paymentOption;
     private Long customerId;
+//    private Long empId;
 }

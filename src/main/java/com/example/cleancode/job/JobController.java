@@ -1,8 +1,12 @@
 package com.example.cleancode.job;
 
 import com.example.cleancode.enums.JobStatus;
+import com.example.cleancode.enums.TimeSlots;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,6 +65,13 @@ public class JobController {
     public Optional<List<Job>> getJobByStatus(@PathVariable String status){
         JobStatus jobStatus = JobStatus.valueOf(status.toUpperCase());
         return jobService.getJobByStatus(jobStatus);
+    }
+
+    @GetMapping("/getAvailableEmployees")
+    public HashMap<Integer, Boolean> getAvailableEmployees(@RequestBody GetAvailableEmployeeDTO getAvailableEmployeeDTO) {
+
+        return jobService.getAvailableEmployees(LocalDateTime.parse(getAvailableEmployeeDTO.getDate() + "T00:00:00"), getAvailableEmployeeDTO.getLookForAvailableThisManyHours());
+
     }
 
 
