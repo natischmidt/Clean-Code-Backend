@@ -168,6 +168,56 @@ public class StartUpConfig {
                     PaymentOption.KLARNA,
                     employeeRepository.findById(2L).get(),
                     customerRepository.findById(1L).get()));
+
+            jobRepository.save(new Job(
+                    Jobtype.ADVANCED,
+                    date,
+                    TimeSlots.FIFTEEN,
+                    JobStatus.DONE,
+                    30,
+                    PaymentOption.KLARNA,
+                    employeeRepository.findById(3L).get(),
+                    customerRepository.findById(1L).get()));
+
+            jobRepository.save(new Job(
+                    Jobtype.DIAMOND,
+                    date,
+                    TimeSlots.EIGHT,
+                    JobStatus.APPROVED,
+                    43,
+                    PaymentOption.KLARNA,
+                    employeeRepository.findById(4L).get(),
+                    customerRepository.findById(1L).get()));
+
+            jobRepository.save(new Job(
+                    Jobtype.ADVANCED,
+                    date,
+                    TimeSlots.NINE,
+                    JobStatus.UNAPPROVED,
+                    56,
+                    PaymentOption.KLARNA,
+                    employeeRepository.findById(1L).get(),
+                    customerRepository.findById(1L).get()));
+
+            jobRepository.save(new Job(
+                    Jobtype.BASIC,
+                    date,
+                    TimeSlots.ELEVEN,
+                    JobStatus.PAID,
+                    25,
+                    PaymentOption.KLARNA,
+                    employeeRepository.findById(2L).get(),
+                    customerRepository.findById(1L).get()));
+
+            jobRepository.save(new Job(
+                    Jobtype.BASIC,
+                    date,
+                    TimeSlots.TWELVE,
+                    JobStatus.CANCELLED,
+                    35,
+                    PaymentOption.KLARNA,
+                    employeeRepository.findById(2L).get(),
+                    customerRepository.findById(1L).get()));
         };
     }
 

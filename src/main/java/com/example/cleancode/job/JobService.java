@@ -240,7 +240,7 @@ public class JobService {
         Optional<Job> optJob = jobRepository.findById(id);
 
         if (optJob.isPresent()) {
-            jobRepository.findById(id);
+            //jobRepository.findById(id);
             return optJob;
         } else {
             throw new JobDoesNotExistException("There is no job with that id in database.");
@@ -315,7 +315,7 @@ public class JobService {
         }
     }
 
-    public Optional<List<Job>> getJobByStatus(JobStatus status) {
-        return Optional.ofNullable(jobRepository.findByJobStatus(status));
+    public List<Job> getJobsByStatus(List<JobStatus> statuses) {
+        return jobRepository.findByJobStatusIn(statuses);
     }
 }

@@ -14,5 +14,5 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     @Query("SELECT j FROM Job j JOIN j.availabilities a WHERE a.date = :date AND a.timeSlots = :timeSlots")
     List<Job> findJobsInTimeRange(@Param("date") LocalDateTime date, @Param("timeSlots") TimeSlots timeSlots);
 
-    List<Job> findByJobStatus(JobStatus status);
+    List<Job> findByJobStatusIn(List<JobStatus> statuses);
 }

@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/jobs")
@@ -61,10 +62,12 @@ public class JobController {
         return jobService.updateJobInfo(id, job);
     }
 
-    @GetMapping("/getByStatus/{status}")
-    public Optional<List<Job>> getJobByStatus(@PathVariable String status){
-        JobStatus jobStatus = JobStatus.valueOf(status.toUpperCase());
-        return jobService.getJobByStatus(jobStatus);
+    @GetMapping("/getByStatus")
+    public List<Job> getJobByStatus(@RequestParam List<String> statuses){
+        List<JobStatus> jobStatuses = statuses.stream().map(status ->
+                JobStatus.valueOf(status.toUpperCase())).collect(Collectors.toList());
+        return jobService.getJobsByStatus(jobStatuses);
+
     }
 
     @GetMapping("/getAvailableEmployees")
