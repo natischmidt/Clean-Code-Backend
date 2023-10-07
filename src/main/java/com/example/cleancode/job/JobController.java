@@ -70,12 +70,12 @@ public class JobController {
 
     }
 
-    @GetMapping("/getAvailableEmployees")
+    @PostMapping("/getAvailableEmployees")
     public HashMap<Integer, Boolean> getAvailableEmployees(@RequestBody GetAvailableEmployeeDTO
                                                                        getAvailableEmployeeDTO) {
 
         return jobService.getAvailableEmployees(
-                LocalDateTime.parse(getAvailableEmployeeDTO.getDate() + "T00:00:00"),
+                LocalDateTime.parse(getAvailableEmployeeDTO.getDate().substring(0,10) + "T00:00:00"),
                 getAvailableEmployeeDTO.getLookForAvailableThisManyHours());
 
     }
