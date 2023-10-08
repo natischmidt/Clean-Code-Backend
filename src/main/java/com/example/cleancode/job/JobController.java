@@ -71,7 +71,7 @@ public class JobController {
     }
 
     @PostMapping("/getAvailableEmployees")
-    public HashMap<Integer, Boolean> getAvailableEmployees(@RequestBody GetAvailableEmployeeDTO
+    public List<Boolean> getAvailableEmployees(@RequestBody GetAvailableEmployeeDTO
                                                                        getAvailableEmployeeDTO) {
 
         return jobService.getAvailableEmployees(

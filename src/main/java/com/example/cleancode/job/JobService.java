@@ -76,7 +76,7 @@ public class JobService {
     }
 
 
-    public HashMap<Integer, Boolean> getAvailableEmployees(LocalDateTime date, int lookForAvailableThisManyHours) {
+    public List<Boolean> getAvailableEmployees(LocalDateTime date, int lookForAvailableThisManyHours) {
         HashMap<Long, List<TimeSlots>> availableEmployeesMap = new HashMap<>();
 
         List<List<Employee>> employeeListList = new ArrayList<>();
@@ -144,7 +144,7 @@ public class JobService {
         boolMap.put(14, fourteen);
         boolMap.put(15, fifteen);
         boolMap.put(16, sixteen);
-
+        List<Boolean> boolList = new ArrayList<>(List.of(false, false, false, false, false, false, false, false, false));
 
         for(int i = 0; i < employeeListList.size(); i++) {
 //            System.out.println("yttre listan, nummer " + i + " " +employeeListList.get(i));
@@ -165,7 +165,8 @@ public class JobService {
                     **/
 
                     if(employeeListList.get(i + k).contains(employeeListList.get(i).get(j)) ) {
-                        boolMap.put(i+8, true);
+//                        boolMap.put(i+8, true);
+                        boolList.set(i, true);
                     }
                 }
              }
@@ -184,7 +185,7 @@ public class JobService {
 
         System.out.println(boolMap);
 
-        return boolMap;
+        return boolList;
     }
 
 
