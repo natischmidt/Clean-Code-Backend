@@ -24,8 +24,6 @@ public class JobController {
 
     @PostMapping("/createJob/")
     public Long createJob(@RequestBody CreateJobDTO createJobDTO) {
-
-
         return jobService.createJob(createJobDTO);
     }
 
@@ -58,10 +56,9 @@ public class JobController {
         return jobService.getAllJobsForCustomer(cusId);
     }
 
-    @PutMapping("/update/{id}")
-    public GetJobDTO updateJobInfo(@PathVariable Long id,
-                                   @RequestBody GetJobDTO jobDTO){
-        return jobService.updateJobInfo(id, jobDTO);
+    @PutMapping("/update/")
+    public GetJobDTO updateJobInfo(@RequestBody GetJobDTO jobDTO){
+        return jobService.updateJobInfo(jobDTO);
     }
 
     @GetMapping("/getByStatus")
@@ -75,14 +72,8 @@ public class JobController {
     @PostMapping("/getAvailableEmployees")
     public List<Boolean> getAvailableEmployees(@RequestBody GetAvailableEmployeeDTO
                                                                        getAvailableEmployeeDTO) {
-
         return jobService.getAvailableEmployees(
                 LocalDateTime.parse(getAvailableEmployeeDTO.getDate().substring(0,10) + "T00:00:00"),
                 getAvailableEmployeeDTO.getLookForAvailableThisManyHours());
-
     }
-
-
-
-
 }

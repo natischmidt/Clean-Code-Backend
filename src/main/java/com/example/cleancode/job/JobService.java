@@ -34,7 +34,6 @@ public class JobService {
     private final BookedRepository bookedRepository;
 
     public JobService(JobRepository jobRepository, EmployeeRepository employeeRepository, CustomerRepository customerRepository, BookedRepository bookedRepository) {
-
         this.jobRepository = jobRepository;
         this.employeeRepository = employeeRepository;
         this.customerRepository = customerRepository;
@@ -77,7 +76,6 @@ public class JobService {
 
 
     public List<Boolean> getAvailableEmployees(LocalDateTime date, int lookForAvailableThisManyHours) {
-        HashMap<Long, List<TimeSlots>> availableEmployeesMap = new HashMap<>();
 
         List<List<Employee>> employeeListList = new ArrayList<>();
         List<Employee> empList = new ArrayList<>();
@@ -101,60 +99,18 @@ public class JobService {
                     .stream()
                     .filter(x -> x.getRole().equals(EMPLOYEE))
                     .collect(Collectors.toList()));
-
-
-//            employeeListList.get(i).stream().forEach(x -> System.out.println("employee: " + x.getFirstName()));
-
-            /**
-            (
-             EIGHT:     (LISTA1   - emp1, emp2, emp5, emp8)
-            NINE:       (LISTA2   - emp2, emp3, emp5, emp8)
-            TEN:        (LISTA3   - emp1, emp3, emp5, emp9)
-            ELEVEN:     (LISTA4   - emp1, emp3, emp5, emp9)
-             )
-            **/
-
-//            List<Employee> employees = employeeRepository.findUnbookedEmployees(date, timeSlotList);
         }
+
         employeeListList.add(List.of());
         employeeListList.add(List.of());
 
-//        List<Employee> employeeList = employees
-//                .stream()
-//                .filter(x -> x.getRole().equals(Role.EMPLOYEE))
-//                .toList();
-
-        boolean eight = false;
-        boolean nine = false;
-        boolean ten = false;
-        boolean eleven = false;
-        boolean twelve = false;
-        boolean thirteen = false;
-        boolean fourteen = false;
-        boolean fifteen = false;
-        boolean sixteen = false;
-
-        HashMap<Integer, Boolean> boolMap = new HashMap<>();
-        boolMap.put(8, eight);
-        boolMap.put(9, nine);
-        boolMap.put(10, ten);
-        boolMap.put(11, eleven);
-        boolMap.put(12, twelve);
-        boolMap.put(13, thirteen);
-        boolMap.put(14, fourteen);
-        boolMap.put(15, fifteen);
-        boolMap.put(16, sixteen);
         List<Boolean> boolList = new ArrayList<>(List.of(false, false, false, false, false, false, false, false, false));
 
         for(int i = 0; i < employeeListList.size(); i++) {
-//            System.out.println("yttre listan, nummer " + i + " " +employeeListList.get(i));
-
         /**
             Loopar igenom yttersta listan, som innehåller listor med tillgängliga employees ett visst klockslag och datum
         **/
             for(int j = 0; j < employeeListList.get(i).size(); j++) {
-//                System.out.println("inre listan, nummer " + j + " " + employeeListList.get(i).get(j));
-
                 /**
                  Loopar igenom inre listorna, som innehåller tillgängliga employees ett visst klockslag och datum
                  **/
@@ -163,9 +119,7 @@ public class JobService {
                     /**
                      loopar lookForAvailableThisManyHours gånger, kollar så många listor framåt
                     **/
-
                     if(employeeListList.get(i + k).contains(employeeListList.get(i).get(j)) ) {
-//                        boolMap.put(i+8, true);
                         boolList.set(i, true);
                     }
                 }
@@ -178,9 +132,6 @@ public class JobService {
             boolList.set(8, false);
             boolList.set(7, false);
         }
-
-        System.out.println(boolMap);
-
         return boolList;
     }
 
@@ -194,11 +145,6 @@ public class JobService {
             throw new RuntimeException("No employees are available for this time slot.");
         }
         Employee assignedEmployee = unbookedEmployees.get(0);
-
-//        Optional<Employee> assignedEmployee = employeeRepository.(createJobDTO.getEmpId());
-//        if(assignedEmployee.isEmpty()) {
-//            throw new PersonDoesNotExistException("That employee does not exist!");
-//        }
 
         Job job = new Job(
                 createJobDTO.getJobtype(),
@@ -334,8 +280,8 @@ public class JobService {
     }
 
     @Transactional
-    public GetJobDTO updateJobInfo(Long id, GetJobDTO jobDTO) {
-        Optional<Job> optionalJob = jobRepository.findById(id);
+    public GetJobDTO updateJobInfo(GetJobDTO jobDTO) {
+        Optional<Job> optionalJob = jobRepository.findById(jobDTO.getJobId());
 
         if (optionalJob.isPresent()) {
             Job jobToUpdate = optionalJob.get();
@@ -353,7 +299,6 @@ public class JobService {
             if (jobDTO.getPaymentOption() != null) {
                 jobToUpdate.setPaymentOption(jobDTO.getPaymentOption());
             }
-
             jobRepository.save(jobToUpdate);
 
             // return  updated jobb as DTO
