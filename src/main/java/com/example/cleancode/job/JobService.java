@@ -171,26 +171,18 @@ public class JobService {
                 }
              }
         }
-
-//        for(int i = 0; i < employeeListList.size(); i++) {
-//            for(int j = 0; j < employeeListList.get(i).size(); j++) {
-//                System.out.println(employeeListList.get(i).get(j).getFirstName());
-//                for(int k = 0; k < lookForAvailableThisManyHours; k++) {
-//                    if(employeeListList.get(i+k).contains(employeeListList.get(i).get(j))) {
-//                        boolMap.put(i, true);
-//                    }
-//                }
-//            }
-//        }
+        if(lookForAvailableThisManyHours == 2) {
+            boolList.set(8, false);
+        }
+        if(lookForAvailableThisManyHours == 3) {
+            boolList.set(8, false);
+            boolList.set(7, false);
+        }
 
         System.out.println(boolMap);
 
         return boolList;
     }
-
-
-
-
 
     public Long createJob(CreateJobDTO createJobDTO) {
 
