@@ -15,7 +15,6 @@ public class EmployeeController {
 
     @PostMapping("/createEmployee")
     public Long createEmployee(@RequestBody CreateEmployeeDTO employeeDTO) {
-       System.out.println(employeeDTO);
         return employeeService.createEmployee(employeeDTO);
     }
 

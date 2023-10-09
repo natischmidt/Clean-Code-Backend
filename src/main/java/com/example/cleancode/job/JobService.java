@@ -41,9 +41,8 @@ public class JobService {
     }
 
     public void updateAvailability(Employee selectedEmployee, LocalDateTime date, List<TimeSlots> timeSlot, Job job) {
-        /**
-         * TODO: Se till så att en employee slumpas fram, så inte Employee med id 1 får alla jobb
-         */
+     /** Denna metod anropas från createJob. Den lägger till rader i BookedRepository med de uppbokade tiderna, så
+      * att vi inte kan boka fler städningar än vi har städare. */
 
         for (int i = 0; i < timeSlot.size(); i++) {
 
@@ -144,7 +143,10 @@ public class JobService {
         if (unbookedEmployees.isEmpty()) {
             throw new RuntimeException("No employees are available for this time slot.");
         }
-        Employee assignedEmployee = unbookedEmployees.get(0);
+
+        /** Assign random employee from the unbookedEmployees list */
+        int randomAvailableEmployee = (int) Math.floor(Math.random() * unbookedEmployees.size());
+        Employee assignedEmployee = unbookedEmployees.get(randomAvailableEmployee);
 
         Job job = new Job(
                 createJobDTO.getJobtype(),
@@ -156,6 +158,7 @@ public class JobService {
                 assignedEmployee,
                 customerRepository.findById(createJobDTO.getCustomerId()).get());
         jobRepository.save(job);
+
         updateAvailability(assignedEmployee, date, createJobDTO.getTimeSlotList(), job);
 
         return job.getJobId();
