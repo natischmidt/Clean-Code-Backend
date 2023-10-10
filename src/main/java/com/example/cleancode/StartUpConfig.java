@@ -34,11 +34,11 @@ public class StartUpConfig {
                     "Lars",
                     "Olofsson",
                     "password",
-                    "Larssas måleri AB",
+                    "Larssons måleri AB",
                     "123445660654-57439",
                     "lars.olofsson@malari.se",
                     "0730123123",
-                    "adressgatan 12",
+                    "Adressgatan 12",
                     CustomerType.BUSINESS
 
             ));
@@ -50,7 +50,7 @@ public class StartUpConfig {
                     "password",
                     "hanna.root@ikea.se",
                     "0730123123",
-                    "adressgatan 13",
+                    "Adressgatan 13",
                     CustomerType.PRIVATE
             ));
         };
@@ -61,26 +61,26 @@ public class StartUpConfig {
         Salary salary1 = new Salary(100);
         Employee employee1 = new Employee(
                 "Kent",
-                "olofsson",
+                "Andersson",
                 "password",
-                "5607144544",
-                "kent@kent.kent",
+                "197404119437",
+                "kent.andersson@stadafint.se",
                 "0734123323",
-                "adressvägen 23",
+                "Adressvägen 23",
                 Role.EMPLOYEE,
                 salary1,
                 List.of());
         salary1.setEmployee(employee1);
 
-        Salary salary2 = new Salary(150);
+        Salary salary2 = new Salary(200);
         Employee employee2 = new Employee(
-                "Admin",
-                "Adminsson",
+                "Lisa",
+                "Grönberg",
                 "password",
-                "5607144543",
-                "kentadmin@admin.kent",
-                "0742424242",
-                "adressvägen 65",
+                "199111129674",
+                "lisa.gronberg@stadafint.se",
+                "0702424242",
+                "Adressvägen 65",
                 Role.ADMIN,
                 salary2,
                 List.of());
@@ -88,13 +88,13 @@ public class StartUpConfig {
 
         Salary salary3 = new Salary(150);
         Employee employee3 = new Employee(
-                "Cleany",
-                "McCleanFace",
+                "Klas",
+                "McClean",
                 "password",
-                "5707144543",
-                "mrclean@clean.se",
-                "0742424542",
-                "adressvägen 66",
+                "199901181373",
+                "klas.mcclean@stadafint.se",
+                "0732424542",
+                "Adressvägen 66",
                 Role.EMPLOYEE,
                 salary3,
                 List.of());
@@ -103,12 +103,12 @@ public class StartUpConfig {
         Salary salary4 = new Salary(150);
         Employee employee4 = new Employee(
                 "Sten",
-                "Sture",
+                "Sturesson",
                 "password",
-                "5607844543",
-                "stenis@sten.kent",
-                "07424212242",
-                "adressvägen 67",
+                "197304165789",
+                "sten.sturesson@stadafint.se",
+                "0738947468",
+                "Adressvägen 67",
                 Role.EMPLOYEE,
                 salary4,
                 List.of());
@@ -116,13 +116,13 @@ public class StartUpConfig {
 
         Salary salary5 = new Salary(150);
         Employee employee5 = new Employee(
-                "Namn",
-                "Namnsson",
+                "Johanna",
+                "Qvist",
                 "password",
-                "5607142243",
-                "namn@namn.namn",
-                "0742423342",
-                "adressvägen 68",
+                "199712180762",
+                "johanna.qvist@stadafint.se",
+                "0706788263",
+                "Adressvägen 68",
                 Role.EMPLOYEE,
                 salary5,
                 List.of());
