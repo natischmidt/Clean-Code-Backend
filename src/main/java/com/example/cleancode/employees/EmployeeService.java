@@ -19,17 +19,15 @@ public class EmployeeService {
     }
 
     public Long createEmployee(CreateEmployeeDTO employeeDTO) {
-
+        /** First calls checkDTO method to verify entered information. If something is wrong, we throw an exception.
+         *...
+         * Then creates the employee, and returns the id. If an employee with that id already exists, we throw an exception. */
         if (!checkDTO(employeeDTO)) {
             throw new InvalidRequestException("One or more fields have invalid or missing content.");
         }
-
         Optional<Employee> optEmp = employeeRepository.findBySsNumber(employeeDTO.getSsNumber());
         if (optEmp.isEmpty()) {
-
             Salary salary = new Salary(employeeDTO.getSalary());
-
-
             Employee employee = new Employee(
                     employeeDTO.getFirstName(),
                     employeeDTO.getLastName(),
@@ -41,11 +39,8 @@ public class EmployeeService {
                     employeeDTO.getRole(),
                     salary,
                     List.of());
-
             salary.setEmployee(employee);
             employeeRepository.save(employee);
-
-
             return employee.getId();
         } else {
             throw new PersonAlreadyExistsException("That person is already registered as an employee.");
@@ -53,8 +48,8 @@ public class EmployeeService {
     }
 
     public Long deleteEmployee(Long id) {
+        /** Deletes the employee with the entered id. If no such employee exist, we throw an exception. Returns the deleted employees id.*/
         Optional<Employee> optEmp = employeeRepository.findById(id);
-
         if (optEmp.isPresent()) {
             employeeRepository.deleteById(id);
             return id;
@@ -64,6 +59,7 @@ public class EmployeeService {
     }
 
     public GetEmployeeDTO getEmployee(Long empId) {
+        /** Returns DTO with the employee with the entered id. If no such employee exist, we throw an exception. */
         Optional<Employee> optEmp = employeeRepository.findById(empId);
         if (optEmp.isPresent()) {
             return employeeToGetEmployeeDto(optEmp.get());
@@ -73,6 +69,7 @@ public class EmployeeService {
     }
 
     public List<GetEmployeeDTO> getAllEmployees() {
+        /** Returns a list, containing all employees, including Admins */
         List<Employee> empList = employeeRepository.findAll();
         return empList
                 .stream()
@@ -81,8 +78,8 @@ public class EmployeeService {
     }
 
     public GetEmployeeDTO editEmployee(Long empId, EditEmployeeDTO employeeDTO) {
+        /** If an employee with the entered id exists, we update it with the values from the DTO. If not, exception is thrown. */
         Optional<Employee> optEmp = employeeRepository.findById(empId);
-
         if (optEmp.isPresent()) {
             optEmp.get().setFirstName(employeeDTO.getFirstName());
             optEmp.get().setLastName(employeeDTO.getLastName());
@@ -93,8 +90,6 @@ public class EmployeeService {
             optEmp.get().setAddress(employeeDTO.getAddress());
             optEmp.get().setRole(employeeDTO.getRole());
             optEmp.get().getSalary().setHourlySalary(employeeDTO.getHourlySalary());
-
-
         } else {
             throw new PersonDoesNotExistException("No employee with that id was found!");
         }
@@ -103,6 +98,7 @@ public class EmployeeService {
     }
 
     private GetEmployeeDTO employeeToGetEmployeeDto(Employee employee) {
+        /** Converts Employee to GetEmployeeDto*/
         return new GetEmployeeDTO(
                 employee.getId(),
                 employee.getFirstName(),
@@ -117,13 +113,13 @@ public class EmployeeService {
     }
 
     private Boolean checkDTO(CreateEmployeeDTO dto) {
-        //Checks so that fields are not null, and that email and phone number are valid formats.
+        /** Checks so that fields are not null, and that email and phone number are valid formats. Returns true if all fields are ok.*/
         return dto.getFirstName() != null
                 && dto.getLastName() != null
                 && dto.getPassword() != null
                 && dto.getSsNumber() != null
                 && dto.getEmail().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
-                && dto.getPhoneNumber().matches("^\\D*(\\d\\D*){8,12}$")
+                && dto.getPhoneNumber().matches("^(\\d+){8,12}$")
                 && dto.getAddress() != null
                 && dto.getRole() != null;
     }
