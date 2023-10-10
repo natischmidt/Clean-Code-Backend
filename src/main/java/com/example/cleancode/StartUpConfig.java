@@ -38,7 +38,9 @@ public class StartUpConfig {
                     "hej@hej.hej",
                     "0730123123",
                     "adressgatan 12",
-                    CustomerType.BUSINESS
+                    CustomerType.BUSINESS,
+                    "password"
+
             ));
             customerRepository.save(new Customer(
                     "Hilfrid",
@@ -46,8 +48,28 @@ public class StartUpConfig {
                     "hilfrid@supercompany.com",
                     "0730424258",
                     "Ragnargatan 25",
-                    CustomerType.PRIVATE
+                    CustomerType.PRIVATE,
+                    "password"
             ));
+            customerRepository.save(new Customer(
+                    "Gunvor",
+                    "Olofsson",
+                    "gunvor@hemma.se",
+                    "0720527288",
+                    "Lugna gatan 1",
+                    CustomerType.PRIVATE,
+                    "password"
+            ));
+            customerRepository.save(new Customer(
+                    "Stoffe",
+                    "Klasson",
+                    "stoffe@minmail.se",
+                    "0720512851",
+                    "Stoffgatan 23",
+                    CustomerType.PRIVATE,
+                    "password"
+            ));
+
         };
     }
 
