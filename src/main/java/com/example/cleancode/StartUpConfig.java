@@ -11,8 +11,6 @@ import com.example.cleancode.job.JobRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -42,8 +40,10 @@ public class StartUpConfig {
                     "0730123123",
                     "adressgatan 12",
                     CustomerType.BUSINESS
+
             ));
             customerRepository.save(new Customer(
+
                     UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53"),
                     "Hanna",
                     "Root",
@@ -72,7 +72,6 @@ public class StartUpConfig {
                 List.of());
         salary1.setEmployee(employee1);
 
-
         Salary salary2 = new Salary(150);
         Employee employee2 = new Employee(
                 "Admin",
@@ -87,7 +86,6 @@ public class StartUpConfig {
                 List.of());
         salary2.setEmployee(employee2);
 
-
         Salary salary3 = new Salary(150);
         Employee employee3 = new Employee(
                 "Cleany",
@@ -101,7 +99,6 @@ public class StartUpConfig {
                 salary3,
                 List.of());
         salary3.setEmployee(employee3);
-
 
         Salary salary4 = new Salary(150);
         Employee employee4 = new Employee(
@@ -225,6 +222,4 @@ public class StartUpConfig {
                     customerRepository.findById(UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")).get()));
         };
     }
-
-
 }
