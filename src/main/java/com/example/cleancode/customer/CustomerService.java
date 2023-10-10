@@ -60,8 +60,9 @@ public class CustomerService {
                         createDTO.getEmail(),
                         createDTO.getPhoneNumber(),
                         createDTO.getAddress(),
-                        CustomerType.PRIVATE);
-                customer.setPassword(createDTO.getPassword());
+                        CustomerType.PRIVATE,
+                        createDTO.getPassword());
+
 
                 customerRepository.save(customer);
 
@@ -82,7 +83,8 @@ public class CustomerService {
                         createDTO.getEmail(),
                         createDTO.getPhoneNumber(),
                         createDTO.address,
-                        CustomerType.BUSINESS);
+                        CustomerType.BUSINESS,
+                        createDTO.getPassword());
                 customer.setPassword(createDTO.getPassword());
                 customerRepository.save(customer);
 

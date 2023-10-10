@@ -1,5 +1,6 @@
 package com.example.cleancode.job;
 
+import com.example.cleancode.customer.Customer;
 import com.example.cleancode.enums.JobStatus;
 import com.example.cleancode.enums.Jobtype;
 import com.example.cleancode.enums.PaymentOption;
@@ -19,4 +20,5 @@ public class GetJobDTO {
     private int squareMeters;
     private PaymentOption paymentOption;
     private String message;
+    private Customer customer;
 }
