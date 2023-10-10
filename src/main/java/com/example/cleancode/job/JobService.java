@@ -227,7 +227,8 @@ public class JobService {
                 job.getJobStatus(),
                 job.getSquareMeters(),
                 job.getPaymentOption(),
-                job.getMessage()
+                job.getMessage(),
+                job.getCustomer()
         );
     }
 
