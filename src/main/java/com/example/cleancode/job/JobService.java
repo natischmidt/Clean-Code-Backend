@@ -222,7 +222,8 @@ public class JobService {
                 job.getTimeSlot(),
                 job.getJobStatus(),
                 job.getSquareMeters(),
-                job.getPaymentOption()
+                job.getPaymentOption(),
+                job.getMessage()
         );
     }
 

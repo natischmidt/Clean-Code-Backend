@@ -39,6 +39,7 @@ public class Job {
     private int squareMeters;
     @Enumerated(EnumType.STRING)
     private PaymentOption paymentOption;
+    private String message;
 
     @ManyToMany(mappedBy = "jobs")
     @JsonBackReference
@@ -72,4 +73,5 @@ public class Job {
         this.employee = employee;
         this.customer = customer;
     }
+
 }

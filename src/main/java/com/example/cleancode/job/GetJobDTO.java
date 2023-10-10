@@ -18,5 +18,5 @@ public class GetJobDTO {
     private JobStatus jobStatus;
     private int squareMeters;
     private PaymentOption paymentOption;
-
+    private String message;
 }

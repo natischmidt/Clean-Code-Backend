@@ -57,7 +57,12 @@ public class JobController {
     }
 
     @PutMapping("/update/")
-    public GetJobDTO updateJobInfo(@RequestBody GetJobDTO jobDTO){
+    public GetJobDTO updateJobInfo(@RequestBody GetJobDTO jobDTO,
+                                   @RequestParam (name ="message", required = false) String message){
+
+        if (message != null && !message.isEmpty()) {
+                jobDTO.setMessage(message);
+        }
         return jobService.updateJobInfo(jobDTO);
     }
 
@@ -66,12 +71,10 @@ public class JobController {
         List<JobStatus> jobStatuses = statuses.stream().map(status ->
                 JobStatus.valueOf(status.toUpperCase())).collect(Collectors.toList());
         return jobService.getJobsByStatus(jobStatuses);
-
     }
 
     @PostMapping("/getAvailableEmployees")
-    public List<Boolean> getAvailableEmployees(@RequestBody GetAvailableEmployeeDTO
-                                                                       getAvailableEmployeeDTO) {
+    public List<Boolean> getAvailableEmployees(@RequestBody GetAvailableEmployeeDTO getAvailableEmployeeDTO) {
         return jobService.getAvailableEmployees(
                 LocalDateTime.parse(getAvailableEmployeeDTO.getDate().substring(0,10) + "T00:00:00"),
                 getAvailableEmployeeDTO.getLookForAvailableThisManyHours());
