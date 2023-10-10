@@ -165,8 +165,6 @@ public class JobService {
         return job.getJobId();
     }
 
-
-
     public Long deleteJob(Long id) {
         Optional<Job> optJob = jobRepository.findById(id);
 

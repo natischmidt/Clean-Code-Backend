@@ -30,7 +30,7 @@ public class Customer {
     @Column(name = "customer_type")
     private CustomerType customerType;
 
-    public Customer(String firstName, String lastName, String companyName, String orgNumber, String email, String phoneNumber, String address, CustomerType customerType) {
+    public Customer(String firstName, String lastName, String companyName, String orgNumber, String email, String phoneNumber, String address, CustomerType customerType, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.companyName = companyName;
@@ -39,15 +39,15 @@ public class Customer {
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.customerType = customerType;
+        this.password = password;
     }
-    public Customer(String firstName, String lastName, String email, String phoneNumber, String address, CustomerType customerType) {
+    public Customer(String firstName, String lastName, String email, String phoneNumber, String address, CustomerType customerType, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.companyName = companyName;
-        this.orgNumber = orgNumber;
-        this.email = email;
+       this.email = email;
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.customerType = customerType;
+        this.password = password;
     }
 }
