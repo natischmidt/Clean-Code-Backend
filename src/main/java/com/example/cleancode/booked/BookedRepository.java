@@ -11,4 +11,5 @@ public interface BookedRepository extends JpaRepository<Booked, Long> {
     Optional<Booked> findByDateAndTimeSlots(LocalDateTime date, TimeSlots timeSlot);
 
     List<Booked> findByDate(LocalDateTime localDateTime);
+
 }

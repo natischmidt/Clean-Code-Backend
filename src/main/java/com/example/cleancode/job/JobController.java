@@ -54,7 +54,7 @@ public class JobController {
     }
 
     @PutMapping("/updateJob")
-    public GetJobDTO updateJobInfo(@RequestBody GetJobDTO jobDTO,
+    public GetJobDTO updateJobInfo(@RequestBody UpdateJobDTO jobDTO,
                                    @RequestParam (name ="message", required = false) String message){
 
         if (message != null && !message.isEmpty()) {

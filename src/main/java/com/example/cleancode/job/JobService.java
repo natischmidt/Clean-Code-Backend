@@ -30,7 +30,11 @@ public class JobService {
     private final CustomerRepository customerRepository;
     private final BookedRepository bookedRepository;
 
-    public JobService(JobRepository jobRepository, EmployeeRepository employeeRepository, CustomerRepository customerRepository, BookedRepository bookedRepository) {
+    public JobService(
+            JobRepository jobRepository,
+            EmployeeRepository employeeRepository,
+            CustomerRepository customerRepository,
+            BookedRepository bookedRepository) {
         this.jobRepository = jobRepository;
         this.employeeRepository = employeeRepository;
         this.customerRepository = customerRepository;
@@ -86,7 +90,6 @@ public class JobService {
                 TimeSlots.FIFTEEN,
                 TimeSlots.SIXTEEN
                 );
-
         for(int i = 0; i < timeSlotList.size(); i++) {
 
             empList = employeeRepository.findUnbookedEmployees(date, timeSlotList.get(i));
@@ -147,8 +150,9 @@ public class JobService {
         }
 
         /** Assign random employee from the unbookedEmployees list */
-        int randomAvailableEmployee = (int) Math.floor(Math.random() * unbookedEmployees.size());
-        Employee assignedEmployee = unbookedEmployees.get(randomAvailableEmployee);
+//        int randomAvailableEmployee = (int) Math.floor(Math.random() * unbookedEmployees.size());
+//        Employee assignedEmployee = unbookedEmployees.get(randomAvailableEmployee);
+        Employee assignedEmployee = assignEmployeeToJob(unbookedEmployees);
 
         Job job = new Job(
                 createJobDTO.getJobtype(),
@@ -164,6 +168,12 @@ public class JobService {
         updateAvailability(assignedEmployee, date, createJobDTO.getTimeSlotList(), job);
 
         return job.getJobId();
+    }
+
+    private Employee assignEmployeeToJob(List<Employee> unbookedEmployees) {
+        int randomAvailableEmployee = (int) Math.floor(Math.random() * unbookedEmployees.size());
+        Employee assignedEmployee = unbookedEmployees.get(randomAvailableEmployee);
+        return assignedEmployee;
     }
 
     public Long deleteJob(Long id) {
@@ -285,7 +295,7 @@ public class JobService {
     }
 
     @Transactional
-    public GetJobDTO updateJobInfo(GetJobDTO jobDTO) {
+    public GetJobDTO updateJobInfo(UpdateJobDTO jobDTO) {
         Optional<Job> optionalJob = jobRepository.findById(jobDTO.getJobId());
 
         if (optionalJob.isPresent()) {
@@ -295,9 +305,14 @@ public class JobService {
             if (jobDTO.getJobtype() != null) {
                 jobToUpdate.setJobtype(jobDTO.getJobtype());
             }
-            if (jobDTO.getDate() != null) {
+            if ((jobDTO.getDate() != null
+                    && jobDTO.getDate() != optionalJob.get().getDate())
+                        || (jobDTO.getJobtype() != null
+                            && jobDTO.getJobtype() != optionalJob.get().getJobtype())) {
                 jobToUpdate.setDate(jobDTO.getDate());
+                updateBookedEmployeesWhenDateIsChanged(jobDTO);
             }
+
             if (jobDTO.getJobStatus() != null) {
                 jobToUpdate.setJobStatus(jobDTO.getJobStatus());
             }
@@ -311,6 +326,31 @@ public class JobService {
         } else {
             throw new JobDoesNotExistException("Job does not exist");
         }
+    }
+
+    private void updateBookedEmployeesWhenDateIsChanged(UpdateJobDTO jobDTO) {
+
+        Optional<Job> optJob = jobRepository.findById(jobDTO.getJobId());
+        if(optJob.isEmpty()) {
+            throw new JobDoesNotExistException("No such job in database.");
+        }
+        Optional<Booked> booked = bookedRepository.findByDateAndTimeSlots(jobDTO.getDate(), jobDTO.getTimeSlotsList().get(0));
+        if(booked.isEmpty()) {
+            throw new InvalidRequestException("No job exists with specified date / timeslot combination");
+        }
+        bookedRepository.deleteById(booked.get().getId());
+
+        List<Employee> empList = findUnbookedEmployees(jobDTO.getDate(), jobDTO.getTimeSlotsList());
+        if (empList.isEmpty()) {
+            throw new RuntimeException("No employees are available for this time slot.");
+        }
+        Employee assignedEmployee = assignEmployeeToJob(empList);
+
+        optJob.get().setDate(jobDTO.getDate());
+        optJob.get().setTimeSlot(jobDTO.getTimeSlotsList().get(0));
+        optJob.get().setEmployee(assignedEmployee);
+
+        jobRepository.save(optJob.get());
     }
 
 
