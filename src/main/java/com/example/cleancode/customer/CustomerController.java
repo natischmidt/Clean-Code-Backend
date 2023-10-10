@@ -3,6 +3,7 @@ package com.example.cleancode.customer;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/customer")
@@ -20,11 +21,11 @@ public class CustomerController {
         return customerService.createCustomer(createDTO);
     }
     @DeleteMapping("/delete/{id}")
-    public String removeCustomer(@PathVariable Long id){
+    public String removeCustomer(@PathVariable UUID id){
         return customerService.deleteCustomer(id);
     }
     @PatchMapping("/update/{id}")
-    public CustomerDTO changeCustomerInfo(@PathVariable Long id,
+    public CustomerDTO changeCustomerInfo(@PathVariable UUID id,
                                           @RequestBody CustomerDTO customerDTO){
         return customerService.updateCustomerInfo(id, customerDTO);
     }
@@ -33,7 +34,7 @@ public class CustomerController {
         return customerService.getAllCustomers();
     }
     @GetMapping("/{id}")
-    public CustomerDTO getCustomerById(@PathVariable Long id){
+    public CustomerDTO getCustomerById(@PathVariable UUID id){
         return customerService.getCustomerById(id);
     }
 

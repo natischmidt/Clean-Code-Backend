@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.example.cleancode.enums.Role.EMPLOYEE;
@@ -272,7 +273,7 @@ public class JobService {
 //        }
 //    }
 
-    public List<GetJobDTO> getAllJobsForCustomer(Long cusId) {
+    public List<GetJobDTO> getAllJobsForCustomer(UUID cusId) {
         List<Job> jobsForCustomer = jobRepository.findAll()
                 .stream()
                 .filter(job -> job.getCustomer().getId() == cusId)

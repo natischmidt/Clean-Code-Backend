@@ -3,11 +3,12 @@ package com.example.cleancode.customer;
 import com.example.cleancode.enums.CustomerType;
 import lombok.Getter;
 import lombok.Setter;
+import java.util.UUID;
 
 @Getter
 @Setter
 public class CustomerDTO {
-    Long id;
+    UUID id;
     String firstName;
     String lastName;
     String companyName;

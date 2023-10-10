@@ -5,6 +5,7 @@ import com.example.cleancode.enums.PaymentOption;
 import com.example.cleancode.enums.TimeSlots;
 import lombok.Data;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 public class CreateJobDTO {
@@ -14,6 +15,6 @@ public class CreateJobDTO {
     private List<TimeSlots> timeSlotList;
     private int squareMeters;
     private PaymentOption paymentOption;
-    private Long customerId;
+    private UUID customerId;
 //    private Long empId;
 }

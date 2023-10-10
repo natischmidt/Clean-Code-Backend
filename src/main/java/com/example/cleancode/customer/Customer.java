@@ -7,16 +7,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 
 @Entity
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class Customer {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private UUID id;
 
     private String firstName;
     private String lastName;
@@ -30,9 +31,34 @@ public class Customer {
     @Column(name = "customer_type")
     private CustomerType customerType;
 
-    public Customer(String firstName, String lastName, String companyName, String orgNumber, String email, String phoneNumber, String address, CustomerType customerType) {
+//    public Customer(String firstName, String lastName, String password, String companyName, String orgNumber, String email, String phoneNumber, String address, CustomerType customerType) {
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.password = password;
+//        this.companyName = companyName;
+//        this.orgNumber = orgNumber;
+//        this.email = email;
+//        this.phoneNumber = phoneNumber;
+//        this.address = address;
+//        this.customerType = customerType;
+//    }
+//    public Customer(String firstName, String lastName, String password, String email, String phoneNumber, String address, CustomerType customerType) {
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.password = password;
+//        this.companyName = companyName;
+//        this.orgNumber = orgNumber;
+//        this.email = email;
+//        this.phoneNumber = phoneNumber;
+//        this.address = address;
+//        this.customerType = customerType;
+//    }
+
+    public Customer(UUID id, String firstName, String lastName, String password, String companyName, String orgNumber, String email, String phoneNumber, String address, CustomerType customerType) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.password = password;
         this.companyName = companyName;
         this.orgNumber = orgNumber;
         this.email = email;
@@ -40,9 +66,11 @@ public class Customer {
         this.address = address;
         this.customerType = customerType;
     }
-    public Customer(String firstName, String lastName, String email, String phoneNumber, String address, CustomerType customerType) {
+    public Customer(UUID id, String firstName, String lastName, String password, String email, String phoneNumber, String address, CustomerType customerType) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.password = password;
         this.companyName = companyName;
         this.orgNumber = orgNumber;
         this.email = email;

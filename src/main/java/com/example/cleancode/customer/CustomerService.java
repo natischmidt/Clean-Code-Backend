@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CustomerService {
@@ -30,21 +31,7 @@ public class CustomerService {
 
         return customerDTO;
     }
-    //gåre o fixa detta smidigare, ist för 2???
-    public CreateCustomerDTO customerEntityToCreateDTO(Customer customer){
-        CreateCustomerDTO createDTO = new CreateCustomerDTO();
-        createDTO.setFirstName(customer.getFirstName());
-        createDTO.setLastName(customer.getLastName());
-        createDTO.setPassword(customer.getPassword());
-        createDTO.setCompanyName(customer.getCompanyName());
-        createDTO.setOrgNumber(customer.getOrgNumber());
-        createDTO.setEmail(customer.getEmail());
-        createDTO.setPhoneNumber(customer.getPhoneNumber());
-        createDTO.setAddress(customer.getAddress());
-        createDTO.setCustomerType(customer.getCustomerType());
 
-        return createDTO;
-    }
     @Autowired
     private EmailService emailService;
 
@@ -66,8 +53,10 @@ public class CustomerService {
         try {
             if (createDTO.getCompanyName() == null && createDTO.getOrgNumber() == null){
                 Customer customer = new Customer(
+                        UUID.randomUUID(),
                         createDTO.getFirstName(),
                         createDTO.getLastName(),
+                        createDTO.getPassword(),
                         createDTO.getEmail(),
                         createDTO.getPhoneNumber(),
                         createDTO.getAddress(),
@@ -84,8 +73,10 @@ public class CustomerService {
             }
             if (createDTO.getCompanyName() != null && createDTO.getOrgNumber() != null){
                 Customer customer = new Customer(
+                        UUID.randomUUID(),
                         createDTO.getFirstName(),
                         createDTO.getLastName(),
+                        createDTO.getPassword(),
                         createDTO.getCompanyName(),
                         createDTO.getOrgNumber(),
                         createDTO.getEmail(),
@@ -115,7 +106,7 @@ public class CustomerService {
     }
 
 
-    public String deleteCustomer(Long id) {
+    public String deleteCustomer(UUID id) {
         Optional<Customer> optionalCustomer = customerRepository.findById(id);
         if (optionalCustomer.isPresent()){
             customerRepository.deleteById(id);
@@ -126,7 +117,7 @@ public class CustomerService {
     }
 
     @Transactional
-    public CustomerDTO updateCustomerInfo(Long id, CustomerDTO customerDTO) {
+    public CustomerDTO updateCustomerInfo(UUID id, CustomerDTO customerDTO) {
         Optional<Customer> optionalCustomer = customerRepository.findById(id);
         if (optionalCustomer.isPresent()){
             Customer customerUpdate = optionalCustomer.get();
@@ -170,7 +161,7 @@ public class CustomerService {
         return allCustomersDTO;
     }
 
-    public CustomerDTO getCustomerById(Long id) {
+    public CustomerDTO getCustomerById(UUID id) {
         Optional<Customer> optionalCustomer = customerRepository.findById(id);
         if (optionalCustomer.isPresent()){
             return customerEntityToDTO(optionalCustomer.get());

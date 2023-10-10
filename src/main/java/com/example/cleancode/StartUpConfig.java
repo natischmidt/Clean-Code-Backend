@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Configuration
 public class StartUpConfig {
@@ -31,21 +32,25 @@ public class StartUpConfig {
     public CommandLineRunner initCustomerDatabase(CustomerRepository customerRepository) {
         return args -> {
             customerRepository.save(new Customer(
-                    "lars",
-                    "olof",
+                    UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632"),
+                    "Lars",
+                    "Olofsson",
+                    "password",
                     "Larssas måleri AB",
-                    "123445660654-orgnr",
-                    "hej@hej.hej",
+                    "123445660654-57439",
+                    "lars.olofsson@malari.se",
                     "0730123123",
                     "adressgatan 12",
                     CustomerType.BUSINESS
             ));
             customerRepository.save(new Customer(
-                    "Hilfrid",
-                    "Ragnarsson",
-                    "hilfrid@supercompany.com",
-                    "0730424258",
-                    "Ragnargatan 25",
+                    UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53"),
+                    "Hanna",
+                    "Root",
+                    "password",
+                    "hanna.root@ikea.se",
+                    "0730123123",
+                    "adressgatan 13",
                     CustomerType.PRIVATE
             ));
         };
@@ -147,7 +152,7 @@ public class StartUpConfig {
                     55,
                     PaymentOption.KLARNA,
                     employeeRepository.findById(1L).get(),
-                    customerRepository.findById(1L).get()));
+                    customerRepository.findById(UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632")).get()));
 
             jobRepository.save(new Job(
                     Jobtype.BASIC,
@@ -157,7 +162,7 @@ public class StartUpConfig {
                     50,
                     PaymentOption.KLARNA,
                     employeeRepository.findById(1L).get(),
-                    customerRepository.findById(2L).get()));
+                    customerRepository.findById(UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")).get()));
 
             jobRepository.save(new Job(
                     Jobtype.BASIC,
@@ -167,7 +172,7 @@ public class StartUpConfig {
                     55,
                     PaymentOption.KLARNA,
                     employeeRepository.findById(2L).get(),
-                    customerRepository.findById(1L).get()));
+                    customerRepository.findById(UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632")).get()));
 
             jobRepository.save(new Job(
                     Jobtype.ADVANCED,
@@ -177,7 +182,7 @@ public class StartUpConfig {
                     30,
                     PaymentOption.KLARNA,
                     employeeRepository.findById(3L).get(),
-                    customerRepository.findById(1L).get()));
+                    customerRepository.findById(UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")).get()));
 
             jobRepository.save(new Job(
                     Jobtype.DIAMOND,
@@ -187,7 +192,7 @@ public class StartUpConfig {
                     43,
                     PaymentOption.KLARNA,
                     employeeRepository.findById(4L).get(),
-                    customerRepository.findById(1L).get()));
+                    customerRepository.findById(UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")).get()));
 
             jobRepository.save(new Job(
                     Jobtype.ADVANCED,
@@ -197,7 +202,7 @@ public class StartUpConfig {
                     56,
                     PaymentOption.KLARNA,
                     employeeRepository.findById(1L).get(),
-                    customerRepository.findById(1L).get()));
+                    customerRepository.findById(UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632")).get()));
 
             jobRepository.save(new Job(
                     Jobtype.BASIC,
@@ -207,7 +212,7 @@ public class StartUpConfig {
                     25,
                     PaymentOption.KLARNA,
                     employeeRepository.findById(2L).get(),
-                    customerRepository.findById(1L).get()));
+                    customerRepository.findById(UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")).get()));
 
             jobRepository.save(new Job(
                     Jobtype.BASIC,
@@ -217,7 +222,7 @@ public class StartUpConfig {
                     35,
                     PaymentOption.KLARNA,
                     employeeRepository.findById(2L).get(),
-                    customerRepository.findById(1L).get()));
+                    customerRepository.findById(UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")).get()));
         };
     }
 

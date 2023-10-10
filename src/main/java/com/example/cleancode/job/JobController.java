@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -18,7 +19,7 @@ public class JobController {
         this.jobService = jobService;
     }
 
-    @PostMapping("/createJob/")
+    @PostMapping("/createJob")
     public Long createJob(@RequestBody CreateJobDTO createJobDTO) {
         return jobService.createJob(createJobDTO);
     }
@@ -48,11 +49,11 @@ public class JobController {
 
     // Get all jobs for a specific customer
     @GetMapping("/getAllJobsForCustomer/{cusId}")
-    public List<GetJobDTO> getAllJobsForCustomer(@PathVariable Long cusId){
+    public List<GetJobDTO> getAllJobsForCustomer(@PathVariable UUID cusId){
         return jobService.getAllJobsForCustomer(cusId);
     }
 
-    @PutMapping("/update/")
+    @PutMapping("/updateJob")
     public GetJobDTO updateJobInfo(@RequestBody GetJobDTO jobDTO,
                                    @RequestParam (name ="message", required = false) String message){
 
