@@ -285,8 +285,11 @@ public class JobService {
     public List<GetJobDTO> getAllJobsForCustomer(UUID cusId) {
         List<Job> jobsForCustomer = jobRepository.findAll()
                 .stream()
-                .filter(job -> job.getCustomer().getId() == cusId)
+                .filter(job -> job.getCustomer().getId().equals(cusId))
                 .collect(Collectors.toList());
+
+        System.out.println(cusId);
+        System.out.println(jobsForCustomer);
         if (!jobsForCustomer.isEmpty()) {
             return convertToDTOList(jobsForCustomer);
         } else {
