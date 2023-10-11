@@ -42,8 +42,8 @@ public class JobService {
     }
 
     public void updateAvailability(Employee selectedEmployee, LocalDateTime date, List<TimeSlots> timeSlot, Job job) {
-     /** Denna metod anropas från createJob. Den lägger till rader i BookedRepository med de uppbokade tiderna, så
-      * att vi inte kan boka fler städningar än vi har städare. */
+        /** Denna metod anropas från createJob. Den lägger till rader i BookedRepository med de uppbokade tiderna, så
+         * att vi inte kan boka fler städningar än vi har städare. */
 
         for (int i = 0; i < timeSlot.size(); i++) {
 
@@ -89,8 +89,8 @@ public class JobService {
                 TimeSlots.FOURTEEN,
                 TimeSlots.FIFTEEN,
                 TimeSlots.SIXTEEN
-                );
-        for(int i = 0; i < timeSlotList.size(); i++) {
+        );
+        for (int i = 0; i < timeSlotList.size(); i++) {
 
             empList = employeeRepository.findUnbookedEmployees(date, timeSlotList.get(i));
 
@@ -105,29 +105,29 @@ public class JobService {
 
         List<Boolean> boolList = new ArrayList<>(List.of(false, false, false, false, false, false, false, false, false));
 
-        for(int i = 0; i < employeeListList.size(); i++) {
-        /**
-            Loopar igenom yttersta listan, som innehåller listor med tillgängliga employees ett visst klockslag och datum
-        **/
-            for(int j = 0; j < employeeListList.get(i).size(); j++) {
+        for (int i = 0; i < employeeListList.size(); i++) {
+            /**
+             Loopar igenom yttersta listan, som innehåller listor med tillgängliga employees ett visst klockslag och datum
+             **/
+            for (int j = 0; j < employeeListList.get(i).size(); j++) {
                 /**
                  Loopar igenom inre listorna, som innehåller tillgängliga employees ett visst klockslag och datum
                  **/
-                for(int k = 0; k < lookForAvailableThisManyHours; k++) {
+                for (int k = 0; k < lookForAvailableThisManyHours; k++) {
 
                     /**
                      loopar lookForAvailableThisManyHours gånger, kollar så många listor framåt
-                    **/
-                    if(employeeListList.get(i + k).contains(employeeListList.get(i).get(j)) ) {
+                     **/
+                    if (employeeListList.get(i + k).contains(employeeListList.get(i).get(j))) {
                         boolList.set(i, true);
                     }
                 }
-             }
+            }
         }
-        if(lookForAvailableThisManyHours == 2) {
+        if (lookForAvailableThisManyHours == 2) {
             boolList.set(8, false);
         }
-        if(lookForAvailableThisManyHours == 3) {
+        if (lookForAvailableThisManyHours == 3) {
             boolList.set(8, false);
             boolList.set(7, false);
         }
@@ -141,7 +141,7 @@ public class JobService {
         List<Employee> unbookedEmployees = findUnbookedEmployees(date, createJobDTO.getTimeSlotList());
         Optional<Customer> customerOptional = customerRepository.findById(createJobDTO.getCustomerId());
 
-        if(customerOptional.isEmpty()) {
+        if (customerOptional.isEmpty()) {
             throw new CustomerDoesNotExistException(createJobDTO.getCustomerId());
         }
 
@@ -310,8 +310,8 @@ public class JobService {
             }
             if ((jobDTO.getDate() != null
                     && jobDTO.getDate() != optionalJob.get().getDate())
-                        || (jobDTO.getJobtype() != null
-                            && jobDTO.getJobtype() != optionalJob.get().getJobtype())) {
+                    || (jobDTO.getJobtype() != null
+                    && jobDTO.getJobtype() != optionalJob.get().getJobtype())) {
                 jobToUpdate.setDate(jobDTO.getDate());
                 updateBookedEmployeesWhenDateIsChanged(jobDTO);
             }
@@ -334,11 +334,11 @@ public class JobService {
     private void updateBookedEmployeesWhenDateIsChanged(UpdateJobDTO jobDTO) {
 
         Optional<Job> optJob = jobRepository.findById(jobDTO.getJobId());
-        if(optJob.isEmpty()) {
+        if (optJob.isEmpty()) {
             throw new JobDoesNotExistException("No such job in database.");
         }
         Optional<Booked> booked = bookedRepository.findByDateAndTimeSlots(jobDTO.getDate(), jobDTO.getTimeSlotsList().get(0));
-        if(booked.isEmpty()) {
+        if (booked.isEmpty()) {
             throw new InvalidRequestException("No job exists with specified date / timeslot combination");
         }
         bookedRepository.deleteById(booked.get().getId());
@@ -388,5 +388,31 @@ public class JobService {
 
     public List<Job> getJobsByStatus(List<JobStatus> statuses) {
         return jobRepository.findByJobStatusIn(statuses);
+    }
+
+    public List<GetJobDTO> getAllJobsForCustomerWithStatus(UUID cusId, JobStatus status) {
+        List<Job> jobsForCustomer = jobRepository.findAll()
+                .stream()
+                .filter(job -> job.getCustomer().getId().equals(cusId) && job.getJobStatus() == status)
+                .collect(Collectors.toList());
+
+        if (!jobsForCustomer.isEmpty()) {
+            return convertToDTOList(jobsForCustomer);
+        } else {
+            throw new NoJobsForCustomerException("There are no jobs for this customer with the specified status");
+        }
+    }
+
+    public List<GetJobDTO> getAllJobsForEmployeeWithStatus(Long empId, JobStatus status) {
+        List<Job> jobsForEmployee = jobRepository.findAll()
+                .stream()
+                .filter(job -> job.getEmployee().getId() == empId && job.getJobStatus() == status)
+                .collect(Collectors.toList());
+
+        if (!jobsForEmployee.isEmpty()) {
+            return convertToDTOList(jobsForEmployee);
+        } else {
+            throw new NoJobsForCustomerException("There are no jobs for this customer with the specified status");
+        }
     }
 }

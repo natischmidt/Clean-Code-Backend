@@ -14,4 +14,5 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     List<Job> findJobsInTimeRange(@Param("date") LocalDateTime date, @Param("timeSlots") TimeSlots timeSlots);
 
     List<Job> findByJobStatusIn(List<JobStatus> statuses);
+
 }
