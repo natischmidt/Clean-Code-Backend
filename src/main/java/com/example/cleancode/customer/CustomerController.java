@@ -21,21 +21,21 @@ public class CustomerController {
         return customerService.createCustomer(createDTO);
     }
     @DeleteMapping("/delete/{id}")
-    public String removeCustomer(@PathVariable UUID id){
-        return customerService.deleteCustomer(id);
+    public String removeCustomer(@PathVariable String id){
+        return customerService.deleteCustomer(UUID.fromString(id));
     }
     @PatchMapping("/update/{id}")
-    public CustomerDTO changeCustomerInfo(@PathVariable UUID id,
+    public CustomerDTO changeCustomerInfo(@PathVariable String id,
                                           @RequestBody CustomerDTO customerDTO){
-        return customerService.updateCustomerInfo(id, customerDTO);
+        return customerService.updateCustomerInfo(UUID.fromString(id), customerDTO);
     }
     @GetMapping("/all")
     public List<CustomerDTO> getAllCustomers(){
         return customerService.getAllCustomers();
     }
     @GetMapping("/{id}")
-    public CustomerDTO getCustomerById(@PathVariable UUID id){
-        return customerService.getCustomerById(id);
+    public CustomerDTO getCustomerById(@PathVariable String id){
+        return customerService.getCustomerById(UUID.fromString(id));
     }
 
 }

@@ -49,8 +49,8 @@ public class JobController {
 
     // Get all jobs for a specific customer
     @GetMapping("/getAllJobsForCustomer/{cusId}")
-    public List<GetJobDTO> getAllJobsForCustomer(@PathVariable UUID cusId){
-        return jobService.getAllJobsForCustomer(cusId);
+    public List<GetJobDTO> getAllJobsForCustomer(@PathVariable String cusId){
+        return jobService.getAllJobsForCustomer(UUID.fromString(cusId));
     }
 
     @PutMapping("/updateJob")
