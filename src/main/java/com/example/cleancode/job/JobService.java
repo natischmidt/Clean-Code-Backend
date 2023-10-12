@@ -90,8 +90,8 @@ public class JobService {
                 TimeSlots.FOURTEEN,
                 TimeSlots.FIFTEEN,
                 TimeSlots.SIXTEEN
-                );
-        for(int i = 0; i < timeSlotList.size(); i++) {
+        );
+        for (int i = 0; i < timeSlotList.size(); i++) {
 
             empList = employeeRepository.findUnbookedEmployees(date, timeSlotList.get(i));
 
@@ -106,29 +106,29 @@ public class JobService {
 
         List<Boolean> boolList = new ArrayList<>(List.of(false, false, false, false, false, false, false, false, false));
 
-        for(int i = 0; i < employeeListList.size(); i++) {
-        /**
-            Loopar igenom yttersta listan, som innehåller listor med tillgängliga employees ett visst klockslag och datum
-        **/
-            for(int j = 0; j < employeeListList.get(i).size(); j++) {
+        for (int i = 0; i < employeeListList.size(); i++) {
+            /**
+             Loopar igenom yttersta listan, som innehåller listor med tillgängliga employees ett visst klockslag och datum
+             **/
+            for (int j = 0; j < employeeListList.get(i).size(); j++) {
                 /**
                  Loopar igenom inre listorna, som innehåller tillgängliga employees ett visst klockslag och datum
                  **/
-                for(int k = 0; k < lookForAvailableThisManyHours; k++) {
+                for (int k = 0; k < lookForAvailableThisManyHours; k++) {
 
                     /**
                      loopar lookForAvailableThisManyHours gånger, kollar så många listor framåt
-                    **/
-                    if(employeeListList.get(i + k).contains(employeeListList.get(i).get(j)) ) {
+                     **/
+                    if (employeeListList.get(i + k).contains(employeeListList.get(i).get(j))) {
                         boolList.set(i, true);
                     }
                 }
-             }
+            }
         }
-        if(lookForAvailableThisManyHours == 2) {
+        if (lookForAvailableThisManyHours == 2) {
             boolList.set(8, false);
         }
-        if(lookForAvailableThisManyHours == 3) {
+        if (lookForAvailableThisManyHours == 3) {
             boolList.set(8, false);
             boolList.set(7, false);
         }
@@ -142,7 +142,7 @@ public class JobService {
         List<Employee> unbookedEmployees = findUnbookedEmployees(date, createJobDTO.getTimeSlotList());
         Optional<Customer> customerOptional = customerRepository.findById(createJobDTO.getCustomerId());
 
-        if(customerOptional.isEmpty()) {
+        if (customerOptional.isEmpty()) {
             throw new CustomerDoesNotExistException(createJobDTO.getCustomerId());
         }
 
@@ -237,15 +237,18 @@ public class JobService {
         if (!jobsForEmployee.isEmpty()) {
             return convertToDTOList(jobsForEmployee);
         } else {
-            throw new NoJobsForEmploeyyException("There are no jobs for this employee");
+            throw new NoJobsForEmployeeException("There are no jobs for this employee");
         }
     }
 
     public List<GetJobDTO> getAllJobsForCustomer(UUID cusId) {
         List<Job> jobsForCustomer = jobRepository.findAll()
                 .stream()
-                .filter(job -> job.getCustomer().getId() == cusId)
+                .filter(job -> job.getCustomer().getId().equals(cusId))
                 .collect(Collectors.toList());
+
+        System.out.println(cusId);
+        System.out.println(jobsForCustomer);
         if (!jobsForCustomer.isEmpty()) {
             return convertToDTOList(jobsForCustomer);
         } else {

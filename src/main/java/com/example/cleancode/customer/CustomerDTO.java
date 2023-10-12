@@ -8,6 +8,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class CustomerDTO {
+
     UUID id;
     String firstName;
     String lastName;
@@ -17,4 +18,5 @@ public class CustomerDTO {
     String phoneNumber;
     String address;
     CustomerType customerType;
+
 }

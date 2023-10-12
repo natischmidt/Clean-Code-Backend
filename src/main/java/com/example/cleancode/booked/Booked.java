@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +20,7 @@ public class Booked {
     private Long id;
 
     private LocalDateTime date;
+
     @Enumerated(EnumType.STRING)
     private TimeSlots timeSlots;
 
@@ -37,5 +37,4 @@ public class Booked {
         }
         this.employees.add(employee);
     }
-
 }

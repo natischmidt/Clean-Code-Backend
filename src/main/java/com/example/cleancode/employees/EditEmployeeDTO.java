@@ -1,10 +1,7 @@
 package com.example.cleancode.employees;
 
 import com.example.cleancode.enums.Role;
-import com.example.cleancode.job.Job;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 public class EditEmployeeDTO {

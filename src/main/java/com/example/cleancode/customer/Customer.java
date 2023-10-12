@@ -23,6 +23,7 @@ public class Customer {
     private String email;
     private String phoneNumber;
     private String address;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "customer_type")
     private CustomerType customerType;
