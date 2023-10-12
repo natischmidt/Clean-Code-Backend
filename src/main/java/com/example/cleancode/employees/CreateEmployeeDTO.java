@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class CreateEmployeeDTO {
+
     private String firstName;
     private String lastName;
     private String password;
@@ -14,4 +15,5 @@ public class CreateEmployeeDTO {
     private String address;
     private Role role;
     private int salary;
+
 }

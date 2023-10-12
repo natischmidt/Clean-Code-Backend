@@ -3,12 +3,11 @@ package com.example.cleancode.customer;
 import com.example.cleancode.enums.CustomerType;
 import com.example.cleancode.exceptions.CustomerAlreadyExistsException;
 import com.example.cleancode.exceptions.CustomerDoesNotExistException;
-import com.example.cleancode.exceptions.CustomerInfoMissmatchException;
+import com.example.cleancode.exceptions.CustomerInfoMissMatchException;
 import com.example.cleancode.mail.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +17,7 @@ import java.util.UUID;
 public class CustomerService {
 
     public CustomerDTO customerEntityToDTO(Customer customer){
+
         CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setId(customer.getId());
         customerDTO.setFirstName(customer.getFirstName());
@@ -62,7 +62,6 @@ public class CustomerService {
                         createDTO.getAddress(),
                         CustomerType.PRIVATE);
 
-
                 customerRepository.save(customer);
 
                 emailService.sendEmail(createDTO.getEmail(),
@@ -71,6 +70,7 @@ public class CustomerService {
 
                 return createDTO;
             }
+
             if (createDTO.getCompanyName() != null && createDTO.getOrgNumber() != null){
                 Customer customer = new Customer(
                         UUID.randomUUID(),
@@ -92,19 +92,20 @@ public class CustomerService {
 
                 return createDTO;
             }
+
             if(createDTO.getCompanyName() != null && createDTO.getOrgNumber() == null){
-                throw new CustomerInfoMissmatchException("If companyName isn't null, you need a orgNumber");
+                throw new CustomerInfoMissMatchException("If companyName isn't null, you need a orgNumber");
             }
+
             if (createDTO.getCompanyName() == null && createDTO.getOrgNumber() != null){
-                throw new CustomerInfoMissmatchException("if orgNumber isn't null, you need a company name");
+                throw new CustomerInfoMissMatchException("if orgNumber isn't null, you need a company name");
             }
             // ^ dom klagar i if-satserna, men tycker dom ser nice ut...
         } catch (Exception e){
             throw new RuntimeException("ERROR -->" + e.getMessage());
         }
-        throw new CustomerInfoMissmatchException("Should not get this :(");
+        throw new CustomerInfoMissMatchException("Should not get this :(");
     }
-
 
     public String deleteCustomer(UUID id) {
         Optional<Customer> optionalCustomer = customerRepository.findById(id);

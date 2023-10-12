@@ -38,7 +38,4 @@ public class EmployeeController {
 
         return employeeService.editEmployee(empId, employee);
     }
-
-
-
 }

@@ -40,10 +40,9 @@ public class StartUpConfig {
                     "0730123123",
                     "Adressgatan 12",
                     CustomerType.BUSINESS
-
             ));
-            customerRepository.save(new Customer(
 
+            customerRepository.save(new Customer(
                     UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53"),
                     "Hanna",
                     "Root",
@@ -58,6 +57,7 @@ public class StartUpConfig {
 
     @Bean
     public CommandLineRunner initEmployeeDatabase(EmployeeRepository employeeRepository) {
+
         Salary salary1 = new Salary(100);
         Employee employee1 = new Employee(
                 "Kent",
@@ -141,6 +141,7 @@ public class StartUpConfig {
     public CommandLineRunner initJobDatabase(JobRepository jobRepository) {
         return args -> {
             LocalDateTime date = LocalDateTime.parse("2023-11-24T12:00");
+
             jobRepository.save(new Job(
                     Jobtype.BASIC,
                     date,

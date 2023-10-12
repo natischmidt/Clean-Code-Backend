@@ -15,8 +15,10 @@ public class Salary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private int hourlySalary;
     private double workedHours;
+
     @OneToOne
     @MapsId
     @JoinColumn(name = "employee_id")

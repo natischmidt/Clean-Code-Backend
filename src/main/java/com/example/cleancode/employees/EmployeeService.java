@@ -4,7 +4,6 @@ import com.example.cleancode.exceptions.InvalidRequestException;
 import com.example.cleancode.exceptions.PersonAlreadyExistsException;
 import com.example.cleancode.exceptions.PersonDoesNotExistException;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,12 +18,15 @@ public class EmployeeService {
     }
 
     public Long createEmployee(CreateEmployeeDTO employeeDTO) {
+
         /** First calls checkDTO method to verify entered information. If something is wrong, we throw an exception.
          *...
          * Then creates the employee, and returns the id. If an employee with that id already exists, we throw an exception. */
+
         if (!checkDTO(employeeDTO)) {
             throw new InvalidRequestException("One or more fields have invalid or missing content.");
         }
+
         Optional<Employee> optEmp = employeeRepository.findBySsNumber(employeeDTO.getSsNumber());
         if (optEmp.isEmpty()) {
             Salary salary = new Salary(employeeDTO.getSalary());

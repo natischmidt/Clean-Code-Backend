@@ -250,7 +250,7 @@ public class JobService {
         if (!jobsForEmployee.isEmpty()) {
             return convertToDTOList(jobsForEmployee);
         } else {
-            throw new NoJobsForEmploeyyException("There are no jobs for this employee");
+            throw new NoJobsForEmployeeException("There are no jobs for this employee");
         }
     }
 

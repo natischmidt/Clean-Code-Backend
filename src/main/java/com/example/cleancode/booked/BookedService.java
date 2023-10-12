@@ -4,7 +4,6 @@ import com.example.cleancode.employees.EmployeeRepository;
 import com.example.cleancode.enums.Role;
 import com.example.cleancode.enums.TimeSlots;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +19,6 @@ public class BookedService {
         this.bookedRepository = bookedRepository;
         this.employeeRepository = employeeRepository;
     }
-
 
     public List<TimeSlots> getFreeSlotsForDate(String date) {
         // Parse the string to a LocalDate object

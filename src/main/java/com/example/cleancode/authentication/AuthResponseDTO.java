@@ -7,6 +7,8 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class AuthResponseDTO {
+
     private Long id;
     private Role role;
+
 }

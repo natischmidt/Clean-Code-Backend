@@ -6,5 +6,5 @@ public enum JobStatus {
     APPROVED,
     UNAPPROVED,
     PAID,
-    CANCELLED // om man vill ta bort ett städ
+    CANCELLED
 }

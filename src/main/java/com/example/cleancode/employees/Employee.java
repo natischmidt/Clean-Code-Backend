@@ -19,6 +19,7 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     private String firstName;
     private String lastName;
     private String password;
@@ -39,16 +40,9 @@ public class Employee {
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Job> jobList = new ArrayList<>();
 
-    public Employee(String firstName,
-                    String lastName,
-                    String password,
-                    String ssNumber,
-                    String email,
-                    String phoneNumber,
-                    String address,
-                    Role role,
-                    Salary salary,
-                    List<Job> jobList) {
+    public Employee(String firstName, String lastName, String password, String ssNumber, String email,
+                    String phoneNumber, String address, Role role, Salary salary, List<Job> jobList) {
+
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
