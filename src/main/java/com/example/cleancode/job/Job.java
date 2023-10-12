@@ -14,7 +14,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,25 +24,30 @@ import java.util.List;
 @Getter
 @Setter
 public class Job {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private long jobId;
+
     @Enumerated(EnumType.STRING)
     private Jobtype jobtype;
     private LocalDateTime date;
+
     @Enumerated(EnumType.STRING)
     private TimeSlots timeSlot;
+
     @Enumerated(EnumType.STRING)
     private JobStatus jobStatus;
     private int squareMeters;
+
     @Enumerated(EnumType.STRING)
     private PaymentOption paymentOption;
     private String message;
 
-    @ManyToMany(mappedBy = "jobs")
+
+    @ManyToMany(mappedBy = "jobs", cascade = CascadeType.ALL)
     @JsonBackReference
-    private List<Booked> availabilities = new ArrayList<>();
+    private List<Booked> booked = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "emp_id")
@@ -74,4 +78,14 @@ public class Job {
         this.customer = customer;
     }
 
+    public Job(Jobtype jobtype, LocalDateTime date, TimeSlots timeSlot, JobStatus jobStatus, int squareMeters, PaymentOption paymentOption, Customer customer) {
+        this.jobtype = jobtype;
+        this.date = date;
+        this.timeSlot = timeSlot;
+        this.jobStatus = jobStatus;
+        this.squareMeters = squareMeters;
+        this.paymentOption = paymentOption;
+
+        this.customer = customer;
+    }
 }

@@ -6,24 +6,31 @@ import com.example.cleancode.employees.Employee;
 import com.example.cleancode.employees.EmployeeRepository;
 import com.example.cleancode.employees.Salary;
 import com.example.cleancode.enums.*;
+import com.example.cleancode.job.CreateJobDTO;
 import com.example.cleancode.job.Job;
 import com.example.cleancode.job.JobRepository;
+import com.example.cleancode.job.JobService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import static com.example.cleancode.enums.TimeSlots.*;
 
 @Configuration
 public class StartUpConfig {
 
     private final EmployeeRepository employeeRepository;
     private final CustomerRepository customerRepository;
+    private final JobService jobService;
 
-    public StartUpConfig(EmployeeRepository employeeRepository, CustomerRepository customerRepository) {
+    public StartUpConfig(EmployeeRepository employeeRepository, CustomerRepository customerRepository, JobService jobService) {
         this.employeeRepository = employeeRepository;
         this.customerRepository = customerRepository;
+        this.jobService = jobService;
     }
 
     @Bean
@@ -138,88 +145,84 @@ public class StartUpConfig {
     }
 
     @Bean
-    public CommandLineRunner initJobDatabase(JobRepository jobRepository) {
+    public CommandLineRunner initJobDatabase(JobService jobService) {
         return args -> {
-            LocalDateTime date = LocalDateTime.parse("2023-11-24T12:00");
-            jobRepository.save(new Job(
-                    Jobtype.BASIC,
-                    date,
-                    TimeSlots.EIGHT,
-                    JobStatus.PENDING,
-                    55,
-                    PaymentOption.KLARNA,
-                    employeeRepository.findById(1L).get(),
-                    customerRepository.findById(UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632")).get()));
+            List<TimeSlots> timesList = new ArrayList<>();
+//            LocalDateTime dateInDateFormat = LocalDateTime.parse("2023-11-24T12:00");
 
-            jobRepository.save(new Job(
-                    Jobtype.BASIC,
-                    date,
-                    TimeSlots.TEN,
-                    JobStatus.PENDING,
-                    50,
-                    PaymentOption.KLARNA,
-                    employeeRepository.findById(1L).get(),
-                    customerRepository.findById(UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")).get()));
+            String date = "2023-11-24";
 
-            jobRepository.save(new Job(
-                    Jobtype.BASIC,
-                    date,
-                    TimeSlots.THIRTEEN,
-                    JobStatus.PENDING,
-                    55,
-                    PaymentOption.KLARNA,
-                    employeeRepository.findById(2L).get(),
-                    customerRepository.findById(UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632")).get()));
+//            timesList.add(EIGHT);
+//            jobService.createJob(new CreateJobDTO(
+//                    Jobtype.BASIC,
+//                    date,
+//                    List.of(EIGHT),
+//                    55,
+//                    PaymentOption.KLARNA,
+//                    UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632")));
 
-            jobRepository.save(new Job(
-                    Jobtype.ADVANCED,
-                    date,
-                    TimeSlots.FIFTEEN,
-                    JobStatus.DONE,
-                    30,
-                    PaymentOption.KLARNA,
-                    employeeRepository.findById(3L).get(),
-                    customerRepository.findById(UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")).get()));
+//            timesList.clear();
+//            timesList.add(NINE);
+//            jobService.createJob(new CreateJobDTO(
+//                    Jobtype.BASIC,
+//                    date,
+//                    List.of(NINE),
+//                    55,
+//                    PaymentOption.KLARNA,
+//                    UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632")));
 
-            jobRepository.save(new Job(
-                    Jobtype.DIAMOND,
-                    date,
-                    TimeSlots.EIGHT,
-                    JobStatus.APPROVED,
-                    43,
-                    PaymentOption.KLARNA,
-                    employeeRepository.findById(4L).get(),
-                    customerRepository.findById(UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")).get()));
+//            timesList.clear();
+//            timesList.add(TEN);
+//            jobService.createJob(new CreateJobDTO(
+//                    Jobtype.BASIC,
+//                    date,
+//                    List.of(TEN),
+//                    50,
+//                    PaymentOption.KLARNA,
+//                    UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")));
 
-            jobRepository.save(new Job(
-                    Jobtype.ADVANCED,
-                    date,
-                    TimeSlots.NINE,
-                    JobStatus.UNAPPROVED,
-                    56,
-                    PaymentOption.KLARNA,
-                    employeeRepository.findById(1L).get(),
-                    customerRepository.findById(UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632")).get()));
+            date = "2023-11-25";
 
-            jobRepository.save(new Job(
-                    Jobtype.BASIC,
-                    date,
-                    TimeSlots.ELEVEN,
-                    JobStatus.PAID,
-                    25,
-                    PaymentOption.KLARNA,
-                    employeeRepository.findById(2L).get(),
-                    customerRepository.findById(UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")).get()));
+//            jobService.createJob(new CreateJobDTO(
+//                    Jobtype.BASIC,
+//                    date,
+//                    List.of(THIRTEEN),
+//                    55,
+//                    PaymentOption.KLARNA,
+//                    UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632")));
+//
+//            jobService.createJob(new CreateJobDTO(
+//                    Jobtype.ADVANCED,
+//                    date,
+//                    List.of(FOURTEEN),
+//                    30,
+//                    PaymentOption.KLARNA,
+//                    UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")));
 
-            jobRepository.save(new Job(
-                    Jobtype.BASIC,
-                    date,
-                    TimeSlots.TWELVE,
-                    JobStatus.CANCELLED,
-                    35,
-                    PaymentOption.KLARNA,
-                    employeeRepository.findById(2L).get(),
-                    customerRepository.findById(UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")).get()));
+//            date = "2023-11-26";
+//            jobService.createJob(new CreateJobDTO(
+//                    Jobtype.DIAMOND,
+//                    date,
+//                    List.of(EIGHT),
+//                    43,
+//                    PaymentOption.KLARNA,
+//                    UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")));
+//
+//            jobService.createJob(new CreateJobDTO(
+//                    Jobtype.ADVANCED,
+//                    date,
+//                    List.of(TWELVE),
+//                    56,
+//                    PaymentOption.KLARNA,
+//                    UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632")));
+//            jobService.createJob(new CreateJobDTO(
+//                    Jobtype.BASIC,
+//                    date,
+//                    List.of(SIXTEEN),
+//                    25,
+//                    PaymentOption.KLARNA,
+//                    UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")));
+
         };
     }
 }

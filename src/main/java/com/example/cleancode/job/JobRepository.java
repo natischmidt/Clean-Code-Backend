@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface JobRepository extends JpaRepository<Job, Long> {
 
-    @Query("SELECT j FROM Job j JOIN j.availabilities a WHERE a.date = :date AND a.timeSlots = :timeSlots")
+    @Query("SELECT j FROM Job j JOIN j.booked a WHERE a.date = :date AND a.timeSlots = :timeSlots")
     List<Job> findJobsInTimeRange(@Param("date") LocalDateTime date, @Param("timeSlots") TimeSlots timeSlots);
 
     List<Job> findByJobStatusIn(List<JobStatus> statuses);

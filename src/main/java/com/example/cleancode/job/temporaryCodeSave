@@ -1,0 +1,32 @@
+sparar nån metod från jobservice som jag inte tror behövs. Har hållt på och grejat för mycket. :) Tar bort hela denna fil snart. //Jimmy
+
+ private void updateBookedEmployeesWhenDateIsChanged(UpdateJobDTO jobDTO) {
+
+        /**Kollar så att jobbet finns*/
+        Optional<Job> optJob = jobRepository.findById(jobDTO.getJobId());
+        if(optJob.isEmpty()) {
+            throw new JobDoesNotExistException("No such job in database.");
+        }
+
+        /** Hämtar en "Booked" med valt datum och timeslot*/
+        Optional<Booked> booked = bookedRepository.findByDateAndTimeSlots(jobDTO.getDate(), jobDTO.getTimeSlotsList().get(0));
+        if(booked.isEmpty()) {
+            throw new InvalidRequestException("No job exists with specified date / timeslot combination");
+        }
+        bookedRepository.deleteById(booked.get().getId());
+
+        List<Employee> empList = findUnbookedEmployees(jobDTO.getDate(), jobDTO.getTimeSlotsList());
+        if (empList.isEmpty()) {
+            throw new RuntimeException("No employees are available for this time slot.");
+        }
+        Employee assignedEmployee = assignEmployeeToJob(empList);
+
+        optJob.get().setDate(jobDTO.getDate());
+        optJob.get().setTimeSlot(jobDTO.getTimeSlotsList().get(0));
+        optJob.get().setEmployee(assignedEmployee);
+
+        jobRepository.save(optJob.get());
+    }
+
+
+

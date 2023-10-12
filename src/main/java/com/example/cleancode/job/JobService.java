@@ -10,14 +10,12 @@ import com.example.cleancode.enums.JobStatus;
 import com.example.cleancode.enums.Role;
 import com.example.cleancode.enums.TimeSlots;
 import com.example.cleancode.exceptions.*;
+import com.example.cleancode.mail.EmailService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.example.cleancode.enums.Role.EMPLOYEE;
@@ -29,25 +27,28 @@ public class JobService {
     private final EmployeeRepository employeeRepository;
     private final CustomerRepository customerRepository;
     private final BookedRepository bookedRepository;
+    private final EmailService emailService;
 
     public JobService(
             JobRepository jobRepository,
             EmployeeRepository employeeRepository,
             CustomerRepository customerRepository,
-            BookedRepository bookedRepository) {
+            BookedRepository bookedRepository,
+            EmailService emailService) {
         this.jobRepository = jobRepository;
         this.employeeRepository = employeeRepository;
         this.customerRepository = customerRepository;
         this.bookedRepository = bookedRepository;
+        this.emailService = emailService;
     }
 
-    public void updateAvailability(Employee selectedEmployee, LocalDateTime date, List<TimeSlots> timeSlot, Job job) {
+    public void updateAvailability(Employee selectedEmployee, LocalDateTime date, List<TimeSlots> timeSlotList, Job job) {
      /** Denna metod anropas från createJob. Den lägger till rader i BookedRepository med de uppbokade tiderna, så
       * att vi inte kan boka fler städningar än vi har städare. */
 
-        for (int i = 0; i < timeSlot.size(); i++) {
+        for (int i = 0; i < timeSlotList.size(); i++) {
 
-            Optional<Booked> optionalAvailability = bookedRepository.findByDateAndTimeSlots(date, timeSlot.get(i));
+            Optional<Booked> optionalAvailability = bookedRepository.findByDateAndTimeSlots(date, timeSlotList.get(i));
             Booked booked;
 
             if (optionalAvailability.isPresent()) {
@@ -55,13 +56,13 @@ public class JobService {
             } else {
                 booked = new Booked();
                 booked.setDate(date);
-                booked.setTimeSlots(timeSlot.get(i));
+                booked.setTimeSlots(timeSlotList.get(i));
             }
 
             booked.addEmployee(selectedEmployee);
 
             booked.getJobs().add(job);
-            job.getAvailabilities().add(booked);
+            job.getBooked().add(booked);
 
             bookedRepository.save(booked);
         }
@@ -136,7 +137,7 @@ public class JobService {
 
     public Long createJob(CreateJobDTO createJobDTO) {
 
-        LocalDateTime date = LocalDateTime.parse(createJobDTO.getDate() + "T00:00:00");
+        LocalDateTime date = LocalDateTime.parse(createJobDTO.getDate() + "T00:00:01");
         TimeSlots timeSlot = createJobDTO.getTimeSlotList().get(0);
         List<Employee> unbookedEmployees = findUnbookedEmployees(date, createJobDTO.getTimeSlotList());
         Optional<Customer> customerOptional = customerRepository.findById(createJobDTO.getCustomerId());
@@ -150,8 +151,6 @@ public class JobService {
         }
 
         /** Assign random employee from the unbookedEmployees list */
-//        int randomAvailableEmployee = (int) Math.floor(Math.random() * unbookedEmployees.size());
-//        Employee assignedEmployee = unbookedEmployees.get(randomAvailableEmployee);
         Employee assignedEmployee = assignEmployeeToJob(unbookedEmployees);
 
         Job job = new Job(
@@ -200,18 +199,6 @@ public class JobService {
 
     }
 
-
-//    public Optional<List<Job>> getAllJobs() {
-//
-//        List<Job> optAllJobs = jobRepository.findAll();
-//
-//        if (!optAllJobs.isEmpty()) {
-//            return Optional.of(optAllJobs);
-//        } else {
-//            throw new JobDoesNotExistException("There is no jobs in the database");
-//        }
-//    }
-
     public List<GetJobDTO> getAllJobs() {
         List<Job> allJobs = jobRepository.findAll();
         if (!allJobs.isEmpty()) {
@@ -254,34 +241,6 @@ public class JobService {
         }
     }
 
-//    public Optional<List<Job>> getAllJobsForEmployee(Long empId) {
-//
-//        List<Job> optAllJobsForEmp = jobRepository.findAll()
-//                .stream()
-//                .filter(job -> job.getEmployee().getId() == empId)
-//                .collect(Collectors.toList());
-//
-//        if (!optAllJobsForEmp.isEmpty()) {
-//            return Optional.of(optAllJobsForEmp);
-//        } else {
-//            throw new NoJobsForEmploeyyException("There is no jobs for this employee");
-//        }
-//    }
-
-//    public Optional<List<Job>> getAllJobsForCustomer(Long cusId) {
-//
-//        List<Job> optAllJobsForCustomer = jobRepository.findAll()
-//                .stream()
-//                .filter(job -> job.getCustomer().getId() == cusId)
-//                .collect(Collectors.toList());
-//
-//        if (!optAllJobsForCustomer.isEmpty()) {
-//            return Optional.of(optAllJobsForCustomer);
-//        } else {
-//            throw new NoJobsForCustomerException("There is no jobs attached to this this customer");
-//        }
-//    }
-
     public List<GetJobDTO> getAllJobsForCustomer(UUID cusId) {
         List<Job> jobsForCustomer = jobRepository.findAll()
                 .stream()
@@ -298,27 +257,48 @@ public class JobService {
     public GetJobDTO updateJobInfo(UpdateJobDTO jobDTO) {
         Optional<Job> optionalJob = jobRepository.findById(jobDTO.getJobId());
 
+        Long newJobId;
         if (optionalJob.isPresent()) {
             Job jobToUpdate = optionalJob.get();
 
             // Update properties from the dto
-            if (jobDTO.getJobtype() != null) {
-                jobToUpdate.setJobtype(jobDTO.getJobtype());
+            if (jobDTO.getJobtype() != null && !jobDTO.getJobtype().equals(optionalJob.get().getJobtype())) {
+                /** Om jobbtyp har ändrats behöver vi boka om
+                 * Vi kollar så att det finns lediga timeslots på det efterfrågade datumet*/
+                Optional<Job> currentJob = jobRepository.findById(jobDTO.getJobId());
+                jobRepository.deleteById(jobDTO.getJobId());
+                List<Employee> availableEmployees = findUnbookedEmployees(LocalDateTime.parse((jobDTO.getDate() + "T00:00:00")), jobDTO.getTimeSlotsList());
+                if(!availableEmployees.isEmpty()) {
+                    jobToUpdate.setJobtype(jobDTO.getJobtype());
+
+                } else {
+                    jobRepository.save(currentJob.get());
+                    throw new InvalidRequestException("That booking can't be updated, since we do not have available employees at that time");
+                }
             }
             if ((jobDTO.getDate() != null
-                    && jobDTO.getDate() != optionalJob.get().getDate())
+                    && LocalDateTime.parse(jobDTO.getDate() + "T00:00:00") != optionalJob.get().getDate())
                         || (jobDTO.getJobtype() != null
                             && jobDTO.getJobtype() != optionalJob.get().getJobtype())) {
-                jobToUpdate.setDate(jobDTO.getDate());
-                updateBookedEmployeesWhenDateIsChanged(jobDTO);
+                jobRepository.deleteById(jobDTO.getJobId());
+                newJobId = createJob(new CreateJobDTO(
+                        jobDTO.getJobtype(),
+                        String.valueOf(jobDTO.getDate()),
+                        jobDTO.getTimeSlotsList(),
+                        jobDTO.getSquareMeters(),
+                        jobDTO.getPaymentOption(),
+                        jobDTO.getCustomerId()));
+                jobToUpdate.setJobId(newJobId);
             }
 
-            if (jobDTO.getJobStatus() != null) {
+            if (jobDTO.getJobStatus() != null && !jobDTO.getJobStatus().equals(optionalJob.get().getJobStatus())) {
                 jobToUpdate.setJobStatus(jobDTO.getJobStatus());
+                handleUpdatedJobStatus(jobDTO);
             }
             if (jobDTO.getPaymentOption() != null) {
                 jobToUpdate.setPaymentOption(jobDTO.getPaymentOption());
             }
+
             jobRepository.save(jobToUpdate);
 
             // return  updated jobb as DTO
@@ -328,62 +308,57 @@ public class JobService {
         }
     }
 
-    private void updateBookedEmployeesWhenDateIsChanged(UpdateJobDTO jobDTO) {
-
-        Optional<Job> optJob = jobRepository.findById(jobDTO.getJobId());
-        if(optJob.isEmpty()) {
-            throw new JobDoesNotExistException("No such job in database.");
-        }
-        Optional<Booked> booked = bookedRepository.findByDateAndTimeSlots(jobDTO.getDate(), jobDTO.getTimeSlotsList().get(0));
-        if(booked.isEmpty()) {
-            throw new InvalidRequestException("No job exists with specified date / timeslot combination");
-        }
-        bookedRepository.deleteById(booked.get().getId());
-
-        List<Employee> empList = findUnbookedEmployees(jobDTO.getDate(), jobDTO.getTimeSlotsList());
-        if (empList.isEmpty()) {
-            throw new RuntimeException("No employees are available for this time slot.");
-        }
-        Employee assignedEmployee = assignEmployeeToJob(empList);
-
-        optJob.get().setDate(jobDTO.getDate());
-        optJob.get().setTimeSlot(jobDTO.getTimeSlotsList().get(0));
-        optJob.get().setEmployee(assignedEmployee);
-
-        jobRepository.save(optJob.get());
-    }
-
-
-//    @Transactional
-//    public Optional<Job> updateJobInfo(Long id, Job job) {
-//
-//        Optional<Job> optionalJob = jobRepository.findById(id);
-//
-//        // Do you need to be able to update squareMeters?
-//        if (optionalJob.isPresent()) {
-//            Job jobUpdate = optionalJob.get();
-//
-//            if (job.getJobtype() != null) {
-//                jobUpdate.setJobtype(job.getJobtype());
-//            }
-//            if (job.getDate() != null) {
-//                jobUpdate.setDate(job.getDate());
-//            }
-//            if (job.getJobStatus() != null) {
-//                jobUpdate.setJobStatus(job.getJobStatus());
-//            }
-//            if (job.getPaymentOption() != null) {
-//                jobUpdate.setPaymentOption(job.getPaymentOption());
-//            }
-//            jobRepository.save(jobUpdate);
-//            return Optional.of(jobUpdate);
-//        } else {
-//            throw new JobDoesNotExistException("Job does not exist");
-//        }
-//    }
-
-
     public List<Job> getJobsByStatus(List<JobStatus> statuses) {
         return jobRepository.findByJobStatusIn(statuses);
     }
+
+    private void handleUpdatedJobStatus(UpdateJobDTO updateJobDTO) {
+
+        Optional<Customer> thisCustomer = customerRepository.findById(updateJobDTO.getCustomerId());
+
+        switch (updateJobDTO.getJobStatus()){
+            case PENDING :{
+                emailService.sendEmail(
+                        thisCustomer.get().getEmail(),
+                        "Ny bokning hos StädaFint!",
+                        "Du har en ny bokning hos StädaFint AB! \nVåra duktiga städare kommer till dig " + updateJobDTO.getDate() + ".");
+            }
+            case DONE: {
+                emailService.sendEmail(
+                        thisCustomer.get().getEmail(),
+                        "Din städning har utförts!",
+                        "Din städning har utförts! Gå in på Mina Sidor för att godkänna städningen och komma vidare till betalning.");
+            }
+            case APPROVED: {
+                //i dunno
+            }
+            case UNAPPROVED:{
+                //här skickar vi kanske ett mail till admin, men det finns bara en mailadress i företaget, så kanske skippa det?
+            }
+            case PAID: {
+
+            }
+            case CANCELLED: {
+               LocalDateTime dateTime = LocalDateTime.parse(updateJobDTO.getDate() + "T00:00:00") ;
+                Job cancelledJob = new Job(
+                        updateJobDTO.getJobtype(),
+                        dateTime,
+                        updateJobDTO.getTimeSlotsList().get(0),
+                        updateJobDTO.getJobStatus(),
+                        updateJobDTO.getSquareMeters(),
+                        updateJobDTO.getPaymentOption(),
+                        customerRepository.findById(updateJobDTO.getCustomerId()).get());
+
+                jobRepository.deleteById(updateJobDTO.getJobId());
+                jobRepository.save(cancelledJob);
+
+            }
+
+        }
+
+
+
+
+    }
+
 }
