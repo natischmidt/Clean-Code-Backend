@@ -47,10 +47,10 @@ public class JobController {
         return jobService.getAllJobsForEmployee(empId);
     }
 
-    @GetMapping("/getAllJobsForEmployeeWithStatus/{empId}")
+   /* @GetMapping("/getAllJobsForEmployeeWithStatus/{empId}")
     public List<GetJobDTO> getAllJobsForEmployeeWithStatus(@PathVariable Long empId, @RequestParam(name = "status", required = false) JobStatus status) {
         return jobService.getAllJobsForEmployeeWithStatus(empId, status);
-    }
+    }*/
 
     // Get all jobs for a specific customer
     @GetMapping("/getAllJobsForCustomer/{cusId}")
@@ -59,8 +59,9 @@ public class JobController {
     }
 
     @GetMapping("/getAllJobsForCustomerWithStatus/{cusId}")
-    public List<GetJobDTO> getAllJobsForCustomerWithStatus(@PathVariable UUID cusId, @RequestParam(name = "status", required = false) JobStatus status) {
-            return jobService.getAllJobsForCustomerWithStatus(cusId, status);
+    public List<GetJobDTO> getAllJobsForCustomerWithStatus(@PathVariable UUID cusId, @RequestParam(name = "statuses",
+            required = false) List<JobStatus> statuses) {
+        return jobService.getAllJobsForCustomerWithStatus(cusId, statuses);
     }
 
     @PutMapping("/updateJob")

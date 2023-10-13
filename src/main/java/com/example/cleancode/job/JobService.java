@@ -356,12 +356,21 @@ public class JobService {
                 jobRepository.save(cancelledJob);
 
             }
-
         }
+    }
+    public List<GetJobDTO> getAllJobsForCustomerWithStatus(UUID cusId, List<JobStatus> statuses) {
+        List<Job> jobsForCustomer = jobRepository.findAll()
+                .stream()
+                .filter(job -> job.getCustomer().getId().equals(cusId) && statuses.contains(job.getJobStatus()))
+                .collect(Collectors.toList());
 
-
-
-
+        if (!jobsForCustomer.isEmpty()) {
+            return convertToDTOList(jobsForCustomer);
+        } else if (jobsForCustomer.isEmpty()) {
+            return new ArrayList<>();
+        } else {
+            throw new NoJobsForCustomerException("There are no jobs for this customer with the specified status");
+        }
     }
 
 }

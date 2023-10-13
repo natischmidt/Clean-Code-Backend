@@ -148,80 +148,80 @@ public class StartUpConfig {
     public CommandLineRunner initJobDatabase(JobService jobService) {
         return args -> {
             List<TimeSlots> timesList = new ArrayList<>();
-//            LocalDateTime dateInDateFormat = LocalDateTime.parse("2023-11-24T12:00");
+          LocalDateTime dateInDateFormat = LocalDateTime.parse("2023-11-24T12:00");
 
             String date = "2023-11-24";
 
-//            timesList.add(EIGHT);
-//            jobService.createJob(new CreateJobDTO(
-//                    Jobtype.BASIC,
-//                    date,
-//                    List.of(EIGHT),
-//                    55,
-//                    PaymentOption.KLARNA,
-//                    UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632")));
+            timesList.add(EIGHT);
+            jobService.createJob(new CreateJobDTO(
+                    Jobtype.BASIC,
+                    date,
+                    List.of(EIGHT),
+                    55,
+                    PaymentOption.KLARNA,
+                    UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632")));
 
-//            timesList.clear();
-//            timesList.add(NINE);
-//            jobService.createJob(new CreateJobDTO(
-//                    Jobtype.BASIC,
-//                    date,
-//                    List.of(NINE),
-//                    55,
-//                    PaymentOption.KLARNA,
-//                    UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632")));
+            timesList.clear();
+            timesList.add(NINE);
+            jobService.createJob(new CreateJobDTO(
+                    Jobtype.BASIC,
+                    date,
+                    List.of(NINE),
+                    55,
+                    PaymentOption.KLARNA,
+                    UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632")));
 
-//            timesList.clear();
-//            timesList.add(TEN);
-//            jobService.createJob(new CreateJobDTO(
-//                    Jobtype.BASIC,
-//                    date,
-//                    List.of(TEN),
-//                    50,
-//                    PaymentOption.KLARNA,
-//                    UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")));
+            timesList.clear();
+            timesList.add(TEN);
+            jobService.createJob(new CreateJobDTO(
+                    Jobtype.BASIC,
+                    date,
+                    List.of(TEN),
+                    50,
+                    PaymentOption.KLARNA,
+                    UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")));
 
             date = "2023-11-25";
 
-//            jobService.createJob(new CreateJobDTO(
-//                    Jobtype.BASIC,
-//                    date,
-//                    List.of(THIRTEEN),
-//                    55,
-//                    PaymentOption.KLARNA,
-//                    UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632")));
-//
-//            jobService.createJob(new CreateJobDTO(
-//                    Jobtype.ADVANCED,
-//                    date,
-//                    List.of(FOURTEEN),
-//                    30,
-//                    PaymentOption.KLARNA,
-//                    UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")));
+            jobService.createJob(new CreateJobDTO(
+                    Jobtype.BASIC,
+                    date,
+                    List.of(THIRTEEN),
+                    55,
+                    PaymentOption.KLARNA,
+                    UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632")));
 
-//            date = "2023-11-26";
-//            jobService.createJob(new CreateJobDTO(
-//                    Jobtype.DIAMOND,
-//                    date,
-//                    List.of(EIGHT),
-//                    43,
-//                    PaymentOption.KLARNA,
-//                    UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")));
-//
-//            jobService.createJob(new CreateJobDTO(
-//                    Jobtype.ADVANCED,
-//                    date,
-//                    List.of(TWELVE),
-//                    56,
-//                    PaymentOption.KLARNA,
-//                    UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632")));
-//            jobService.createJob(new CreateJobDTO(
-//                    Jobtype.BASIC,
-//                    date,
-//                    List.of(SIXTEEN),
-//                    25,
-//                    PaymentOption.KLARNA,
-//                    UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")));
+            jobService.createJob(new CreateJobDTO(
+                    Jobtype.ADVANCED,
+                    date,
+                    List.of(FOURTEEN),
+                    30,
+                    PaymentOption.KLARNA,
+                    UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")));
+
+            date = "2023-11-26";
+            jobService.createJob(new CreateJobDTO(
+                    Jobtype.DIAMOND,
+                    date,
+                    List.of(EIGHT),
+                    43,
+                    PaymentOption.KLARNA,
+                    UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")));
+
+            jobService.createJob(new CreateJobDTO(
+                    Jobtype.ADVANCED,
+                    date,
+                    List.of(TWELVE),
+                    56,
+                    PaymentOption.KLARNA,
+                    UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632")));
+            jobService.createJob(new CreateJobDTO(
+                    Jobtype.BASIC,
+                    date,
+                    List.of(SIXTEEN),
+                    25,
+                    PaymentOption.KLARNA,
+                    UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")));
 
         };
     }
