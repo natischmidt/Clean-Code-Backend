@@ -2,7 +2,10 @@ package com.example.cleancode.job;
 
 import com.example.cleancode.enums.JobStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -67,7 +70,7 @@ public class JobController {
     @PutMapping("/updateJob")
     public GetJobDTO updateJobInfo(@RequestBody UpdateJobDTO jobDTO,
                                    @RequestParam (name ="message", required = false) String message){
-
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SSSSSSSSSSSSSSSSSSSSSSSSSSSSS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         if (message != null && !message.isEmpty()) {
                 jobDTO.setMessage(message);
         }
@@ -84,7 +87,8 @@ public class JobController {
     @PostMapping("/getAvailableEmployees")
     public List<Boolean> getAvailableEmployees(@RequestBody GetAvailableEmployeeDTO getAvailableEmployeeDTO) {
         return jobService.getAvailableEmployees(
-                LocalDateTime.parse(getAvailableEmployeeDTO.getDate().substring(0,10) + "T00:00:00"),
+                //LocalDateTime.parse(getAvailableEmployeeDTO.getDate().substring(0,10) + "T00:00:00"),
+                Date.from(Instant.from(LocalDateTime.parse(getAvailableEmployeeDTO.getDate()))),
                 getAvailableEmployeeDTO.getLookForAvailableThisManyHours());
     }
 }

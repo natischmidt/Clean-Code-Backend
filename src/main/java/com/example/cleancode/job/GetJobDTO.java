@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class GetJobDTO {
     private long jobId;
     private Jobtype jobtype;
-    private LocalDateTime date;
+    private String date;
     private TimeSlots timeSlot;
     private JobStatus jobStatus;
     private int squareMeters;
