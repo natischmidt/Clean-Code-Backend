@@ -5,6 +5,8 @@ import com.example.cleancode.enums.PaymentOption;
 import com.example.cleancode.enums.TimeSlots;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,7 +15,7 @@ import java.util.UUID;
 public class CreateJobDTO {
 
     private Jobtype jobtype;
-    private String date;
+    private Date date;
     private List<TimeSlots> timeSlotList;
     private int squareMeters;
     private PaymentOption paymentOption;

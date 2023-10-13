@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -31,7 +32,7 @@ public class Job {
 
     @Enumerated(EnumType.STRING)
     private Jobtype jobtype;
-    private LocalDateTime date;
+    private Date date;
 
     @Enumerated(EnumType.STRING)
     private TimeSlots timeSlot;
@@ -61,7 +62,7 @@ public class Job {
 
     public Job(
             Jobtype jobtype,
-            LocalDateTime date,
+            Date date,
             TimeSlots timeSlot,
             JobStatus jobStatus,
             int squareMeters,
@@ -78,7 +79,7 @@ public class Job {
         this.customer = customer;
     }
 
-    public Job(Jobtype jobtype, LocalDateTime date, TimeSlots timeSlot, JobStatus jobStatus, int squareMeters, PaymentOption paymentOption, Customer customer) {
+    public Job(Jobtype jobtype, Date date, TimeSlots timeSlot, JobStatus jobStatus, int squareMeters, PaymentOption paymentOption, Customer customer) {
         this.jobtype = jobtype;
         this.date = date;
         this.timeSlot = timeSlot;
