@@ -44,31 +44,7 @@ public class JobService {
         this.emailService = emailService;
     }
 
-    public void updateAvailability(Employee selectedEmployee, Date date, List<TimeSlots> timeSlotList, Job job) {
-     /** Denna metod anropas från createJob. Den lägger till rader i BookedRepository med de uppbokade tiderna, så
-      * att vi inte kan boka fler städningar än vi har städare. */
 
-        for (int i = 0; i < timeSlotList.size(); i++) {
-
-            Optional<Booked> optionalAvailability = bookedRepository.findByDateAndTimeSlots(date, timeSlotList.get(i));
-            Booked booked;
-
-            if (optionalAvailability.isPresent()) {
-                booked = optionalAvailability.get();
-            } else {
-                booked = new Booked();
-                booked.setDate(date);
-                booked.setTimeSlots(timeSlotList.get(i));
-            }
-
-            booked.addEmployee(selectedEmployee);
-
-            booked.getJobs().add(job);
-            job.getBooked().add(booked);
-
-            bookedRepository.save(booked);
-        }
-    }
 
     public List<Employee> findUnbookedEmployees(Date date, List<TimeSlots> timeSlot) {
 
@@ -76,7 +52,6 @@ public class JobService {
 
         return employees.stream().filter(x -> x.getRole().equals(Role.EMPLOYEE)).toList();
     }
-
 
     public List<Boolean> getAvailableEmployees(Date date, int lookForAvailableThisManyHours) {
 
@@ -139,9 +114,6 @@ public class JobService {
 
     public Long createJob(CreateJobDTO createJobDTO) {
 
-       // Date dtae = Date.from(Instant.from(LocalDateTime.parse(jobDTO.getDate())));
-
-
         Date date = createJobDTO.getDate();
         TimeSlots timeSlot = createJobDTO.getTimeSlotList().get(0);
         List<Employee> unbookedEmployees = findUnbookedEmployees(date, createJobDTO.getTimeSlotList());
@@ -150,11 +122,9 @@ public class JobService {
         if (customerOptional.isEmpty()) {
             throw new CustomerDoesNotExistException(createJobDTO.getCustomerId());
         }
-
         if (unbookedEmployees.isEmpty()) {
             throw new RuntimeException("No employees are available for this time slot.");
         }
-
         /** Assign random employee from the unbookedEmployees list */
         Employee assignedEmployee = assignEmployeeToJob(unbookedEmployees);
 
@@ -168,10 +138,33 @@ public class JobService {
                 assignedEmployee,
                 customerOptional.get());
         jobRepository.save(job);
-
         updateAvailability(assignedEmployee, date, createJobDTO.getTimeSlotList(), job);
-
         return job.getJobId();
+    }
+
+    public void updateAvailability(Employee selectedEmployee, Date date, List<TimeSlots> timeSlotList, Job job) {
+        /** Denna metod anropas från createJob. Den lägger till rader i BookedRepository med de uppbokade tiderna, så
+         * att vi inte kan boka fler städningar än vi har städare. */
+
+        for (int i = 0; i < timeSlotList.size(); i++) {
+
+            Optional<Booked> optionalAvailability = bookedRepository.findByDateAndTimeSlots(date, timeSlotList.get(i));
+            Booked booked;
+
+            if (optionalAvailability.isPresent()) {
+                booked = optionalAvailability.get();
+            } else {
+                booked = new Booked();
+                booked.setDate(date);
+                booked.setTimeSlots(timeSlotList.get(i));
+            }
+            booked.addEmployee(selectedEmployee);
+
+            booked.getJobs().add(job);
+            job.getBooked().add(booked);
+
+            bookedRepository.save(booked);
+        }
     }
 
     private Employee assignEmployeeToJob(List<Employee> unbookedEmployees) {
@@ -182,7 +175,6 @@ public class JobService {
 
     public Long deleteJob(Long id) {
         Optional<Job> optJob = jobRepository.findById(id);
-
         if (optJob.isPresent()) {
             jobRepository.deleteById(id);
             return id;
@@ -196,7 +188,6 @@ public class JobService {
         Optional<Job> optJob = jobRepository.findById(id);
 
         if (optJob.isPresent()) {
-            //jobRepository.findById(id);
             return optJob;
         } else {
             throw new JobDoesNotExistException("There is no job with that id in database.");
@@ -238,7 +229,6 @@ public class JobService {
                 .stream()
                 .filter(job -> job.getEmployee().getId() == empId)
                 .collect(Collectors.toList());
-
         if (!jobsForEmployee.isEmpty()) {
             return convertToDTOList(jobsForEmployee);
         } else {
@@ -252,8 +242,6 @@ public class JobService {
                 .filter(job -> job.getCustomer().getId().equals(cusId))
                 .collect(Collectors.toList());
 
-        System.out.println(cusId);
-        System.out.println(jobsForCustomer);
         if (!jobsForCustomer.isEmpty()) {
             return convertToDTOList(jobsForCustomer);
         } else {
@@ -265,7 +253,6 @@ public class JobService {
     public GetJobDTO updateJobInfo(UpdateJobDTO jobDTO) {
         Optional<Job> optionalJob = jobRepository.findById(jobDTO.getJobId());
 
-        Long newJobId;
         if (optionalJob.isPresent()) {
             Job jobToUpdate = optionalJob.get();
 
@@ -351,19 +338,16 @@ public class JobService {
 
             }
             case CANCELLED: {
-                //Date.from(Instant.from(LocalDateTime.parse(jobDTO.getDate())));
 
                Date date = updateJobDTO.getDate();
                 Job cancelledJob = new Job(
                         updateJobDTO.getJobtype(),
                         date,
-                        //updateJobDTO.getTimeSlotsList().get(0),
                         TimeSlots.FIFTEEN,
                         updateJobDTO.getJobStatus(),
                         updateJobDTO.getSquareMeters(),
                         updateJobDTO.getPaymentOption(),
                         customerRepository.findById(updateJobDTO.getCustomerId()).get());
-
                 jobRepository.deleteById(updateJobDTO.getJobId());
                 jobRepository.save(cancelledJob);
 
@@ -378,10 +362,8 @@ public class JobService {
 
         if (!jobsForCustomer.isEmpty()) {
             return convertToDTOList(jobsForCustomer);
-        } else if (jobsForCustomer.isEmpty()) {
-            return new ArrayList<>();
         } else {
-            throw new NoJobsForCustomerException("There are no jobs for this customer with the specified status");
+            return new ArrayList<>();
         }
     }
 
@@ -393,10 +375,8 @@ public class JobService {
 
         if (!jobsForEmployee.isEmpty()) {
             return convertToDTOList(jobsForEmployee);
-        } else if (jobsForEmployee.isEmpty()) {
+        } else  {
             return new ArrayList<>();
-        } else {
-            throw new NoJobsForCustomerException("There are no jobs for this employee with the specified status");
-        }
+        } 
     }
 }
