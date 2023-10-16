@@ -183,16 +183,26 @@ public class JobService {
         }
     }
 
-    public Optional<Job> getJob(Long id) {
-
+    public GetJobForUpdate getJob(Long id) {
         Optional<Job> optJob = jobRepository.findById(id);
 
         if (optJob.isPresent()) {
-            return optJob;
+            Job job = optJob.get();
+            UUID customerId = job.getCustomer().getId(); // Assuming getCustomerId exists in Customer
+            return new GetJobForUpdate(
+                    job.getJobId(),
+                    job.getJobtype(),
+                    job.getDate(),
+                    job.getTimeSlot(),
+                    job.getJobStatus(),
+                    job.getSquareMeters(),
+                    job.getPaymentOption(),
+                    job.getMessage(),
+                    customerId
+            );
         } else {
-            throw new JobDoesNotExistException("There is no job with that id in database.");
+            throw new JobDoesNotExistException("There is no job with that id in the database.");
         }
-
     }
 
     public List<GetJobDTO> getAllJobs() {
