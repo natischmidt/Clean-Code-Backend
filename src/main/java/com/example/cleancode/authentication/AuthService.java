@@ -43,11 +43,10 @@ public class AuthService {
         }
 
         if (optEmployee.get().getPassword().equals(authDTO.getPassword())) {
-            AuthResponseDTO authResponseDTO = new AuthResponseDTO(
+            return new AuthResponseDTO(
                     optEmployee.get().getId(),
                     optEmployee.get().getRole()
             );
-            return authResponseDTO;
         } else {
             throw new InvalidRequestException("The given password was incorrect");
         }

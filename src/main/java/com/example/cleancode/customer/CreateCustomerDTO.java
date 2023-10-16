@@ -8,14 +8,14 @@ import lombok.Setter;
 @Setter
 public class CreateCustomerDTO {
 
-    String firstName;
-    String lastName;
-    String password;
-    String companyName;
-    String orgNumber;
-    String email;
-    String phoneNumber;
-    String address;
-    CustomerType customerType;
+    private String firstName;
+    private String lastName;
+    private String password;
+    private String companyName;
+    private String orgNumber;
+    private String email;
+    private String phoneNumber;
+    private String address;
+    private CustomerType customerType;
 
 }
