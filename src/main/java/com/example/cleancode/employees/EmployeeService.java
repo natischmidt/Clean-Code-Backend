@@ -23,7 +23,7 @@ public class EmployeeService {
          *...
          * Then creates the employee, and returns the id. If an employee with that id already exists, we throw an exception. */
 
-        if (!checkDTO(employeeDTO)) {
+        if (!checkCreateEmployeeDTO(employeeDTO)) {
             throw new InvalidRequestException("One or more fields have invalid or missing content.");
         }
 
@@ -82,6 +82,11 @@ public class EmployeeService {
     public GetEmployeeDTO editEmployee(Long empId, EditEmployeeDTO employeeDTO) {
         /** If an employee with the entered id exists, we update it with the values from the DTO. If not, exception is thrown. */
         Optional<Employee> optEmp = employeeRepository.findById(empId);
+
+        if(!checkEditEmployeeDTO(employeeDTO)) {
+            throw new InvalidRequestException("Some fields had missing or invalid data");
+        }
+
         if (optEmp.isPresent()) {
             optEmp.get().setFirstName(employeeDTO.getFirstName());
             optEmp.get().setLastName(employeeDTO.getLastName());
@@ -114,7 +119,7 @@ public class EmployeeService {
                 employee.getSalary().getHourlySalary());
     }
 
-    private Boolean checkDTO(CreateEmployeeDTO dto) {
+    private Boolean checkCreateEmployeeDTO(CreateEmployeeDTO dto) {
         /** Checks so that fields are not null, and that email and phone number are valid formats. Returns true if all fields are ok.*/
         return dto.getFirstName() != null
                 && dto.getLastName() != null
@@ -124,5 +129,18 @@ public class EmployeeService {
                 && dto.getPhoneNumber().matches("^(\\d+){8,12}$")
                 && dto.getAddress() != null
                 && dto.getRole() != null;
+    }
+
+    private Boolean checkEditEmployeeDTO(EditEmployeeDTO dto) {
+        /** Checks so that fields are not null, and that email and phone number are valid formats. Returns true if all fields are ok.*/
+        return dto.getFirstName() != null
+                && dto.getLastName() != null
+                && dto.getPassword() != null
+                && dto.getSsNumber() != null
+                && dto.getEmail().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
+                && dto.getPhoneNumber().matches("^(\\d+){8,12}$")
+                && dto.getAddress() != null
+                && dto.getRole() != null
+                && dto.getHourlySalary() != 0;
     }
 }
