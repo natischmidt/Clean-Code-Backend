@@ -136,7 +136,8 @@ public class JobService {
                 createJobDTO.getSquareMeters(),
                 createJobDTO.getPaymentOption(),
                 assignedEmployee,
-                customerOptional.get());
+                customerOptional.get(),
+                createJobDTO.getMessage());
         jobRepository.save(job);
         updateAvailability(assignedEmployee, date, createJobDTO.getTimeSlotList(), job);
         return job.getJobId();

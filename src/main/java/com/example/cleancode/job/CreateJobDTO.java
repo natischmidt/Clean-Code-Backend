@@ -20,4 +20,5 @@ public class CreateJobDTO {
     private int squareMeters;
     private PaymentOption paymentOption;
     private UUID customerId;
+    private String message;
 }

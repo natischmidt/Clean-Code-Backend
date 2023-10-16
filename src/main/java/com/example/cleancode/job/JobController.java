@@ -24,31 +24,35 @@ public class JobController {
 
     @PostMapping("/createJob")
     public Long createJob(@RequestBody CreateJobDTO createJobDTO) {
+        if (createJobDTO.getMessage() == null && createJobDTO.getMessage().isEmpty()) {
+            createJobDTO.setMessage("inget meddelande");
+        }
         return jobService.createJob(createJobDTO);
     }
 
     @DeleteMapping("/deleteJob")
-    public Long deleteJob(@RequestHeader Long jobId){
+    public Long deleteJob(@RequestHeader Long jobId) {
         return jobService.deleteJob(jobId);
     }
 
     // Get a specific job
     @GetMapping("/getJob")
-    public GetJobForUpdate getJob(@RequestHeader Long jobId){
+    public GetJobForUpdate getJob(@RequestHeader Long jobId) {
         return jobService.getJob(jobId);
     }
 
     // Get all jobs
     @GetMapping("/getAllJobs")
-    public List<GetJobDTO> getAllJobs(){
+    public List<GetJobDTO> getAllJobs() {
         return jobService.getAllJobs();
     }
 
     // Get all jobs for a specific employee
     @GetMapping("/getAllJobsForEmployee/{empId}")
-    public List<GetJobDTO> getAllJobsForEmployee(@PathVariable Long empId){
+    public List<GetJobDTO> getAllJobsForEmployee(@PathVariable Long empId) {
         return jobService.getAllJobsForEmployee(empId);
     }
+
     @GetMapping("/getAllJobsForEmployeeWithStatus/{empId}")
     public List<GetJobDTO> getAllJobsForEmployeeWithStatus(@PathVariable Long empId,
                                                            @RequestParam(name = "status", required = false) List<JobStatus> status) {
@@ -69,16 +73,15 @@ public class JobController {
 
     @PutMapping("/updateJob")
     public GetJobDTO updateJobInfo(@RequestBody UpdateJobDTO jobDTO,
-                                   @RequestParam (name ="message", required = false) String message){
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SSSSSSSSSSSSSSSSSSSSSSSSSSSSS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+                                   @RequestParam(name = "message", required = false) String message) {
         if (message != null && !message.isEmpty()) {
-                jobDTO.setMessage(message);
+            jobDTO.setMessage(message);
         }
         return jobService.updateJobInfo(jobDTO);
     }
 
     @GetMapping("/getByStatus")
-    public List<Job> getJobByStatus(@RequestParam List<String> statuses){
+    public List<Job> getJobByStatus(@RequestParam List<String> statuses) {
         List<JobStatus> jobStatuses = statuses.stream().map(status ->
                 JobStatus.valueOf(status.toUpperCase())).collect(Collectors.toList());
         return jobService.getJobsByStatus(jobStatuses);

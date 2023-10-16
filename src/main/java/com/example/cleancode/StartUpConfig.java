@@ -164,7 +164,8 @@ public class StartUpConfig {
                     List.of(EIGHT),
                     55,
                     PaymentOption.KLARNA,
-                    UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632")));
+                    UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632"),
+                    "test"));
 
             timesList.clear();
             timesList.add(NINE);
@@ -174,7 +175,8 @@ public class StartUpConfig {
                     List.of(NINE),
                     55,
                     PaymentOption.KLARNA,
-                    UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632")));
+                    UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632"),
+                    "gör nått bra"));
 
             timesList.clear();
             timesList.add(TEN);
@@ -184,7 +186,8 @@ public class StartUpConfig {
                     List.of(TEN),
                     50,
                     PaymentOption.KLARNA,
-                    UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")));
+                    UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53"),
+                    "städa fint tack."));
 
             //Date date2 = new Date();
             //date2.setTime(1699811200);
@@ -202,7 +205,8 @@ public class StartUpConfig {
                     List.of(THIRTEEN),
                     55,
                     PaymentOption.KLARNA,
-                    UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632")));
+                    UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632"),
+                    ""));
 
             jobService.createJob(new CreateJobDTO(
                     Jobtype.ADVANCED,
@@ -210,7 +214,8 @@ public class StartUpConfig {
                     List.of(FOURTEEN),
                     30,
                     PaymentOption.KLARNA,
-                    UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")));
+                    UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53"),
+                    ""));
 
             Date date3 = new Date(2023-11-26);
             jobService.createJob(new CreateJobDTO(
@@ -219,7 +224,8 @@ public class StartUpConfig {
                     List.of(EIGHT),
                     43,
                     PaymentOption.KLARNA,
-                    UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")));
+                    UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53"),
+                    null));
 
             jobService.createJob(new CreateJobDTO(
                     Jobtype.ADVANCED,
@@ -227,14 +233,16 @@ public class StartUpConfig {
                     List.of(TWELVE),
                     56,
                     PaymentOption.KLARNA,
-                    UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632")));
+                    UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632"),
+                    ""));
             jobService.createJob(new CreateJobDTO(
                     Jobtype.BASIC,
                     date3,
                     List.of(SIXTEEN),
                     25,
                     PaymentOption.KLARNA,
-                    UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53")));
+                    UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53"),
+                    ""));
 
         };
     }

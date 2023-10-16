@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -68,7 +69,8 @@ public class Job {
             int squareMeters,
             PaymentOption paymentOption,
             Employee employee,
-            Customer customer) {
+            Customer customer,
+            String message) {
         this.jobtype = jobtype;
         this.date = date;
         this.jobStatus = jobStatus;
@@ -77,6 +79,7 @@ public class Job {
         this.paymentOption = paymentOption;
         this.employee = employee;
         this.customer = customer;
+        this.message = message;
     }
 
     public Job(Jobtype jobtype, Date date, TimeSlots timeSlot, JobStatus jobStatus, int squareMeters, PaymentOption paymentOption, Customer customer) {
