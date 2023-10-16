@@ -370,10 +370,10 @@ public class JobService {
             }
         }
     }
-    public List<GetJobDTO> getAllJobsForCustomerWithStatus(UUID cusId, List<JobStatus> statuses) {
+    public List<GetJobDTO> getAllJobsForCustomerWithStatus(UUID cusId, List<JobStatus> status) {
         List<Job> jobsForCustomer = jobRepository.findAll()
                 .stream()
-                .filter(job -> job.getCustomer().getId().equals(cusId) && statuses.contains(job.getJobStatus()))
+                .filter(job -> job.getCustomer().getId().equals(cusId) && status.contains(job.getJobStatus()))
                 .collect(Collectors.toList());
 
         if (!jobsForCustomer.isEmpty()) {
@@ -385,4 +385,18 @@ public class JobService {
         }
     }
 
+    public List<GetJobDTO> getAllJobsForEmployeeWithStatus(Long empId, List<JobStatus> status) {
+        List<Job> jobsForEmployee = jobRepository.findAll()
+                .stream()
+                .filter(job -> job.getEmployee().getId() == empId && status.contains(job.getJobStatus()))
+                .collect(Collectors.toList());
+
+        if (!jobsForEmployee.isEmpty()) {
+            return convertToDTOList(jobsForEmployee);
+        } else if (jobsForEmployee.isEmpty()) {
+            return new ArrayList<>();
+        } else {
+            throw new NoJobsForCustomerException("There are no jobs for this employee with the specified status");
+        }
+    }
 }
