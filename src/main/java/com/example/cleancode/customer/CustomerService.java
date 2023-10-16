@@ -4,6 +4,7 @@ import com.example.cleancode.enums.CustomerType;
 import com.example.cleancode.exceptions.CustomerAlreadyExistsException;
 import com.example.cleancode.exceptions.CustomerDoesNotExistException;
 import com.example.cleancode.exceptions.CustomerInfoMissMatchException;
+import com.example.cleancode.exceptions.InvalidRequestException;
 import com.example.cleancode.mail.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,10 @@ public class CustomerService {
             throw new CustomerAlreadyExistsException(createDTO.getEmail());
         }
 
+        if(!checkCreateCustomerDTO(createDTO)) {
+            throw new InvalidRequestException("Some fields had incorrect or missing information.");
+        }
+
         try {
             if (createDTO.getCompanyName() == null && createDTO.getOrgNumber() == null){
                 Customer customer = new Customer(
@@ -81,7 +86,7 @@ public class CustomerService {
                         createDTO.getOrgNumber(),
                         createDTO.getEmail(),
                         createDTO.getPhoneNumber(),
-                        createDTO.address,
+                        createDTO.getAddress(),
                         CustomerType.BUSINESS);
                 customer.setPassword(createDTO.getPassword());
                 customerRepository.save(customer);
@@ -93,18 +98,17 @@ public class CustomerService {
                 return createDTO;
             }
 
+            // andra delen av "if condition" är överflödig, eftersom annars hamnar vi i någon av return ovan, men det är tydligare att behålla såhär
             if(createDTO.getCompanyName() != null && createDTO.getOrgNumber() == null){
                 throw new CustomerInfoMissMatchException("If companyName isn't null, you need a orgNumber");
             }
 
-            if (createDTO.getCompanyName() == null && createDTO.getOrgNumber() != null){
-                throw new CustomerInfoMissMatchException("if orgNumber isn't null, you need a company name");
-            }
+            throw new CustomerInfoMissMatchException("if orgNumber isn't null, you need a company name");
+
             // ^ dom klagar i if-satserna, men tycker dom ser nice ut...
         } catch (Exception e){
             throw new RuntimeException("ERROR -->" + e.getMessage());
         }
-        throw new CustomerInfoMissMatchException("Should not get this :(");
     }
 
     public String deleteCustomer(UUID id) {
@@ -128,10 +132,10 @@ public class CustomerService {
             if (customerDTO.getLastName() != null){
                 customerUpdate.setLastName(customerDTO.getLastName());
             }
-            if (customerDTO.getCompanyName() != null){
+            if (customerDTO.getCompanyName() != null && customerUpdate.getCustomerType().equals(CustomerType.BUSINESS)){
                 customerUpdate.setCompanyName(customerDTO.getCompanyName());
             }
-            if (customerDTO.getOrgNumber() != null){
+            if (customerDTO.getOrgNumber() != null && customerUpdate.getCustomerType().equals(CustomerType.BUSINESS)){
                 customerUpdate.setOrgNumber(customerDTO.getOrgNumber());
             }
             if (customerDTO.getEmail() != null){
@@ -171,5 +175,12 @@ public class CustomerService {
         }
     }
 
-    // lägga till filter för
+    private boolean checkCreateCustomerDTO(CreateCustomerDTO createCustomerDTO) {
+        return createCustomerDTO.getFirstName() != null
+                && createCustomerDTO.getLastName() != null
+                && (createCustomerDTO.getPassword() != null && createCustomerDTO.getPassword().length() >= 8)
+                && createCustomerDTO.getEmail().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
+                && createCustomerDTO.getPhoneNumber().matches("^(\\d+){8,12}$")
+                && createCustomerDTO.getAddress() != null;
+    }
 }
