@@ -29,7 +29,7 @@ public class JobService {
     private final EmployeeRepository employeeRepository;
     private final CustomerRepository customerRepository;
     private final BookedRepository bookedRepository;
-//    private final EmailService emailService;
+    private final EmailService emailService;
 
     public JobService(
             JobRepository jobRepository,
@@ -41,7 +41,7 @@ public class JobService {
         this.employeeRepository = employeeRepository;
         this.customerRepository = customerRepository;
         this.bookedRepository = bookedRepository;
-//        this.emailService = emailService;
+        this.emailService = emailService;
     }
 
 
@@ -328,16 +328,16 @@ public class JobService {
 
         switch (updateJobDTO.getJobStatus()){
             case PENDING :{
-//                emailService.sendEmail(
-//                        thisCustomer.get().getEmail(),
-//                        "Ny bokning hos StädaFint!",
-//                        "Du har en ny bokning hos StädaFint AB! \nVåra duktiga städare kommer till dig " + updateJobDTO.getDate() + ".");
+                emailService.sendEmail(
+                        thisCustomer.get().getEmail(),
+                        "Ny bokning hos StädaFint!",
+                        "Du har en ny bokning hos StädaFint AB! \nVåra duktiga städare kommer till dig " + updateJobDTO.getDate() + ".");
             }
             case DONE: {
-//                emailService.sendEmail(
-//                        thisCustomer.get().getEmail(),
-//                        "Din städning har utförts!",
-//                        "Din städning har utförts! Gå in på Mina Sidor för att godkänna städningen och komma vidare till betalning.");
+                emailService.sendEmail(
+                        thisCustomer.get().getEmail(),
+                        "Din städning har utförts!",
+                        "Din städning har utförts! Gå in på Mina Sidor för att godkänna städningen och komma vidare till betalning.");
             }
             case APPROVED: {
                 //i dunno
