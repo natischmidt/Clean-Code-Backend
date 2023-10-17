@@ -67,7 +67,7 @@ public class JobController {
 
     @GetMapping("/getAllJobsForCustomerWithStatus/{cusId}")
     public List<GetJobDTO> getAllJobsForCustomerWithStatus(@PathVariable UUID cusId,
-                                                           @RequestParam(name = "status", required = false) List<JobStatus> status) {
+                                                           @RequestParam(name = "statuses", required = false) List<JobStatus> status) {
         return jobService.getAllJobsForCustomerWithStatus(cusId, status);
     }
 
