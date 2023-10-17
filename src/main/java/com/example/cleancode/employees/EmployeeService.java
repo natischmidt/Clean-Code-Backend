@@ -110,7 +110,6 @@ public class EmployeeService {
                 employee.getId(),
                 employee.getFirstName(),
                 employee.getLastName(),
-                employee.getPassword(),
                 employee.getSsNumber(),
                 employee.getEmail(),
                 employee.getPhoneNumber(),
