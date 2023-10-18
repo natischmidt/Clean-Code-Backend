@@ -27,6 +27,8 @@ public class Employee {
     private String email;
     private String phoneNumber;
     private String address;
+    private String city;
+    private String postalCode;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -41,7 +43,7 @@ public class Employee {
     private List<Job> jobList = new ArrayList<>();
 
     public Employee(String firstName, String lastName, String password, String ssNumber, String email,
-                    String phoneNumber, String address, Role role, Salary salary, List<Job> jobList) {
+                    String phoneNumber, String address, String city, String postalCode, Role role, Salary salary, List<Job> jobList) {
 
         this.firstName = firstName;
         this.lastName = lastName;
@@ -50,6 +52,8 @@ public class Employee {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.address = address;
+        this.city = city;
+        this.postalCode = postalCode;
         this.role = role;
         this.jobList = jobList;
         this.salary = salary;

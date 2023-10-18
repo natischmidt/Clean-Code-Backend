@@ -23,12 +23,14 @@ public class Customer {
     private String email;
     private String phoneNumber;
     private String address;
+    private String city;
+    private String postalCode;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "customer_type")
     private CustomerType customerType;
 
-    public Customer(UUID id, String firstName, String lastName, String password, String companyName, String orgNumber, String email, String phoneNumber, String address, CustomerType customerType) {
+    public Customer(UUID id, String firstName, String lastName, String password, String companyName, String orgNumber, String email, String phoneNumber, String address, String city, String postalCode, CustomerType customerType) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -38,9 +40,11 @@ public class Customer {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.address = address;
+        this.city = city;
+        this.postalCode = postalCode;
         this.customerType = customerType;
     }
-    public Customer(UUID id, String firstName, String lastName, String password, String email, String phoneNumber, String address, CustomerType customerType) {
+    public Customer(UUID id, String firstName, String lastName, String password, String email, String phoneNumber, String address,  String city, String postalCode, CustomerType customerType) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -48,6 +52,8 @@ public class Customer {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.address = address;
+        this.city = city;
+        this.postalCode = postalCode;
         this.customerType = customerType;
     }
 }

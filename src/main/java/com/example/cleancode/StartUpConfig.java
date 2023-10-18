@@ -63,6 +63,8 @@ public class StartUpConfig {
                     "hanna.root@ikea.se",
                     "0730123123",
                     "Adressgatan 13",
+                    "Stadberga",
+                    "34512",
                     CustomerType.PRIVATE
             ));
         };
@@ -79,6 +81,8 @@ public class StartUpConfig {
                 "kent.andersson@stadafint.se",
                 "0734123323",
                 "Adressvägen 23",
+                "OrtInteStad",
+                "98712",
                 Role.EMPLOYEE,
                 salary1,
                 List.of());
@@ -93,6 +97,8 @@ public class StartUpConfig {
                 "lisa.gronberg@stadafint.se",
                 "0702424242",
                 "Adressvägen 65",
+                "Adminköping",
+                "54376",
                 Role.ADMIN,
                 salary2,
                 List.of());
@@ -107,6 +113,8 @@ public class StartUpConfig {
                 "klas.mcclean@stadafint.se",
                 "0732424542",
                 "Adressvägen 66",
+                "Städeborg",
+                "43209",
                 Role.EMPLOYEE,
                 salary3,
                 List.of());
@@ -121,6 +129,8 @@ public class StartUpConfig {
                 "sten.sturesson@stadafint.se",
                 "0738947468",
                 "Adressvägen 67",
+                "StureStena",
+                "99999",
                 Role.EMPLOYEE,
                 salary4,
                 List.of());
@@ -135,6 +145,8 @@ public class StartUpConfig {
                 "johanna.qvist@stadafint.se",
                 "0706788263",
                 "Adressvägen 68",
+                "Borås",
+                "32465",
                 Role.EMPLOYEE,
                 salary5,
                 List.of());

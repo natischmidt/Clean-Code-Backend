@@ -15,6 +15,7 @@ public class EmployeeController {
 
     @PostMapping("/createEmployee")
     public Long createEmployee(@RequestBody CreateEmployeeDTO employeeDTO) {
+        System.out.println("***********************************" + employeeDTO);
         return employeeService.createEmployee(employeeDTO);
     }
 
@@ -23,7 +24,7 @@ public class EmployeeController {
         return employeeService.deleteEmployee(empId);
     }
 
-    @GetMapping("/getEmployee")
+    @PostMapping("/getEmployee")
     public GetEmployeeDTO getEmployee(@RequestHeader Long empId) {
         return employeeService.getEmployee(empId);
     }

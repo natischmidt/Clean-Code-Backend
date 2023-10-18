@@ -33,8 +33,8 @@ public class CustomerService {
         return customerDTO;
     }
 
-//    @Autowired
-//    private EmailService emailService;
+    @Autowired
+    private EmailService emailService;
 
     private final CustomerRepository customerRepository;
 
@@ -55,7 +55,7 @@ public class CustomerService {
             throw new InvalidRequestException("Some fields had incorrect or missing information.");
         }
 
-//        try {
+        try {
             if (createDTO.getCompanyName().isEmpty() && createDTO.getOrgNumber().isEmpty()){
                 Customer customer = new Customer(
                         UUID.randomUUID(),
@@ -65,13 +65,15 @@ public class CustomerService {
                         createDTO.getEmail(),
                         createDTO.getPhoneNumber(),
                         createDTO.getAddress(),
+                        createDTO.getCity(),
+                        createDTO.getPostalCode(),
                         CustomerType.PRIVATE);
 
                 customerRepository.save(customer);
 
-//                emailService.sendEmail(createDTO.getEmail(),
-//                        "StädaFint AB",
-//                        "Du är nu registrerad som medlem på StädaFint AB. Välkommen!");
+                emailService.sendEmail(createDTO.getEmail(),
+                        "StädaFint AB",
+                        "Du är nu registrerad som medlem på StädaFint AB. Välkommen!");
 
                 return createDTO;
             }
@@ -91,9 +93,9 @@ public class CustomerService {
                 customer.setPassword(createDTO.getPassword());
                 customerRepository.save(customer);
 
-//                emailService.sendEmail(createDTO.getEmail(),
-//                        "StädaFint AB",
-//                        "Du är nu registrerad som medlem på StädaFint AB. Välkommen!");
+                emailService.sendEmail(createDTO.getEmail(),
+                        "StädaFint AB",
+                        "Du är nu registrerad som medlem på StädaFint AB. Välkommen!");
                 return createDTO;
             }
 
@@ -104,10 +106,10 @@ public class CustomerService {
 
             throw new CustomerInfoMissMatchException("if orgNumber isn't null, you need a company name");
 
-            // ^ dom klagar i if-satserna, men tycker dom ser nice ut...
-//        } catch (Exception e){
-//            throw new RuntimeException("ERROR -->" + e.getMessage());
-//        }
+//             ^ dom klagar i if-satserna, men tycker dom ser nice ut...
+        } catch (Exception e){
+            throw new RuntimeException("ERROR -->" + e.getMessage());
+        }
     }
 
     public String deleteCustomer(UUID id) {
