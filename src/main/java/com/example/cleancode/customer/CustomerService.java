@@ -65,6 +65,8 @@ public class CustomerService {
                         createDTO.getEmail(),
                         createDTO.getPhoneNumber(),
                         createDTO.getAddress(),
+                        createDTO.getCity(),
+                        createDTO.getPostalCode(),
                         CustomerType.PRIVATE);
 
                 customerRepository.save(customer);

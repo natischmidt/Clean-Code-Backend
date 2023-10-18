@@ -38,6 +38,8 @@ public class EmployeeService {
                     employeeDTO.getEmail(),
                     employeeDTO.getPhoneNumber(),
                     employeeDTO.getAddress(),
+                    employeeDTO.getCity(),
+                    employeeDTO.getPostalCode(),
                     employeeDTO.getRole(),
                     salary,
                     List.of());
@@ -114,6 +116,8 @@ public class EmployeeService {
                 employee.getEmail(),
                 employee.getPhoneNumber(),
                 employee.getAddress(),
+                employee.getCity(),
+                employee.getPostalCode(),
                 employee.getRole(),
                 employee.getSalary().getHourlySalary());
     }

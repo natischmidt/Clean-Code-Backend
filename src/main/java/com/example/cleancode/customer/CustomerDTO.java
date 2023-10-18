@@ -17,6 +17,8 @@ public class CustomerDTO {
     String email;
     String phoneNumber;
     String address;
+    String city;
+    String postalCode;
     CustomerType customerType;
 
 }
