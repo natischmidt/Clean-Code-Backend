@@ -56,7 +56,7 @@ public class CustomerService {
         }
 
 //        try {
-            if (createDTO.getCompanyName() == null && createDTO.getOrgNumber() == null){
+            if (createDTO.getCompanyName().isEmpty() && createDTO.getOrgNumber().isEmpty()){
                 Customer customer = new Customer(
                         UUID.randomUUID(),
                         createDTO.getFirstName(),
@@ -76,7 +76,7 @@ public class CustomerService {
                 return createDTO;
             }
 
-            if (createDTO.getCompanyName() != null && createDTO.getOrgNumber() != null){
+            if (!createDTO.getCompanyName().isEmpty() && !createDTO.getOrgNumber().isEmpty()){
                 Customer customer = new Customer(
                         UUID.randomUUID(),
                         createDTO.getFirstName(),
@@ -98,7 +98,7 @@ public class CustomerService {
             }
 
             // andra delen av "if condition" är överflödig, eftersom annars hamnar vi i någon av return ovan, men det är tydligare att behålla såhär
-            if(createDTO.getCompanyName() != null && createDTO.getOrgNumber() == null){
+            if(!createDTO.getCompanyName().isEmpty() && createDTO.getOrgNumber().isEmpty()){
                 throw new CustomerInfoMissMatchException("If companyName isn't null, you need a orgNumber");
             }
 
