@@ -36,7 +36,7 @@ public class JobController {
     }
 
     // Get a specific job
-    @PostMapping("/getJob")
+    @GetMapping("/getJob")
     public GetJobForUpdate getJob(@RequestHeader Long jobId) {
         return jobService.getJob(jobId);
     }
