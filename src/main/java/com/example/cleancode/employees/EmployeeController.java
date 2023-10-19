@@ -24,7 +24,7 @@ public class EmployeeController {
         return employeeService.deleteEmployee(empId);
     }
 
-    @PostMapping("/getEmployee")
+    @GetMapping("/getEmployee")
     public GetEmployeeDTO getEmployee(@RequestHeader Long empId) {
         return employeeService.getEmployee(empId);
     }
