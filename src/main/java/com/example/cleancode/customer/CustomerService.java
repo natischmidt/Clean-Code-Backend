@@ -147,7 +147,14 @@ public class CustomerService {
             }
             if (customerDTO.getAddress() != null){
                 customerUpdate.setAddress(customerDTO.getAddress());
-            }if (customerDTO.getCustomerType() != null){
+            }
+            if (customerDTO.getCity() != null){
+                customerUpdate.setCity(customerDTO.getCity());
+            }
+            if (customerDTO.getPostalCode() != null){
+                customerUpdate.setPostalCode(customerDTO.getPostalCode());
+            }
+            if (customerDTO.getCustomerType() != null){
                 customerUpdate.setCustomerType(customerDTO.getCustomerType());
             }
             customerRepository.save(customerUpdate);
