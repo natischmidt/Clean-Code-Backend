@@ -28,6 +28,8 @@ public class CustomerService {
         customerDTO.setEmail(customer.getEmail());
         customerDTO.setPhoneNumber(customer.getPhoneNumber());
         customerDTO.setAddress(customer.getAddress());
+        customerDTO.setCity(customer.getCity());
+        customerDTO.setPostalCode(customer.getPostalCode());
         customerDTO.setCustomerType(customer.getCustomerType());
 
         return customerDTO;
@@ -89,6 +91,8 @@ public class CustomerService {
                         createDTO.getEmail(),
                         createDTO.getPhoneNumber(),
                         createDTO.getAddress(),
+                        createDTO.getCity(),
+                        createDTO.getPostalCode(),
                         CustomerType.BUSINESS);
                 customer.setPassword(createDTO.getPassword());
                 customerRepository.save(customer);
