@@ -334,10 +334,10 @@ public class JobService {
                         "Du har en ny bokning hos StädaFint AB! \nVåra duktiga städare kommer till dig " + updateJobDTO.getDate() + ".");
             }
             case DONE: {
-                emailService.sendEmail(
+               /* emailService.sendEmail(
                         thisCustomer.get().getEmail(),
                         "Din städning har utförts!",
-                        "Din städning har utförts! Gå in på Mina Sidor för att godkänna städningen och komma vidare till betalning.");
+                        "Din städning har utförts! Gå in på Mina Sidor för att godkänna städningen och komma vidare till betalning.");*/
             }
             case APPROVED: {
                 //i dunno
