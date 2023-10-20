@@ -1,12 +1,9 @@
-package com.example.cleancode.payment;
+package com.example.cleancode.payment.stripe;
 
-import com.stripe.model.Address;
 import com.stripe.model.Customer;
 import com.stripe.model.PaymentMethod;
 import com.stripe.param.CustomerCreateParams;
 import com.stripe.param.PaymentIntentConfirmParams;
-import com.stripe.param.PaymentMethodCreateParams;
-import com.stripe.param.common.EmptyParam;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
