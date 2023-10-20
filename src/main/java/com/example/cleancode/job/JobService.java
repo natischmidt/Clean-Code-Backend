@@ -300,10 +300,12 @@ public class JobService {
                 jobToUpdate.setJobId(newJobId);
             }*/
 
-            if (jobDTO.getJobStatus() != null && !jobDTO.getJobStatus().equals(optionalJob.get().getJobStatus())) {
+            if (jobDTO.getJobStatus() != null && !jobDTO.getJobStatus().equals(jobToUpdate.getJobStatus())) {
                 jobToUpdate.setJobStatus(jobDTO.getJobStatus());
-                handleUpdatedJobStatus(jobDTO);
-                return null; // funkar nu
+
+                //kommenterade ut denna metod temporärt, då något med den gör att det int går att uppdatera jobbStatus till Done
+//                handleUpdatedJobStatus(jobDTO);
+
             }
             if (jobDTO.getPaymentOption() != null) {
                 jobToUpdate.setPaymentOption(jobDTO.getPaymentOption());
@@ -321,6 +323,7 @@ public class JobService {
     public List<Job> getJobsByStatus(List<JobStatus> statuses) {
         return jobRepository.findByJobStatusIn(statuses);
     }
+
 
     private void handleUpdatedJobStatus(UpdateJobDTO updateJobDTO) {
 

@@ -1,4 +1,4 @@
-package com.example.cleancode.payment;
+package com.example.cleancode.payment.stripe;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
