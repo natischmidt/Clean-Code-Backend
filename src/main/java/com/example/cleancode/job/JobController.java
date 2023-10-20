@@ -77,6 +77,7 @@ public class JobController {
         if (message != null && !message.isEmpty()) {
             jobDTO.setMessage(message);
         }
+
         return jobService.updateJobInfo(jobDTO);
     }
 

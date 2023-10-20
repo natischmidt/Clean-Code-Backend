@@ -28,6 +28,8 @@ public class CustomerService {
         customerDTO.setEmail(customer.getEmail());
         customerDTO.setPhoneNumber(customer.getPhoneNumber());
         customerDTO.setAddress(customer.getAddress());
+        customerDTO.setCity(customer.getCity());
+        customerDTO.setPostalCode(customer.getPostalCode());
         customerDTO.setCustomerType(customer.getCustomerType());
 
         return customerDTO;
@@ -89,6 +91,8 @@ public class CustomerService {
                         createDTO.getEmail(),
                         createDTO.getPhoneNumber(),
                         createDTO.getAddress(),
+                        createDTO.getCity(),
+                        createDTO.getPostalCode(),
                         CustomerType.BUSINESS);
                 customer.setPassword(createDTO.getPassword());
                 customerRepository.save(customer);
@@ -147,7 +151,14 @@ public class CustomerService {
             }
             if (customerDTO.getAddress() != null){
                 customerUpdate.setAddress(customerDTO.getAddress());
-            }if (customerDTO.getCustomerType() != null){
+            }
+            if (customerDTO.getCity() != null){
+                customerUpdate.setCity(customerDTO.getCity());
+            }
+            if (customerDTO.getPostalCode() != null){
+                customerUpdate.setPostalCode(customerDTO.getPostalCode());
+            }
+            if (customerDTO.getCustomerType() != null){
                 customerUpdate.setCustomerType(customerDTO.getCustomerType());
             }
             customerRepository.save(customerUpdate);
