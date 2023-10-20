@@ -46,11 +46,11 @@ public class StartUpConfig {
                     "Lars",
                     "Olofsson",
                     "password",
-                    "Larssons måleri AB",
-                    "123445660654-57439",
                     "lars.olofsson@malari.se",
-                    "0730123123",
-                    "Adressgatan 12",
+                    "1234456605",
+                    "Målerigatan 10",
+                    "Målberga",
+                    "76042",
                     CustomerType.BUSINESS
 
             ));
@@ -60,6 +60,8 @@ public class StartUpConfig {
                     "Hanna",
                     "Root",
                     "password",
+                    "ikea",
+                    "457898-5612",
                     "hanna.root@ikea.se",
                     "0730123123",
                     "Adressgatan 13",
