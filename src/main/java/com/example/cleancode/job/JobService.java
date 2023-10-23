@@ -236,6 +236,7 @@ public class JobService {
     }
 
     public List<GetJobDTO> getAllJobsForEmployee(Long empId) {
+
         List<Job> jobsForEmployee = jobRepository.findAll()
                 .stream()
                 .filter(job -> job.getEmployee().getId() == empId)
@@ -243,7 +244,8 @@ public class JobService {
         if (!jobsForEmployee.isEmpty()) {
             return convertToDTOList(jobsForEmployee);
         } else {
-            throw new NoJobsForEmployeeException("There are no jobs for this employee");
+        //returnerar tom lista här istället för throw, annars blir det fel när vi försöker mappa i frontend.
+            return new ArrayList<>();
         }
     }
 
