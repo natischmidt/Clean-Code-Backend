@@ -75,7 +75,7 @@ public class CustomerService {
 
                 emailService.sendEmail(createDTO.getEmail(),
                         "StädaFint AB",
-                        "Du är nu registrerad som medlem på StädaFint AB. Välkommen!");
+                        "You are now a registered member at StädaFintAB. Welcome!");
 
                 return createDTO;
             }
