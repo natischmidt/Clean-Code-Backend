@@ -50,13 +50,139 @@ public class KlarnaController {
             return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
         }
     }
-    @PostMapping("/createOrder")
-    public ResponseEntity<Map<String, Object>> createOrder(@RequestBody KlarnaOrderDTO klarnaOrder) {
+    @PostMapping("/createBasicOrder")
+    public ResponseEntity<Map<String, Object>> createBasicOrder(@RequestBody KlarnaOrderDTO klarnaOrder) {
         // Create the headers
         HttpHeaders headers = new HttpHeaders();
         String credentials = username + ":" + password;
         String encodedCredentials = new String(Base64.getEncoder().encode(credentials.getBytes()));
        headers.set("Authorization", "Basic " + encodedCredentials); // Replace with your Klarna API credentials
+        headers.set("Content-Type", "application/json");
+
+        // Create the HttpEntity object
+        HttpEntity<KlarnaOrderDTO> entity = new HttpEntity<>(klarnaOrder, headers);
+
+        // Create RestTemplate instance
+        RestTemplate restTemplate = new RestTemplate();
+
+        // Send POST request
+        ResponseEntity<Map> response = restTemplate.exchange(
+                "https://api.playground.klarna.com/checkout/v3/orders", // Replace with actual Klarna API endpoint
+                HttpMethod.POST,
+                entity,
+                Map.class
+        );
+
+        // Check for successful response
+        if (response.getStatusCode() == HttpStatus.CREATED) {
+
+            JSONObject jsonResponse = new JSONObject(response.getBody());
+            String orderId = jsonResponse.getString("order_id");
+            String htmlSnippet = jsonResponse.getString("html_snippet");
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("message", "Order created successfully");
+            responseBody.put("orderID", orderId);
+            responseBody.put("htmlSnippet", htmlSnippet);
+
+
+            return ResponseEntity.ok(responseBody);
+        } else {
+            // You can also handle errors here
+            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+        }
+    }
+
+    @PostMapping("/createAdvancedOrder")
+    public ResponseEntity<Map<String, Object>> createAdvancedOrder(@RequestBody KlarnaOrderDTO klarnaOrder) {
+        // Create the headers
+        HttpHeaders headers = new HttpHeaders();
+        String credentials = username + ":" + password;
+        String encodedCredentials = new String(Base64.getEncoder().encode(credentials.getBytes()));
+        headers.set("Authorization", "Advanced " + encodedCredentials); // Replace with your Klarna API credentials
+        headers.set("Content-Type", "application/json");
+
+        // Create the HttpEntity object
+        HttpEntity<KlarnaOrderDTO> entity = new HttpEntity<>(klarnaOrder, headers);
+
+        // Create RestTemplate instance
+        RestTemplate restTemplate = new RestTemplate();
+
+        // Send POST request
+        ResponseEntity<Map> response = restTemplate.exchange(
+                "https://api.playground.klarna.com/checkout/v3/orders", // Replace with actual Klarna API endpoint
+                HttpMethod.POST,
+                entity,
+                Map.class
+        );
+
+        // Check for successful response
+        if (response.getStatusCode() == HttpStatus.CREATED) {
+
+            JSONObject jsonResponse = new JSONObject(response.getBody());
+            String orderId = jsonResponse.getString("order_id");
+            String htmlSnippet = jsonResponse.getString("html_snippet");
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("message", "Order created successfully");
+            responseBody.put("orderID", orderId);
+            responseBody.put("htmlSnippet", htmlSnippet);
+
+
+            return ResponseEntity.ok(responseBody);
+        } else {
+            // You can also handle errors here
+            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+        }
+    }
+
+    @PostMapping("/createDiamondOrder")
+    public ResponseEntity<Map<String, Object>> createDiamondOrder(@RequestBody KlarnaOrderDTO klarnaOrder) {
+        // Create the headers
+        HttpHeaders headers = new HttpHeaders();
+        String credentials = username + ":" + password;
+        String encodedCredentials = new String(Base64.getEncoder().encode(credentials.getBytes()));
+        headers.set("Authorization", "Diamond " + encodedCredentials); // Replace with your Klarna API credentials
+        headers.set("Content-Type", "application/json");
+
+        // Create the HttpEntity object
+        HttpEntity<KlarnaOrderDTO> entity = new HttpEntity<>(klarnaOrder, headers);
+
+        // Create RestTemplate instance
+        RestTemplate restTemplate = new RestTemplate();
+
+        // Send POST request
+        ResponseEntity<Map> response = restTemplate.exchange(
+                "https://api.playground.klarna.com/checkout/v3/orders", // Replace with actual Klarna API endpoint
+                HttpMethod.POST,
+                entity,
+                Map.class
+        );
+
+        // Check for successful response
+        if (response.getStatusCode() == HttpStatus.CREATED) {
+
+            JSONObject jsonResponse = new JSONObject(response.getBody());
+            String orderId = jsonResponse.getString("order_id");
+            String htmlSnippet = jsonResponse.getString("html_snippet");
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("message", "Order created successfully");
+            responseBody.put("orderID", orderId);
+            responseBody.put("htmlSnippet", htmlSnippet);
+
+
+            return ResponseEntity.ok(responseBody);
+        } else {
+            // You can also handle errors here
+            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+        }
+    }
+
+    @PostMapping("/createWindowOrder")
+    public ResponseEntity<Map<String, Object>> createWindowOrder(@RequestBody KlarnaOrderDTO klarnaOrder) {
+        // Create the headers
+        HttpHeaders headers = new HttpHeaders();
+        String credentials = username + ":" + password;
+        String encodedCredentials = new String(Base64.getEncoder().encode(credentials.getBytes()));
+        headers.set("Authorization", "Window " + encodedCredentials); // Replace with your Klarna API credentials
         headers.set("Content-Type", "application/json");
 
         // Create the HttpEntity object
