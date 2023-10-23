@@ -342,8 +342,8 @@ public class JobService {
             case PENDING :{
                 emailService.sendEmail(
                         thisCustomer.get().getEmail(),
-                        "Ny bokning hos StädaFint!",
-                        "Du har en ny bokning hos StädaFint AB! \nVåra duktiga städare kommer till dig " + updateJobDTO.getDate() + ".");
+                        "New booking at StädaFint!",
+                        "You have a new booking at StädaFint AB! \nOur professional cleaner will be at your home " + updateJobDTO.getDate() + ".");
             }
             case DONE: {
                /* emailService.sendEmail(
@@ -352,7 +352,11 @@ public class JobService {
                         "Din städning har utförts! Gå in på Mina Sidor för att godkänna städningen och komma vidare till betalning.");*/
             }
             case APPROVED: {
-                //i dunno
+                emailService.sendEmail(
+                        thisCustomer.get().getEmail(),
+                        "StädaFint!",
+                        "You have approved the cleaning and your invoice is shown below.");
+
             }
             case UNAPPROVED:{
                 //här skickar vi kanske ett mail till admin, men det finns bara en mailadress i företaget, så kanske skippa det?
