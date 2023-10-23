@@ -69,6 +69,19 @@ public class StartUpConfig {
                     "34512",
                     CustomerType.PRIVATE
             ));
+
+            customerRepository.save(new Customer(
+                    UUID.fromString("978b8da4-28cd-42c9-b6c6-a3dc53204632"),
+                    "Stina",
+                    "Fina",
+                    "password",
+                    "StadaFintAB@gmail.com",
+                    "0700123123",
+                    "Dirtyroad 12",
+                    "Stockholm",
+                    "41356",
+                    CustomerType.PRIVATE
+            ));
         };
     }
 
