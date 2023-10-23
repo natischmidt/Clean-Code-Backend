@@ -140,6 +140,15 @@ public class JobService {
                 createJobDTO.getMessage());
         jobRepository.save(job);
         updateAvailability(assignedEmployee, date, createJobDTO.getTimeSlotList(), job);
+
+        System.out.println(customerOptional.get().getEmail());
+
+        String body = "Your booking has been approved and is now entered into our system! The cleaning will take place: " + job.getDate();
+
+        emailService.sendEmail(customerOptional.get().getEmail(),
+                "StädaFint AB",
+                body);
+
         return job.getJobId();
     }
 
