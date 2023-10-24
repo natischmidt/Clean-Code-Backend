@@ -89,7 +89,16 @@ public class Job {
         this.jobStatus = jobStatus;
         this.squareMeters = squareMeters;
         this.paymentOption = paymentOption;
-
+        this.customer = customer;
+    }
+    public Job(Jobtype jobtype, Date date, TimeSlots timeSlot, JobStatus jobStatus, int squareMeters, PaymentOption paymentOption, String message, Customer customer) {
+        this.jobtype = jobtype;
+        this.date = date;
+        this.timeSlot = timeSlot;
+        this.jobStatus = jobStatus;
+        this.squareMeters = squareMeters;
+        this.paymentOption = paymentOption;
+        this.message = message;
         this.customer = customer;
     }
 }

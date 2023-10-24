@@ -396,22 +396,22 @@ public class StartUpConfig {
             employeeRepository.save(employee1);
             employeeRepository.save(employee2);
             employeeRepository.save(employee3);
-            employeeRepository.save(employee4);
-            employeeRepository.save(employee5);
-            employeeRepository.save(employee6);
-            employeeRepository.save(employee7);
-            employeeRepository.save(employee8);
-            employeeRepository.save(employee9);
-            employeeRepository.save(employee10);
-            employeeRepository.save(employee11);
-            employeeRepository.save(employee12);
-            employeeRepository.save(employee13);
-            employeeRepository.save(employee14);
-            employeeRepository.save(employee15);
-            employeeRepository.save(employee16);
-            employeeRepository.save(employee17);
-            employeeRepository.save(employee18);
-            employeeRepository.save(employee19);
+//            employeeRepository.save(employee4);
+//            employeeRepository.save(employee5);
+//            employeeRepository.save(employee6);
+//            employeeRepository.save(employee7);
+//            employeeRepository.save(employee8);
+//            employeeRepository.save(employee9);
+//            employeeRepository.save(employee10);
+//            employeeRepository.save(employee11);
+//            employeeRepository.save(employee12);
+//            employeeRepository.save(employee13);
+//            employeeRepository.save(employee14);
+//            employeeRepository.save(employee15);
+//            employeeRepository.save(employee16);
+//            employeeRepository.save(employee17);
+//            employeeRepository.save(employee18);
+//            employeeRepository.save(employee19);
         };
     }
 

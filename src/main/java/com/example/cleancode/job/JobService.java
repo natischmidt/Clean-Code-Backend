@@ -245,6 +245,7 @@ public class JobService {
     }
 
     public List<GetJobDTO> getAllJobsForEmployee(Long empId) {
+
         List<Job> jobsForEmployee = jobRepository.findAll()
                 .stream()
                 .filter(job -> job.getEmployee().getId() == empId)
@@ -252,7 +253,8 @@ public class JobService {
         if (!jobsForEmployee.isEmpty()) {
             return convertToDTOList(jobsForEmployee);
         } else {
-            throw new NoJobsForEmployeeException("There are no jobs for this employee");
+        //returnerar tom lista här istället för throw, annars blir det fel när vi försöker mappa i frontend.
+            return new ArrayList<>();
         }
     }
 
@@ -310,19 +312,18 @@ public class JobService {
             }*/
 
             if (jobDTO.getJobStatus() != null && !jobDTO.getJobStatus().equals(jobToUpdate.getJobStatus())) {
-                jobToUpdate.setJobStatus(jobDTO.getJobStatus());
+//                jobToUpdate.setJobStatus(jobDTO.getJobStatus());
 
-                //kommenterade ut denna metod temporärt, då något med den gör att det int går att uppdatera jobbStatus till Done
-//                handleUpdatedJobStatus(jobDTO);
-
+                handleUpdatedJobStatus(jobDTO);
+                return null;
             }
             if (jobDTO.getPaymentOption() != null) {
-                jobToUpdate.setPaymentOption(jobDTO.getPaymentOption());
+                jobToUpdate.    setPaymentOption(jobDTO.getPaymentOption());
             }
 
             jobRepository.save(jobToUpdate);
 
-            // return  updated jobb as DTO
+            // return  updated job as DTO
             return convertToDTO(jobToUpdate);
         } else {
             throw new JobDoesNotExistException("Job does not exist");
@@ -342,27 +343,30 @@ public class JobService {
             case PENDING :{
                 emailService.sendEmail(
                         thisCustomer.get().getEmail(),
-                        "New booking at StädaFint!",
-                        "You have a new booking at StädaFint AB! \nOur professional cleaner will be at your home " + updateJobDTO.getDate() + ".");
+                        "Ny bokning hos StädaFint!",
+                        "Du har en ny bokning hos StädaFint AB! \nVåra duktiga städare kommer till dig " + updateJobDTO.getDate() + ".");
+                break;
             }
             case DONE: {
                /* emailService.sendEmail(
                         thisCustomer.get().getEmail(),
                         "Din städning har utförts!",
                         "Din städning har utförts! Gå in på Mina Sidor för att godkänna städningen och komma vidare till betalning.");*/
+                break;
             }
             case APPROVED: {
-                emailService.sendEmail(
-                        thisCustomer.get().getEmail(),
-                        "StädaFint!",
-                        "You have approved the cleaning and your invoice is shown below.");
-
+                //i dunno
+                System.out.println("printar nåt bara för att annars är intelliJ skitstörigt och markerar allt som 'duplicate branches'.");
+                break;
             }
             case UNAPPROVED:{
                 //här skickar vi kanske ett mail till admin, men det finns bara en mailadress i företaget, så kanske skippa det?
+                System.out.println(" ");
+                break;
             }
             case PAID: {
-
+                System.out.println("  ");
+                break;
             }
             case CANCELLED: {
 
@@ -374,10 +378,11 @@ public class JobService {
                         updateJobDTO.getJobStatus(),
                         updateJobDTO.getSquareMeters(),
                         updateJobDTO.getPaymentOption(),
+                        updateJobDTO.getMessage(),
                         customerRepository.findById(updateJobDTO.getCustomerId()).get());
                 jobRepository.deleteById(updateJobDTO.getJobId());
                 jobRepository.save(cancelledJob);
-
+                break;
             }
         }
     }
