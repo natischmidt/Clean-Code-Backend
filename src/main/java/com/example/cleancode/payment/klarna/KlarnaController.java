@@ -98,7 +98,7 @@ public class KlarnaController {
         HttpHeaders headers = new HttpHeaders();
         String credentials = username + ":" + password;
         String encodedCredentials = new String(Base64.getEncoder().encode(credentials.getBytes()));
-        headers.set("Authorization", "Advanced " + encodedCredentials); // Replace with your Klarna API credentials
+        headers.set("Authorization", "Basic " + encodedCredentials); // Replace with your Klarna API credentials
         headers.set("Content-Type", "application/json");
 
         // Create the HttpEntity object
@@ -140,7 +140,7 @@ public class KlarnaController {
         HttpHeaders headers = new HttpHeaders();
         String credentials = username + ":" + password;
         String encodedCredentials = new String(Base64.getEncoder().encode(credentials.getBytes()));
-        headers.set("Authorization", "Diamond " + encodedCredentials); // Replace with your Klarna API credentials
+        headers.set("Authorization", "Basic " + encodedCredentials); // Replace with your Klarna API credentials
         headers.set("Content-Type", "application/json");
 
         // Create the HttpEntity object
@@ -182,7 +182,7 @@ public class KlarnaController {
         HttpHeaders headers = new HttpHeaders();
         String credentials = username + ":" + password;
         String encodedCredentials = new String(Base64.getEncoder().encode(credentials.getBytes()));
-        headers.set("Authorization", "Window " + encodedCredentials); // Replace with your Klarna API credentials
+        headers.set("Authorization", "Basic " + encodedCredentials); // Replace with your Klarna API credentials
         headers.set("Content-Type", "application/json");
 
         // Create the HttpEntity object
