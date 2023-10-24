@@ -342,8 +342,8 @@ public class JobService {
 
         Optional<Customer> thisCustomer = customerRepository.findById(updateJobDTO.getCustomerId());
 
-        switch (updateJobDTO.getJobStatus()){
-            case PENDING :{
+        switch (updateJobDTO.getJobStatus()) {
+            case PENDING: {
 
                 emailService.sendEmail(
                         thisCustomer.get().getEmail(),
@@ -356,14 +356,14 @@ public class JobService {
             case DONE: {
                 Optional<Employee> emp = employeeRepository.findById(jobToUpdate.getEmployee().getId());
                 int hours = 3;
-                if(jobToUpdate.getJobtype().equals(BASIC) || jobToUpdate.getJobtype().equals(WINDOW)) {
+                if (jobToUpdate.getJobtype().equals(BASIC) || jobToUpdate.getJobtype().equals(WINDOW)) {
                     hours = 1;
                 } else if (jobToUpdate.getJobtype().equals(ADVANCED)) {
                     hours = 2;
                 }
 
-                if(emp.isPresent()) {
-                    emp.get().getSalary().setWorkedHours(emp.get().getSalary().getWorkedHours()+ hours);
+                if (emp.isPresent()) {
+                    emp.get().getSalary().setWorkedHours(emp.get().getSalary().getWorkedHours() + hours);
                 }
 
                /* emailService.sendEmail(
@@ -380,7 +380,7 @@ public class JobService {
                 jobToUpdate.setJobStatus(updateJobDTO.getJobStatus());
                 return jobToUpdate;
             }
-            case UNAPPROVED:{
+            case UNAPPROVED: {
                 //här skickar vi kanske ett mail till admin, men det finns bara en mailadress i företaget, så kanske skippa det?
                 System.out.println(" ");
                 jobToUpdate.setJobStatus(updateJobDTO.getJobStatus());
@@ -391,35 +391,53 @@ public class JobService {
                 jobToUpdate.setJobStatus(updateJobDTO.getJobStatus());
                 return jobToUpdate;
             }
+
             case CANCELLED: {
                 String message = updateJobDTO.getMessage();
 
-                if(updateJobDTO.getMessage() == null || updateJobDTO.getMessage().isEmpty()) {
+                if (updateJobDTO.getMessage() == null || updateJobDTO.getMessage().isEmpty()) {
                     message = jobToUpdate.getMessage();
                 }
-                jobRepository.deleteById(updateJobDTO.getJobId());
-
+                jobToUpdate.setJobStatus(JobStatus.CANCELLED);
+                jobToUpdate.setMessage(message);
                 jobToUpdate.getBooked().clear();
-                jobToUpdate.setJobStatus(CANCELLED);
-//                Job cancelledJob = new Job(
-//                        updateJobDTO.getJobId(),
-//                        updateJobDTO.getJobtype(),
-//                        updateJobDTO.getDate(),
-//                        TimeSlots.SIXTEEN,
-//                        updateJobDTO.getJobStatus(),
-//                        updateJobDTO.getSquareMeters(),
-//                        updateJobDTO.getPaymentOption(),
-//                        message,
-//                        customerRepository.findById(updateJobDTO.getCustomerId()).get());
 
                 return jobToUpdate;
             }
             default: {
                 return jobToUpdate;
             }
-        }
 
+
+//            case CANCELLED: {
+//                String message = updateJobDTO.getMessage();
+//
+//                if(updateJobDTO.getMessage() == null || updateJobDTO.getMessage().isEmpty()) {
+//                    message = jobToUpdate.getMessage();
+//                }
+//                jobRepository.deleteById(updateJobDTO.getJobId());
+//
+//                jobToUpdate.getBooked().clear();
+//                jobToUpdate.setJobStatus(CANCELLED);
+////                Job cancelledJob = new Job(
+////                        updateJobDTO.getJobId(),
+////                        updateJobDTO.getJobtype(),
+////                        updateJobDTO.getDate(),
+////                        TimeSlots.SIXTEEN,
+////                        updateJobDTO.getJobStatus(),
+////                        updateJobDTO.getSquareMeters(),
+////                        updateJobDTO.getPaymentOption(),
+////                        message,
+////                        customerRepository.findById(updateJobDTO.getCustomerId()).get());
+//
+//                return jobToUpdate;
+//            }
+//            default: {
+//                return jobToUpdate;
+//            }
+        }
     }
+
     public List<GetJobDTO> getAllJobsForCustomerWithStatus(UUID cusId, List<JobStatus> status) {
         List<Job> jobsForCustomer = jobRepository.findAll()
                 .stream()
