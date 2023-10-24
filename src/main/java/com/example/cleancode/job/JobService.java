@@ -7,6 +7,7 @@ import com.example.cleancode.customer.CustomerRepository;
 import com.example.cleancode.employees.Employee;
 import com.example.cleancode.employees.EmployeeRepository;
 import com.example.cleancode.enums.JobStatus;
+import com.example.cleancode.enums.Jobtype;
 import com.example.cleancode.enums.Role;
 import com.example.cleancode.enums.TimeSlots;
 import com.example.cleancode.exceptions.*;
@@ -20,6 +21,8 @@ import java.util.*;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
+import static com.example.cleancode.enums.JobStatus.CANCELLED;
+import static com.example.cleancode.enums.Jobtype.*;
 import static com.example.cleancode.enums.Role.EMPLOYEE;
 
 @Service
@@ -314,11 +317,11 @@ public class JobService {
             if (jobDTO.getJobStatus() != null && !jobDTO.getJobStatus().equals(jobToUpdate.getJobStatus())) {
 //                jobToUpdate.setJobStatus(jobDTO.getJobStatus());
 
-                handleUpdatedJobStatus(jobDTO);
-                return null;
+                jobToUpdate= handleUpdatedJobStatus(jobDTO, jobToUpdate);
+
             }
             if (jobDTO.getPaymentOption() != null) {
-                jobToUpdate.    setPaymentOption(jobDTO.getPaymentOption());
+                jobToUpdate.setPaymentOption(jobDTO.getPaymentOption());
             }
 
             jobRepository.save(jobToUpdate);
@@ -335,56 +338,87 @@ public class JobService {
     }
 
 
-    private void handleUpdatedJobStatus(UpdateJobDTO updateJobDTO) {
+    private Job handleUpdatedJobStatus(UpdateJobDTO updateJobDTO, Job jobToUpdate) {
 
         Optional<Customer> thisCustomer = customerRepository.findById(updateJobDTO.getCustomerId());
 
         switch (updateJobDTO.getJobStatus()){
             case PENDING :{
+
                 emailService.sendEmail(
                         thisCustomer.get().getEmail(),
                         "Ny bokning hos StädaFint!",
                         "Du har en ny bokning hos StädaFint AB! \nVåra duktiga städare kommer till dig " + updateJobDTO.getDate() + ".");
-                break;
+                jobToUpdate.setJobStatus(updateJobDTO.getJobStatus());
+                return jobToUpdate;
+
             }
             case DONE: {
+                Optional<Employee> emp = employeeRepository.findById(jobToUpdate.getEmployee().getId());
+                int hours = 3;
+                if(jobToUpdate.getJobtype().equals(BASIC) || jobToUpdate.getJobtype().equals(WINDOW)) {
+                    hours = 1;
+                } else if (jobToUpdate.getJobtype().equals(ADVANCED)) {
+                    hours = 2;
+                }
+
+                if(emp.isPresent()) {
+                    emp.get().getSalary().setWorkedHours(emp.get().getSalary().getWorkedHours()+ hours);
+                }
+
                /* emailService.sendEmail(
                         thisCustomer.get().getEmail(),
                         "Din städning har utförts!",
                         "Din städning har utförts! Gå in på Mina Sidor för att godkänna städningen och komma vidare till betalning.");*/
-                break;
+                jobToUpdate.setJobStatus(updateJobDTO.getJobStatus());
+                return jobToUpdate;
+
             }
             case APPROVED: {
                 //i dunno
                 System.out.println("printar nåt bara för att annars är intelliJ skitstörigt och markerar allt som 'duplicate branches'.");
-                break;
+                jobToUpdate.setJobStatus(updateJobDTO.getJobStatus());
+                return jobToUpdate;
             }
             case UNAPPROVED:{
                 //här skickar vi kanske ett mail till admin, men det finns bara en mailadress i företaget, så kanske skippa det?
                 System.out.println(" ");
-                break;
+                jobToUpdate.setJobStatus(updateJobDTO.getJobStatus());
+                return jobToUpdate;
             }
             case PAID: {
                 System.out.println("  ");
-                break;
+                jobToUpdate.setJobStatus(updateJobDTO.getJobStatus());
+                return jobToUpdate;
             }
             case CANCELLED: {
+                String message = updateJobDTO.getMessage();
 
-               Date date = updateJobDTO.getDate();
-                Job cancelledJob = new Job(
-                        updateJobDTO.getJobtype(),
-                        date,
-                        TimeSlots.FIFTEEN,
-                        updateJobDTO.getJobStatus(),
-                        updateJobDTO.getSquareMeters(),
-                        updateJobDTO.getPaymentOption(),
-                        updateJobDTO.getMessage(),
-                        customerRepository.findById(updateJobDTO.getCustomerId()).get());
+                if(updateJobDTO.getMessage() == null || updateJobDTO.getMessage().isEmpty()) {
+                    message = jobToUpdate.getMessage();
+                }
                 jobRepository.deleteById(updateJobDTO.getJobId());
-                jobRepository.save(cancelledJob);
-                break;
+
+                jobToUpdate.getBooked().clear();
+                jobToUpdate.setJobStatus(CANCELLED);
+//                Job cancelledJob = new Job(
+//                        updateJobDTO.getJobId(),
+//                        updateJobDTO.getJobtype(),
+//                        updateJobDTO.getDate(),
+//                        TimeSlots.SIXTEEN,
+//                        updateJobDTO.getJobStatus(),
+//                        updateJobDTO.getSquareMeters(),
+//                        updateJobDTO.getPaymentOption(),
+//                        message,
+//                        customerRepository.findById(updateJobDTO.getCustomerId()).get());
+
+                return jobToUpdate;
+            }
+            default: {
+                return jobToUpdate;
             }
         }
+
     }
     public List<GetJobDTO> getAllJobsForCustomerWithStatus(UUID cusId, List<JobStatus> status) {
         List<Job> jobsForCustomer = jobRepository.findAll()

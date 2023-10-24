@@ -4,6 +4,7 @@ import com.example.cleancode.exceptions.InvalidRequestException;
 import com.example.cleancode.exceptions.PersonAlreadyExistsException;
 import com.example.cleancode.exceptions.PersonDoesNotExistException;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -85,7 +86,7 @@ public class EmployeeService {
         /** If an employee with the entered id exists, we update it with the values from the DTO. If not, exception is thrown. */
         Optional<Employee> optEmp = employeeRepository.findById(empId);
 
-        if(!checkEditEmployeeDTO(employeeDTO)) {
+        if (!checkEditEmployeeDTO(employeeDTO)) {
             throw new InvalidRequestException("Some fields had missing or invalid data");
         }
 
@@ -104,6 +105,22 @@ public class EmployeeService {
         }
         employeeRepository.save(optEmp.get());
         return employeeToGetEmployeeDto(optEmp.get());
+    }
+
+    public SalaryDTO getSalary(Long id) {
+        Optional<Employee> optEmp = employeeRepository.findById(id);
+
+        SalaryDTO salaryDTO;
+
+        if (optEmp.isPresent()) {
+            salaryDTO = new SalaryDTO(
+                    optEmp.get().getSalary().getWorkedHours(),
+                    optEmp.get().getSalary().getHourlySalary()
+            );
+        } else {
+            salaryDTO = new SalaryDTO();
+        }
+        return salaryDTO;
     }
 
     private GetEmployeeDTO employeeToGetEmployeeDto(Employee employee) {
@@ -146,4 +163,6 @@ public class EmployeeService {
                 && dto.getRole() != null
                 && dto.getHourlySalary() != 0;
     }
+
+
 }

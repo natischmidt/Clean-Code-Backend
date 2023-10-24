@@ -39,4 +39,11 @@ public class EmployeeController {
 
         return employeeService.editEmployee(empId, employee);
     }
+
+    @GetMapping("/getSalary/{id}")
+    public SalaryDTO getSalary(@PathVariable Long id) {
+        return employeeService.getSalary(id);
+
+    }
+
 }

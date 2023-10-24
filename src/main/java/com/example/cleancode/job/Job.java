@@ -101,4 +101,15 @@ public class Job {
         this.message = message;
         this.customer = customer;
     }
+    public Job(long jobId, Jobtype jobtype, Date date, TimeSlots timeSlot, JobStatus jobStatus, int squareMeters, PaymentOption paymentOption, String message, Customer customer) {
+        this.jobId = jobId;
+        this.jobtype = jobtype;
+        this.date = date;
+        this.timeSlot = timeSlot;
+        this.jobStatus = jobStatus;
+        this.squareMeters = squareMeters;
+        this.paymentOption = paymentOption;
+        this.message = message;
+        this.customer = customer;
+    }
 }
