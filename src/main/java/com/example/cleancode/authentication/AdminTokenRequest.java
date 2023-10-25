@@ -7,9 +7,13 @@ import lombok.Data;
 @AllArgsConstructor
 public class AdminTokenRequest {
 
-    private String grant_type;
-    private String username;
-    private String password;
-    private String client_id;
+    private String access_token;
+    private String expires_in;
+    private String refresh_expires_in;
+    private String refresh_token;
+    private String token_type;
+    private String notbeforepolicy;
+    private String session_State;
+    private String scope;
 
 }

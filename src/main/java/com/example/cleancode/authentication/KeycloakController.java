@@ -19,4 +19,9 @@ public class KeycloakController {
         return keycloakService.getAdminToken();
     }
 
+    @PostMapping("/createUser")
+    public String createUser (@RequestBody CreateUserDTO createUserDTO) {
+        return keycloakService.createUser(createUserDTO);
+    }
+
 }
