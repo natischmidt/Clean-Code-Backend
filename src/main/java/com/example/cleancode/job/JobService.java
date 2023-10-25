@@ -375,6 +375,10 @@ public class JobService {
 
             }
             case APPROVED: {
+                emailService.sendEmail(
+                        thisCustomer.get().getEmail(),
+                        "Nytt status på din bokning hos StädaFint!",
+                        "Din bokning är nu godkänt och reda att betalas hos StädaFint AB!");
                 //i dunno
                 System.out.println("printar nåt bara för att annars är intelliJ skitstörigt och markerar allt som 'duplicate branches'.");
                 jobToUpdate.setJobStatus(updateJobDTO.getJobStatus());

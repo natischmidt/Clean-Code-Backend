@@ -1,14 +1,12 @@
 package com.example.cleancode.customer;
 
 import com.example.cleancode.enums.CustomerType;
-import com.example.cleancode.exceptions.CustomerAlreadyExistsException;
-import com.example.cleancode.exceptions.CustomerDoesNotExistException;
-import com.example.cleancode.exceptions.CustomerInfoMissMatchException;
-import com.example.cleancode.exceptions.InvalidRequestException;
+import com.example.cleancode.exceptions.*;
 import com.example.cleancode.mail.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +15,7 @@ import java.util.UUID;
 @Service
 public class CustomerService {
 
-    public CustomerDTO customerEntityToDTO(Customer customer){
+    public CustomerDTO customerEntityToDTO(Customer customer) {
 
         CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setId(customer.getId());
@@ -49,16 +47,18 @@ public class CustomerService {
         Optional<Customer> optCustEmail = customerRepository.findByEmail(createDTO.getEmail());
         //om det är en business så får vi ett värde i company fältet, annars null
 
-        if (optCustEmail.isPresent()){
+        if (optCustEmail.isPresent()) {
             throw new CustomerAlreadyExistsException(createDTO.getEmail());
         }
 
-        if(!checkCreateCustomerDTO(createDTO)) {
-            throw new InvalidRequestException("Some fields had incorrect or missing information.");
+        if (createDTO.getFirstName() != "") {
+            if (!checkCreateCustomerDTO(createDTO)) {
+                throw new InvalidRequestException("Some fields had incorrect or missing information.");
+            }
         }
 
         try {
-            if (createDTO.getCompanyName().isEmpty() && createDTO.getOrgNumber().isEmpty()){
+            if (createDTO.getCompanyName().isEmpty() && createDTO.getOrgNumber().isEmpty()) {
                 Customer customer = new Customer(
                         UUID.randomUUID(),
                         createDTO.getFirstName(),
@@ -80,7 +80,7 @@ public class CustomerService {
                 return createDTO;
             }
 
-            if (!createDTO.getCompanyName().isEmpty() && !createDTO.getOrgNumber().isEmpty()){
+            if (!createDTO.getCompanyName().isEmpty() && !createDTO.getOrgNumber().isEmpty()) {
                 Customer customer = new Customer(
                         UUID.randomUUID(),
                         createDTO.getFirstName(),
@@ -104,21 +104,21 @@ public class CustomerService {
             }
 
             // andra delen av "if condition" är överflödig, eftersom annars hamnar vi i någon av return ovan, men det är tydligare att behålla såhär
-            if(!createDTO.getCompanyName().isEmpty() && createDTO.getOrgNumber().isEmpty()){
+            if (!createDTO.getCompanyName().isEmpty() && createDTO.getOrgNumber().isEmpty()) {
                 throw new CustomerInfoMissMatchException("If companyName isn't null, you need a orgNumber");
             }
 
             throw new CustomerInfoMissMatchException("if orgNumber isn't null, you need a company name");
 
 //             ^ dom klagar i if-satserna, men tycker dom ser nice ut...
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("ERROR -->" + e.getMessage());
         }
     }
 
     public String deleteCustomer(UUID id) {
         Optional<Customer> optionalCustomer = customerRepository.findById(id);
-        if (optionalCustomer.isPresent()){
+        if (optionalCustomer.isPresent()) {
             customerRepository.deleteById(id);
             return "Customer with the ID: " + id + " have been removed";
         } else {
@@ -129,42 +129,41 @@ public class CustomerService {
     @Transactional
     public CustomerDTO updateCustomerInfo(UUID id, CustomerDTO customerDTO) {
         Optional<Customer> optionalCustomer = customerRepository.findById(id);
-        if (optionalCustomer.isPresent()){
+        if (optionalCustomer.isPresent()) {
             Customer customerUpdate = optionalCustomer.get();
-            if(customerDTO.getFirstName() != null){
+            if (customerDTO.getFirstName() != null) {
                 customerUpdate.setFirstName(customerDTO.getFirstName());
             }
-            if (customerDTO.getLastName() != null){
+            if (customerDTO.getLastName() != null) {
                 customerUpdate.setLastName(customerDTO.getLastName());
             }
-            if (customerDTO.getCompanyName() != null && customerUpdate.getCustomerType().equals(CustomerType.BUSINESS)){
+            if (customerDTO.getCompanyName() != null && customerUpdate.getCustomerType().equals(CustomerType.BUSINESS)) {
                 customerUpdate.setCompanyName(customerDTO.getCompanyName());
             }
-            if (customerDTO.getOrgNumber() != null && customerUpdate.getCustomerType().equals(CustomerType.BUSINESS)){
+            if (customerDTO.getOrgNumber() != null && customerUpdate.getCustomerType().equals(CustomerType.BUSINESS)) {
                 customerUpdate.setOrgNumber(customerDTO.getOrgNumber());
             }
-            if (customerDTO.getEmail() != null){
+            if (customerDTO.getEmail() != null) {
                 customerUpdate.setEmail(customerDTO.getEmail());
             }
-            if (customerDTO.getPhoneNumber() != null){
+            if (customerDTO.getPhoneNumber() != null) {
                 customerUpdate.setPhoneNumber(customerDTO.getPhoneNumber());
             }
-            if (customerDTO.getAddress() != null){
+            if (customerDTO.getAddress() != null) {
                 customerUpdate.setAddress(customerDTO.getAddress());
             }
-            if (customerDTO.getCity() != null){
+            if (customerDTO.getCity() != null) {
                 customerUpdate.setCity(customerDTO.getCity());
             }
-            if (customerDTO.getPostalCode() != null){
+            if (customerDTO.getPostalCode() != null) {
                 customerUpdate.setPostalCode(customerDTO.getPostalCode());
             }
-            if (customerDTO.getCustomerType() != null){
+            if (customerDTO.getCustomerType() != null) {
                 customerUpdate.setCustomerType(customerDTO.getCustomerType());
             }
             customerRepository.save(customerUpdate);
             return customerEntityToDTO(customerUpdate);
-        }
-        else {
+        } else {
             throw new CustomerDoesNotExistException(id);
         }
     }
@@ -172,7 +171,7 @@ public class CustomerService {
     public List<CustomerDTO> getAllCustomers() {
         List<Customer> allCustomers = customerRepository.findAll();
         List<CustomerDTO> allCustomersDTO = new ArrayList<>();
-        for (Customer customer : allCustomers){
+        for (Customer customer : allCustomers) {
             allCustomersDTO.add(customerEntityToDTO(customer));
         }
         return allCustomersDTO;
@@ -180,10 +179,20 @@ public class CustomerService {
 
     public CustomerDTO getCustomerById(UUID id) {
         Optional<Customer> optionalCustomer = customerRepository.findById(id);
-        if (optionalCustomer.isPresent()){
+        if (optionalCustomer.isPresent()) {
             return customerEntityToDTO(optionalCustomer.get());
         } else {
             throw new CustomerDoesNotExistException(id);
+        }
+    }
+
+    public UUID getCustomerByEmail(String email) {
+        UUID optEmail = customerRepository.findByEmail(email).get().getId();
+
+        if (optEmail != null) {
+            return optEmail;
+        } else {
+            throw new CustomerWithEmailDoesNotExistException(email);
         }
     }
 

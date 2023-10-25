@@ -41,4 +41,9 @@ public class CustomerController {
     public CustomerDTO getCustomerById(@PathVariable String id){
         return customerService.getCustomerById(UUID.fromString(id));
     }
+
+    @GetMapping("/getIdByEmail/{email}")
+    public UUID getCustomerByEmail(@PathVariable String email){
+        return customerService.getCustomerByEmail(email);
+    }
 }
