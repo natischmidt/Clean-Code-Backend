@@ -1,5 +1,6 @@
 package com.example.cleancode.authentication;
 
+import com.example.cleancode.authentication.dto.CreateUserDTO;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("api/auth/keycloak")

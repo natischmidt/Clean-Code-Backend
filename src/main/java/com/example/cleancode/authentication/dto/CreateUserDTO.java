@@ -1,4 +1,4 @@
-package com.example.cleancode.authentication;
+package com.example.cleancode.authentication.dto;
 
 import lombok.Data;
 
@@ -9,8 +9,6 @@ public class CreateUserDTO {
     private String email;
     private String firstName;
     private String lastName;
-    private String username;
-    private String credentials;
     private String password;
     private String token;
 
