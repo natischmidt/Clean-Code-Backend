@@ -297,6 +297,7 @@ public class JobService {
                     throw new InvalidRequestException("That booking can't be updated, since we do not have available employees at that time");
                 }
             }
+
            /* if ((jobDTO.getDate() != null
                     && !jobDTO.getDate().equals(optionalJob.get().getDate()))
                         || (jobDTO.getJobtype() != null
