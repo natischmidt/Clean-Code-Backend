@@ -124,31 +124,28 @@ public class KeycloakService {
 
     /** Assign a role to the Keycloak user.
      * For testing purposes there is an endpoint for this, but we probably want to call this method from within spring boot only.**/
-
-    //This method does not yet work, some 401 error when calling getUserId method?
     public String assignRoleToUser(String role, String username, String adminToken) {
         RestTemplate restTemplate = new RestTemplate();
         String createRoleId;
 
         switch (role) {
-            case "admin" -> {
+            case "admin" ->
                 createRoleId = "f3c54b32-9d24-4d05-9fd3-3a326a5be6eb";
-            }
-            case "employee" -> {
+            case "employee" ->
                 createRoleId = "d05f878c-1dc9-401a-bc46-38957fc7f7f4";
-            }
-            default -> {
+            default ->
                 createRoleId = "1bdc1c3c-4cc2-44fc-9c3c-9c630a71ea15";
-            }
         }
+
         String userId = getUserId(username, adminToken);
-        System.out.println(userId);
-        String url =  "http://stadafint.se/admin/realms/cleanCode/users/" + userId + "/role-mappings/clients/" + cleanCodeClientId;
+        String url =  "http://stadafint.se/admin/realms/cleanCode/users/" + userId + "/role-mappings/realm";
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + adminToken);
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        map.add("id", createRoleId);
-        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        CreateRoleObject[] createRoleObject = {new CreateRoleObject(createRoleId, role)};
+
+        HttpEntity<Object> entity = new HttpEntity<>(createRoleObject, headers);
         ResponseEntity<String> response = restTemplate.exchange(
                 url,
                 HttpMethod.POST,

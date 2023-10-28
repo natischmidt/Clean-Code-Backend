@@ -1,5 +1,6 @@
 package com.example.cleancode.authentication;
 
+import com.example.cleancode.authentication.dto.AssignRoleDTO;
 import com.example.cleancode.authentication.dto.CreateUserDTO;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,8 +34,8 @@ public class KeycloakController {
     }
 
     @PostMapping("/assignRoleToUser")
-    public String assignRoleToUser(@RequestHeader String role, String username, String adminToken) {
-        return keycloakService.assignRoleToUser(role, username, adminToken);
+    public String assignRoleToUser(@RequestBody AssignRoleDTO assignRoleDTO) {
+        return keycloakService.assignRoleToUser(assignRoleDTO.getRole(), assignRoleDTO.getUsername(), assignRoleDTO.getAdminToken());
 
     }
 
