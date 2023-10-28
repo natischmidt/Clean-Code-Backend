@@ -25,4 +25,17 @@ public class KeycloakController {
         return keycloakService.createUser(createUserDTO);
     }
 
+    @PostMapping("/getUserId/{username}")
+    public String getUserId(@PathVariable String username, @RequestHeader String adminToken) {
+
+        return keycloakService.getUserId(username, adminToken);
+
+    }
+
+    @PostMapping("/assignRoleToUser")
+    public String assignRoleToUser(@RequestHeader String role, String username, String adminToken) {
+        return keycloakService.assignRoleToUser(role, username, adminToken);
+
+    }
+
 }
