@@ -5,9 +5,12 @@ import com.example.cleancode.customer.CustomerAuthenticationResponseDTO;
 import com.example.cleancode.customer.CustomerRepository;
 import com.example.cleancode.employees.Employee;
 import com.example.cleancode.employees.EmployeeRepository;
+import com.example.cleancode.exceptions.HttpRequestFailedException;
 import com.example.cleancode.exceptions.InvalidRequestException;
 import com.example.cleancode.exceptions.PersonDoesNotExistException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,13 +28,13 @@ public class AuthService {
     }
 
     public CustomerAuthenticationResponseDTO loginCustomer(AuthDTO authDTO) {
-        Optional <Customer> optCustomer = customerRepository.findByEmail(authDTO.getEmail());
+        Optional<Customer> optCustomer = customerRepository.findByEmail(authDTO.getEmail());
 
         if (optCustomer.isEmpty()) {
             throw new PersonDoesNotExistException("Email not found");
         }
 
-        String jwt= keycloakService.getUserToken(authDTO.getEmail(), authDTO.getPassword());
+        String jwt = keycloakService.getUserToken(authDTO.getEmail(), authDTO.getPassword());
         String userId = optCustomer.get().getId().toString();
 
         return new CustomerAuthenticationResponseDTO(jwt, userId);
@@ -43,19 +46,21 @@ public class AuthService {
     }
 
     public AuthResponseDTO loginEmployee(AuthDTO authDTO) {
-        Optional <Employee> optEmployee = employeeRepository.findByEmail(authDTO.getEmail());
+        Optional<Employee> optEmployee = employeeRepository.findByEmail(authDTO.getEmail());
 
         if (optEmployee.isEmpty()) {
             throw new PersonDoesNotExistException("Email not found");
         }
-
-        if (optEmployee.get().getPassword().equals(authDTO.getPassword())) {
-            return new AuthResponseDTO(
-                    optEmployee.get().getId(),
-                    optEmployee.get().getRole()
-            );
-        } else {
-            throw new InvalidRequestException("The given password was incorrect");
+        String jwt;
+        try {
+            jwt = keycloakService.getUserToken(authDTO.getEmail(), authDTO.getPassword());
+        } catch (HttpRequestFailedException e) {
+            throw new HttpRequestFailedException("Something went wrong logging in");
         }
+
+        return new AuthResponseDTO(
+                optEmployee.get().getId(),
+                optEmployee.get().getRole(),
+                jwt);
     }
 }

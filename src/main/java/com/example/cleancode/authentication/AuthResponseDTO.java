@@ -10,5 +10,6 @@ public class AuthResponseDTO {
 
     private Long id;
     private Role role;
+    private String jwt;
 
 }

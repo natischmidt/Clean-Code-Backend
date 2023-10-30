@@ -14,23 +14,12 @@ import java.util.*;
 @Service
 public class KeycloakService {
 
-    //  client id for cleanCode: 16b58469-6ca4-46ea-b4bf-2b15600c5dd9
-
-    //  "id": "1bdc1c3c-4cc2-44fc-9c3c-9c630a71ea15",
-    //  "name": "customer",
-    //  "description": "customer role",
-    //
-    //  "id": "d05f878c-1dc9-401a-bc46-38957fc7f7f4",
-    //  "name": "employee",
-    //  "description": "employee role",
-    //
-    //  "id": "f3c54b32-9d24-4d05-9fd3-3a326a5be6eb",
-    //  "name": "admin",
-    //  "description": "admin role",
 
     RestTemplate restTemplate;
     String cleanCodeClientId = "16b58469-6ca4-46ea-b4bf-2b15600c5dd9";
     String customerRoleId = "1bdc1c3c-4cc2-44fc-9c3c-9c630a71ea15";
+    String employeeRoleId = "d05f878c-1dc9-401a-bc46-38957fc7f7f4";
+    String adminRoleId = "f3c54b32-9d24-4d05-9fd3-3a326a5be6eb";
     String client_secret = "Z9ejOes6m4LVvLvBYKfkgUMdQ2MdK9Dn";
 
 
@@ -138,9 +127,9 @@ public class KeycloakService {
         String createRoleId;
 
         switch (role) {
-            case "admin" -> createRoleId = "f3c54b32-9d24-4d05-9fd3-3a326a5be6eb";
-            case "employee" -> createRoleId = "d05f878c-1dc9-401a-bc46-38957fc7f7f4";
-            default -> createRoleId = "1bdc1c3c-4cc2-44fc-9c3c-9c630a71ea15";
+            case "admin" -> createRoleId = adminRoleId;
+            case "employee" -> createRoleId = employeeRoleId;
+            default -> createRoleId = customerRoleId;
         }
 
         String userId = getUserId(username, adminToken);
