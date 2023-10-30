@@ -16,8 +16,9 @@ public class BookedController {
         this.bookedService = bookedService;
     }
 
-    @GetMapping("/freeSlots/{date}")
-    public List<TimeSlots> getFreeSlotsForDate(@PathVariable String date) throws ParseException {
-        return bookedService.getFreeSlotsForDate(date);
-    }
+
+//    @GetMapping("/freeSlots/{date}")
+//    public List<TimeSlots> getFreeSlotsForDate(@PathVariable String date) throws ParseException {
+//        return bookedService.getFreeSlotsForDate(date);
+//    }
 }

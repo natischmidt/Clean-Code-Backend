@@ -16,11 +16,13 @@ public class AuthController {
         this.authService = authService;
     }
 
+
     @PostMapping("/loginCustomer")
     public CustomerAuthenticationResponseDTO loginCustomer(@RequestBody AuthDTO authDTO) {
         return authService.loginCustomer(authDTO);
     }
 
+//    @PreAuthorize("hasRole('customer')")
     @PostMapping("/logoutCustomer")
     public void logoutCustomer(HttpServletRequest request) {
         request.getSession().invalidate();
@@ -31,6 +33,7 @@ public class AuthController {
         return authService.loginEmployee(authDTO);
     }
 
+//    @PreAuthorize("hasAnyRole('admin', 'employee')")
     @PostMapping("/logoutEmployee")
     public void logoutEmployee(HttpServletRequest request) {
         request.getSession().invalidate();
