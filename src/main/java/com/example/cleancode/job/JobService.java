@@ -391,6 +391,11 @@ public class JobService {
                 jobToUpdate.setJobStatus(updateJobDTO.getJobStatus());
                 return jobToUpdate;
             }
+            case PROCESSING: {
+                System.out.println(" Måste va nått me' klockan ");
+                jobToUpdate.setJobStatus(updateJobDTO.getJobStatus());
+                return jobToUpdate;
+            }
             case PAID: {
                 System.out.println("  ");
                 jobToUpdate.setJobStatus(updateJobDTO.getJobStatus());

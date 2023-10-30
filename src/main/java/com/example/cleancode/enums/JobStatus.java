@@ -5,6 +5,7 @@ public enum JobStatus {
     DONE,
     APPROVED,
     UNAPPROVED,
+    PROCESSING,
     PAID,
     CANCELLED
 }
