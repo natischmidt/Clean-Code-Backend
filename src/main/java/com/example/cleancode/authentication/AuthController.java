@@ -1,5 +1,6 @@
 package com.example.cleancode.authentication;
 
+import com.example.cleancode.customer.CustomerAuthenticationResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
@@ -16,7 +17,7 @@ public class AuthController {
     }
 
     @PostMapping("/loginCustomer")
-    public UUID loginCustomer(@RequestBody AuthDTO authDTO) {
+    public CustomerAuthenticationResponseDTO loginCustomer(@RequestBody AuthDTO authDTO) {
         return authService.loginCustomer(authDTO);
     }
 

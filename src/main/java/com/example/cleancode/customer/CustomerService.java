@@ -49,7 +49,7 @@ public class CustomerService {
         this.keycloakService = keycloakService;
     }
 
-    public CreateCustomerDTO createCustomer(CreateCustomerDTO createDTO) {
+    public CustomerAuthenticationResponseDTO createCustomer(CreateCustomerDTO createDTO) {
 
         Optional<Customer> optCustEmail = customerRepository.findByEmail(createDTO.getEmail());
         //om det är en business så får vi ett värde i company fältet, annars null
@@ -97,7 +97,7 @@ public class CustomerService {
                         "StädaFint AB",
                         "You are now a registered member at StädaFintAB. Welcome!");
 
-                return createDTO;
+                return new CustomerAuthenticationResponseDTO(keycloakService.getUserToken(createDTO.getEmail(), createDTO.getPassword()), customer.getId().toString());
             }
 
             if (!createDTO.getCompanyName().isEmpty() && !createDTO.getOrgNumber().isEmpty()) {
@@ -120,7 +120,7 @@ public class CustomerService {
                 emailService.sendEmail(createDTO.getEmail(),
                         "StädaFint AB",
                         "Du är nu registrerad som medlem på StädaFint AB. Välkommen!");
-                return createDTO;
+                return new CustomerAuthenticationResponseDTO(keycloakService.getUserToken(createDTO.getEmail(), createDTO.getPassword()), customer.getId().toString());
             }
 
             // andra delen av "if condition" är överflödig, eftersom annars hamnar vi i någon av return ovan, men det är tydligare att behålla såhär
