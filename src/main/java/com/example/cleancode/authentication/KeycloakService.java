@@ -31,9 +31,12 @@ public class KeycloakService {
     RestTemplate restTemplate;
     String cleanCodeClientId = "16b58469-6ca4-46ea-b4bf-2b15600c5dd9";
     String customerRoleId = "1bdc1c3c-4cc2-44fc-9c3c-9c630a71ea15";
+    String client_secret = "Z9ejOes6m4LVvLvBYKfkgUMdQ2MdK9Dn";
 
 
-    /** Get an admin token from master realm. This is needed for most fetches.*/
+    /**
+     * Get an admin token from master realm. This is needed for most fetches.
+     */
     public String getAdminToken() {
         restTemplate = new RestTemplate();
         try {
@@ -47,7 +50,7 @@ public class KeycloakService {
             map.add("client_id", "admin-cli");
 
             HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
-            ResponseEntity<AdminTokenExtractionObject> response = restTemplate.exchange(
+            ResponseEntity<TokenRequestObject> response = restTemplate.exchange(
                     "http://stadafint.se/realms/master/protocol/openid-connect/token",
                     HttpMethod.POST,
                     entity,
@@ -62,15 +65,17 @@ public class KeycloakService {
     }
 
     /**
-     * Create a user in Keycloak. We set password as username. If successful, "201 CREATED"  is returned
+     * Create a user in Keycloak. We set email as username. If successful, "201 CREATED"  is returned
      */
     public String createUser(CreateUserDTO createUserDTO) {
         restTemplate = new RestTemplate();
 
+        String adminToken = getAdminToken();
+
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.add("Authorization", "Bearer " + createUserDTO.getToken());
+            headers.add("Authorization", "Bearer " + adminToken);
 
             Credentials[] credentialsArray = {
                     new Credentials(
@@ -101,8 +106,10 @@ public class KeycloakService {
     }
 
 
-    /** Get the Keycloak user id by username. Username is the same as password.
-     * For testing purposes there is an endpoint for this, but we probably want to call this method from within spring boot only.**/
+    /**
+     * Get the Keycloak user id by username. Username is the same as password.
+     * For testing purposes there is an endpoint for this, but we probably want to call this method from within spring boot only.
+     **/
     public String getUserId(String username, String adminToken) {
         restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -122,23 +129,22 @@ public class KeycloakService {
 
     }
 
-    /** Assign a role to the Keycloak user.
-     * For testing purposes there is an endpoint for this, but we probably want to call this method from within spring boot only.**/
+    /**
+     * Assign a role to the Keycloak user.
+     * For testing purposes there is an endpoint for this, but we probably want to call this method from within spring boot only.
+     **/
     public String assignRoleToUser(String role, String username, String adminToken) {
-        RestTemplate restTemplate = new RestTemplate();
+        restTemplate = new RestTemplate();
         String createRoleId;
 
         switch (role) {
-            case "admin" ->
-                createRoleId = "f3c54b32-9d24-4d05-9fd3-3a326a5be6eb";
-            case "employee" ->
-                createRoleId = "d05f878c-1dc9-401a-bc46-38957fc7f7f4";
-            default ->
-                createRoleId = "1bdc1c3c-4cc2-44fc-9c3c-9c630a71ea15";
+            case "admin" -> createRoleId = "f3c54b32-9d24-4d05-9fd3-3a326a5be6eb";
+            case "employee" -> createRoleId = "d05f878c-1dc9-401a-bc46-38957fc7f7f4";
+            default -> createRoleId = "1bdc1c3c-4cc2-44fc-9c3c-9c630a71ea15";
         }
 
         String userId = getUserId(username, adminToken);
-        String url =  "http://stadafint.se/admin/realms/cleanCode/users/" + userId + "/role-mappings/realm";
+        String url = "http://stadafint.se/admin/realms/cleanCode/users/" + userId + "/role-mappings/realm";
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + adminToken);
@@ -155,4 +161,32 @@ public class KeycloakService {
         );
         return response.toString();
     }
+
+    public String getUserToken(String username, String password) {
+        restTemplate = new RestTemplate();
+
+        String url = "http://stadafint.se/realms/cleanCode/protocol/openid-connect/token";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("grant_type", "password");
+        map.add("client_secret", client_secret);
+        map.add("client_id", "cleanCode");
+        map.add("username", username);
+        map.add("password", password);
+
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
+
+        ResponseEntity<TokenRequestObject> response = restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                entity,
+                new ParameterizedTypeReference<>() {
+                });
+
+        return Objects.requireNonNull(response.getBody()).getAccess_token();
+    }
+
 }

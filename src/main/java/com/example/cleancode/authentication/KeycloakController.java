@@ -10,19 +10,23 @@ import org.springframework.web.bind.annotation.*;
 public class KeycloakController {
 
     private final KeycloakService keycloakService;
-
     public KeycloakController(KeycloakService keycloakService) {
         this.keycloakService = keycloakService;
     }
 
     @GetMapping("/getAdminToken")
     public String getAdminToken() throws Exception {
-
         return keycloakService.getAdminToken();
     }
 
-    @PostMapping("/createUser")
-    public String createUser (@RequestBody CreateUserDTO createUserDTO) {
+    @PostMapping("/createCustomer")
+    public String createCustomer (@RequestBody CreateUserDTO createUserDTO) {
+        return keycloakService.createUser(createUserDTO);
+    }
+
+    //ADMIN endpoint. User token with Role ADMIN needed to access this endpoint
+    @PostMapping("/createEmployee")
+    public String createEmployee (@RequestBody CreateUserDTO createUserDTO) {
         return keycloakService.createUser(createUserDTO);
     }
 
@@ -30,13 +34,15 @@ public class KeycloakController {
     public String getUserId(@PathVariable String username, @RequestHeader String adminToken) {
 
         return keycloakService.getUserId(username, adminToken);
-
     }
 
     @PostMapping("/assignRoleToUser")
     public String assignRoleToUser(@RequestBody AssignRoleDTO assignRoleDTO) {
         return keycloakService.assignRoleToUser(assignRoleDTO.getRole(), assignRoleDTO.getUsername(), assignRoleDTO.getAdminToken());
-
     }
 
+    @PostMapping("/getUserToken")
+    public String getUserToken(@RequestHeader String username, @RequestHeader String password) {
+        return keycloakService.getUserToken(username, password);
+    }
 }
