@@ -3,7 +3,7 @@ package com.example.cleancode.authentication.dto;
 import lombok.Data;
 
 @Data
-public class AdminTokenExtractionObject {
+public class TokenRequestObject {
 
      String access_token;
      int expires_in;

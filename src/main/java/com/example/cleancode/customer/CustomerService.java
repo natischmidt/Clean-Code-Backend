@@ -1,5 +1,7 @@
 package com.example.cleancode.customer;
 
+import com.example.cleancode.authentication.KeycloakService;
+import com.example.cleancode.authentication.dto.CreateUserDTO;
 import com.example.cleancode.enums.CustomerType;
 import com.example.cleancode.exceptions.*;
 import com.example.cleancode.mail.EmailService;
@@ -14,6 +16,10 @@ import java.util.UUID;
 
 @Service
 public class CustomerService {
+
+    private final KeycloakService keycloakService;
+
+
 
     public CustomerDTO customerEntityToDTO(Customer customer) {
 
@@ -38,8 +44,9 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
 
-    public CustomerService(CustomerRepository customerRepository) {
+    public CustomerService(CustomerRepository customerRepository, KeycloakService keycloakService) {
         this.customerRepository = customerRepository;
+        this.keycloakService = keycloakService;
     }
 
     public CreateCustomerDTO createCustomer(CreateCustomerDTO createDTO) {
@@ -55,6 +62,19 @@ public class CustomerService {
             if (!checkCreateCustomerDTO(createDTO)) {
                 throw new InvalidRequestException("Some fields had incorrect or missing information.");
             }
+        }
+
+        String keycloakResponse = keycloakService.createUser(new CreateUserDTO(createDTO.getEmail(), createDTO.getFirstName(), createDTO.getLastName(), createDTO.getPassword()));
+        if(!keycloakResponse.equals("201 CREATED")) {
+            throw new HttpRequestFailedException("Failed to create user in keycloak step 1.");
+        }
+
+        String adminToken = keycloakService.getAdminToken();
+
+        try {
+            keycloakService.assignRoleToUser("customer", createDTO.getEmail(), adminToken);
+        } catch (HttpRequestFailedException e){
+            throw new HttpRequestFailedException("Failed to get userId or failed to assign role to user");
         }
 
         try {
