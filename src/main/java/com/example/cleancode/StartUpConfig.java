@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
 import static com.example.cleancode.enums.TimeSlots.*;
 
 @Configuration
@@ -419,14 +420,17 @@ public class StartUpConfig {
     public CommandLineRunner initJobDatabase(JobService jobService) {
         return args -> {
             List<TimeSlots> timesList = new ArrayList<>();
-          LocalDateTime dateInDateFormat = LocalDateTime.parse("2023-11-24T12:00");
+            LocalDateTime dateInDateFormat = LocalDateTime.parse("2023-11-24T12:00");
 
-            Date date = new Date(2023-11-24);
+            String dateInString5 = "2024-05-10";
+            LocalDate localDate5 = LocalDate.parse(dateInString5);
+            Date date5 = Date.from(localDate5.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+
 
             timesList.add(EIGHT);
             jobService.createJob(new CreateJobDTO(
                     Jobtype.BASIC,
-                    date,
+                    date5,
                     List.of(EIGHT),
                     55,
                     PaymentOption.KLARNA,
@@ -437,7 +441,7 @@ public class StartUpConfig {
             timesList.add(NINE);
             jobService.createJob(new CreateJobDTO(
                     Jobtype.BASIC,
-                    date,
+                    date5,
                     List.of(NINE),
                     55,
                     PaymentOption.KLARNA,
@@ -448,28 +452,22 @@ public class StartUpConfig {
             timesList.add(TEN);
             jobService.createJob(new CreateJobDTO(
                     Jobtype.BASIC,
-                    date,
+                    date5,
                     List.of(TEN),
                     50,
                     PaymentOption.KLARNA,
                     UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53"),
                     "Damma lamporna"));
 
-            //Date date2 = new Date();
-            //date2.setTime(1699811200);
-            //Date dtae = Date.from(Instant.from(LocalDateTime.parse(jobDTO.getDate())));
-
             String dateInString = "2023-11-24";
             LocalDate localDate = LocalDate.parse(dateInString);
-
-            // Convert LocalDate to java.util.Date
             Date date2 = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 
             jobService.createJob(new CreateJobDTO(
                     Jobtype.BASIC,
                     date2,
                     List.of(THIRTEEN),
-                    55,
+                    99,
                     PaymentOption.KLARNA,
                     UUID.fromString("678b8da4-28cd-42c9-b6c6-a3dc53204632"),
                     ""));
@@ -483,10 +481,14 @@ public class StartUpConfig {
                     UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53"),
                     ""));
 
-            Date date3 = new Date(2023-11-26);
+            String dateInString7 = "2024-03-24";
+            LocalDate localDate7 = LocalDate.parse(dateInString7);
+            Date date7 = Date.from(localDate7.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+
+
             jobService.createJob(new CreateJobDTO(
                     Jobtype.DIAMOND,
-                    date3,
+                    date7,
                     List.of(EIGHT),
                     43,
                     PaymentOption.KLARNA,
@@ -495,7 +497,7 @@ public class StartUpConfig {
 
             jobService.createJob(new CreateJobDTO(
                     Jobtype.ADVANCED,
-                    date3,
+                    date7,
                     List.of(TWELVE),
                     56,
                     PaymentOption.KLARNA,
@@ -503,7 +505,7 @@ public class StartUpConfig {
                     ""));
             jobService.createJob(new CreateJobDTO(
                     Jobtype.BASIC,
-                    date3,
+                    date7,
                     List.of(SIXTEEN),
                     25,
                     PaymentOption.CASH,
