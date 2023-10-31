@@ -1,5 +1,5 @@
 
-debug: true
+#debug: true
 
 jwt:
     auth:
@@ -45,7 +45,8 @@ spring:
             resourceserver:
                 jwt:
                     issuer-uri: http://stadafint.se/realms/cleanCode
-                    jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+                    jwk-set-uri: http://stadafint.se/realms/cleanCode/protocol/openid-connect/certs
+#                    jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
 #                opaquetoken:
 #                    client-id: cleanCode
 #                    client-secret: Z9ejOes6m4LVvLvBYKfkgUMdQ2MdK9Dn
