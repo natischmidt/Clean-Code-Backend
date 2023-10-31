@@ -17,7 +17,7 @@ public class AuthController {
         this.authService = authService;
     }
 
-
+    @PreAuthorize("permitAll")
     @PostMapping("/loginCustomer")
     public CustomerAuthenticationResponseDTO loginCustomer(@RequestBody AuthDTO authDTO) {
         return authService.loginCustomer(authDTO);
