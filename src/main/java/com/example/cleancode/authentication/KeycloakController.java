@@ -21,7 +21,6 @@ public class KeycloakController {
 
     @PostMapping("/createCustomer")
     public String createCustomer (@RequestBody CreateUserDTO createUserDTO) {
-        System.out.println("test test");
         return keycloakService.createUser(createUserDTO);
     }
 
