@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("api/auth")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+//@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AuthController {
 
     private final AuthService authService;
@@ -17,7 +17,7 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @PreAuthorize("permitAll")
+//    @PreAuthorize("permitAll")
     @PostMapping("/loginCustomer")
     public CustomerAuthenticationResponseDTO loginCustomer(@RequestBody AuthDTO authDTO) {
         return authService.loginCustomer(authDTO);
