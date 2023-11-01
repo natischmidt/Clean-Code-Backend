@@ -1,6 +1,8 @@
 package com.example.cleancode.employees;
 
 //import org.springframework.security.access.prepost.PreAuthorize;
+import com.example.cleancode.customer.CreateCustomerDTO;
+import com.example.cleancode.customer.CustomerAuthenticationResponseDTO;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @RestController
@@ -14,14 +16,14 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-//    @PreAuthorize("hasRole('admin')")
     @PostMapping("/createEmployee")
-    public Long createEmployee(@RequestBody CreateEmployeeDTO employeeDTO) {
-        System.out.println("***********************************" + employeeDTO);
-        return employeeService.createEmployee(employeeDTO);
+    public EmployeeAuthenticationResponseDTO createEmp(@RequestBody CreateEmployeeDTO createDTO){
+        System.out.println(createDTO);
+        return employeeService.createEmp(createDTO);
     }
 
-//    @PreAuthorize("hasRole('admin')")
+
+    //    @PreAuthorize("hasRole('admin')")
     @DeleteMapping("/deleteEmployee")
     public Long deleteEmployee(@RequestHeader Long empId) {
         return employeeService.deleteEmployee(empId);
