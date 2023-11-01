@@ -26,7 +26,7 @@ public class JobController {
 //    @PreAuthorize("hasAnyRole('admin', 'employee', 'customer')")
     @PostMapping("/createJob")
     public Long createJob(@RequestBody CreateJobDTO createJobDTO) {
-        if (createJobDTO.getMessage() == null && createJobDTO.getMessage().isEmpty()) {
+        if (createJobDTO.getMessage() == null || createJobDTO.getMessage().isEmpty()) {
             createJobDTO.setMessage("inget meddelande");
         }
         return jobService.createJob(createJobDTO);

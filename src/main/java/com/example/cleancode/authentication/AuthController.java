@@ -18,15 +18,11 @@ public class AuthController {
     }
 
 //    @PreAuthorize("permitAll")
-    @GetMapping("/loginCustomer")
+    @PostMapping("/loginCustomer")
     public CustomerAuthenticationResponseDTO loginCustomer(@RequestBody AuthDTO authDTO) {
         return authService.loginCustomer(authDTO);
     }
 
-    @GetMapping("/hello")
-    public String hello1() {
-        return "Hello world!";
-    }
 
 //    @PreAuthorize("hasRole('customer')")
     @PostMapping("/logoutCustomer")

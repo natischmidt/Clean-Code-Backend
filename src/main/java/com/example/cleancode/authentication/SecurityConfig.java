@@ -1,4 +1,5 @@
 package com.example.cleancode.authentication;
+
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,13 +36,47 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+                .csrf(csrf -> csrf.disable());
+
+        http
                 .authorizeHttpRequests(auth ->
                 {
-                    auth.requestMatchers(HttpMethod.GET , "/api/auth/loginCustomer").permitAll();
-                    auth.requestMatchers(HttpMethod.GET, "/api/auth/hello").hasRole(CUSTOMER);
-                    auth.requestMatchers(HttpMethod.GET, "/api/auth/logoutCustomer/").hasRole(CUSTOMER);
+                    auth.requestMatchers(HttpMethod.POST,"/api/auth/loginCustomer").permitAll();
+                    auth.requestMatchers(HttpMethod.POST, "/api/auth/logoutCustomer/").hasRole(CUSTOMER);
                     auth.requestMatchers(HttpMethod.POST, "/api/auth/loginEmployee").permitAll();
-                    auth.requestMatchers(HttpMethod.GET, "/api/auth/logoutEmployee").hasAnyRole(ADMIN, EMPLOYEE);
+                    auth.requestMatchers(HttpMethod.POST, "/api/auth/logoutEmployee").hasAnyRole(ADMIN, EMPLOYEE);
+
+                    auth.requestMatchers(HttpMethod.POST,"/api/customer/create").permitAll();
+                    auth.requestMatchers(HttpMethod.DELETE,"/api/customer/delete/*").hasRole(ADMIN);
+                    auth.requestMatchers(HttpMethod.PATCH,"/api/customer/update/*").hasAnyRole(ADMIN, EMPLOYEE);
+                    auth.requestMatchers(HttpMethod.GET,"/api/customer/all").hasAnyRole(ADMIN,EMPLOYEE);
+                    auth.requestMatchers(HttpMethod.GET,"/api/customer/*").hasAnyRole(ADMIN,EMPLOYEE);
+                    auth.requestMatchers(HttpMethod.GET,"/api/customer/getByEmail/*").hasAnyRole(ADMIN, EMPLOYEE);
+
+                    auth.requestMatchers(HttpMethod.POST,"/api/employee/createEmployee").hasRole(ADMIN);
+                    auth.requestMatchers(HttpMethod.DELETE,"/api/employee/deleteEmployee").hasRole(ADMIN);
+                    auth.requestMatchers(HttpMethod.GET,"/api/employee/getEmployee").hasAnyRole(ADMIN,EMPLOYEE);
+                    auth.requestMatchers(HttpMethod.GET,"/api/employee/getAllEmployees").hasRole(ADMIN);
+                    auth.requestMatchers(HttpMethod.PUT,"/api/employee/editEmployee").hasRole(ADMIN);
+                    auth.requestMatchers(HttpMethod.GET,"/api/employee/getSalary/*").hasAnyRole(ADMIN,EMPLOYEE);
+
+                    auth.requestMatchers(HttpMethod.POST,"/api/jobs/createJob").hasAnyRole(ADMIN, EMPLOYEE, CUSTOMER);
+                    auth.requestMatchers(HttpMethod.DELETE,"/api/jobs/deleteJob").hasRole(ADMIN);
+                    auth.requestMatchers(HttpMethod.GET,"/api/jobs/getJob").hasAnyRole(ADMIN, EMPLOYEE);
+                    auth.requestMatchers(HttpMethod.GET,"/api/jobs/getAllJobs").hasAnyRole(ADMIN);
+                    auth.requestMatchers(HttpMethod.GET,"/api/jobs/getAllJobsForEmployee/*").hasAnyRole(ADMIN, EMPLOYEE);
+                    auth.requestMatchers(HttpMethod.GET,"/api/jobs/getAllJobsForEmployeeWithStatus/*").hasAnyRole(ADMIN, EMPLOYEE);
+                    auth.requestMatchers(HttpMethod.GET,"/api/jobs/getAllJobsForCustomer/*").hasAnyRole(ADMIN, EMPLOYEE, CUSTOMER);
+                    auth.requestMatchers(HttpMethod.GET,"/api/jobs/getAllJobsForCustomerWithStatus/*").hasAnyRole(ADMIN, EMPLOYEE, CUSTOMER);
+                    auth.requestMatchers(HttpMethod.PUT,"/api/jobs/updateJob").hasAnyRole(ADMIN, EMPLOYEE, CUSTOMER);
+                    auth.requestMatchers(HttpMethod.GET,"/api/jobs/getByStatus").hasAnyRole(ADMIN, EMPLOYEE, CUSTOMER);
+                    auth.requestMatchers(HttpMethod.POST,"/api/jobs/getAvailableEmployees").hasAnyRole(ADMIN);
+
+
+
+
+
+
                     auth.anyRequest().authenticated();
                 });
 
@@ -54,9 +89,6 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
-
-
-
 
 
 //        http
