@@ -41,7 +41,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth ->
                 {
-                    auth.requestMatchers(HttpMethod.POST,"/api/auth/loginCustomer").permitAll();
+                    auth.requestMatchers("/api/auth/loginCustomer").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/api/auth/logoutCustomer/").hasRole(CUSTOMER);
                     auth.requestMatchers(HttpMethod.POST, "/api/auth/loginEmployee").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/api/auth/logoutEmployee").hasAnyRole(ADMIN, EMPLOYEE);
@@ -50,7 +50,7 @@ public class SecurityConfig {
                     auth.requestMatchers(HttpMethod.DELETE,"/api/customer/delete/*").hasRole(ADMIN);
                     auth.requestMatchers(HttpMethod.PATCH,"/api/customer/update/*").hasAnyRole(ADMIN, EMPLOYEE);
                     auth.requestMatchers(HttpMethod.GET,"/api/customer/all").hasAnyRole(ADMIN,EMPLOYEE);
-                    auth.requestMatchers(HttpMethod.GET,"/api/customer/*").hasAnyRole(ADMIN,EMPLOYEE);
+                    auth.requestMatchers("/api/customer/*").hasAnyRole(ADMIN,EMPLOYEE, CUSTOMER);
                     auth.requestMatchers(HttpMethod.GET,"/api/customer/getByEmail/*").hasAnyRole(ADMIN, EMPLOYEE);
 
                     auth.requestMatchers(HttpMethod.POST,"/api/employee/createEmployee").hasRole(ADMIN);
@@ -67,7 +67,7 @@ public class SecurityConfig {
                     auth.requestMatchers(HttpMethod.GET,"/api/jobs/getAllJobsForEmployee/*").hasAnyRole(ADMIN, EMPLOYEE);
                     auth.requestMatchers(HttpMethod.GET,"/api/jobs/getAllJobsForEmployeeWithStatus/*").hasAnyRole(ADMIN, EMPLOYEE);
                     auth.requestMatchers(HttpMethod.GET,"/api/jobs/getAllJobsForCustomer/*").hasAnyRole(ADMIN, EMPLOYEE, CUSTOMER);
-                    auth.requestMatchers(HttpMethod.GET,"/api/jobs/getAllJobsForCustomerWithStatus/*").hasAnyRole(ADMIN, EMPLOYEE, CUSTOMER);
+                    auth.requestMatchers("/api/jobs/getAllJobsForCustomerWithStatus/*").hasAnyRole(ADMIN, EMPLOYEE, CUSTOMER);
                     auth.requestMatchers(HttpMethod.PUT,"/api/jobs/updateJob").hasAnyRole(ADMIN, EMPLOYEE, CUSTOMER);
                     auth.requestMatchers(HttpMethod.GET,"/api/jobs/getByStatus").hasAnyRole(ADMIN, EMPLOYEE, CUSTOMER);
                     auth.requestMatchers(HttpMethod.POST,"/api/jobs/getAvailableEmployees").hasAnyRole(ADMIN);
