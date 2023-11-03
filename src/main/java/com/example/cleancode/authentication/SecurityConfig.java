@@ -11,17 +11,22 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+
+    @Autowired
+    private CorsConfigurationSource corsConfigurationSource;
 
     private final JwtAuthConverter jwtAuthConverter;
     public static final String ADMIN = "client-admin";
@@ -36,7 +41,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .csrf(csrf -> csrf.disable());
+                .csrf(csrf -> csrf.disable())
+        .cors( ).configurationSource(corsConfigurationSource);
 
         http
                 .authorizeHttpRequests(auth ->
@@ -73,7 +79,7 @@ public class SecurityConfig {
                     auth.requestMatchers(HttpMethod.PUT,"/api/jobs/updateJob").hasAnyRole(ADMIN, EMPLOYEE, CUSTOMER);
                     auth.requestMatchers(HttpMethod.GET,"/api/jobs/getByStatus").hasAnyRole(ADMIN, EMPLOYEE, CUSTOMER);
                     auth.requestMatchers(HttpMethod.POST,"/api/jobs/getAvailableEmployees").hasAnyRole(ADMIN);
-//                    auth.anyRequest().authenticated();
+                   auth.anyRequest().authenticated();
                 });
 
         http
@@ -87,34 +93,7 @@ public class SecurityConfig {
         return http.build();
 
 
-//        http
-//                .csrf(csrf -> csrf.disable())
-//                .authorizeHttpRequests(auth -> {
-////                    auth.anyRequest().authenticated();
-//                    auth.requestMatchers(HttpMethod.POST, "/api/customer/open/*").permitAll();
-//                    auth.requestMatchers(HttpMethod.GET, "/api/customer/admin/*").hasRole(ADMIN);
-//                    auth.requestMatchers(HttpMethod.GET, "/api/employee/*").hasRole(ADMIN);
-//                    auth.requestMatchers(HttpMethod.POST, "/api/employee/*").hasRole(ADMIN);
-//                    auth.requestMatchers(HttpMethod.POST, "/api/jobs/open/*").hasAnyRole(ADMIN, EMPLOYEE, CUSTOMER);
-//                    auth.requestMatchers(HttpMethod.POST, "/api/jobs/admin/*").hasRole(ADMIN);
-//                    auth.requestMatchers(HttpMethod.POST, "/api/jobs/employee/*").hasAnyRole(ADMIN, EMPLOYEE);
-//
-//                });
-
-//        http.csrf(csrf -> csrf.disable());
-
-//        http.authorizeHttpRequests(auth -> {
-//            auth.requestMatchers(HttpMethod.GET, "/api/*").permitAll()
-//                    .anyRequest().authenticated()
-//            ;});
-
-
-//        http.oauth2ResourceServer(oauth2 -> oauth2.jwt(x -> x.jwtAuthenticationConverter(jwtAuthConverter)));
-//
-//        http.sessionManagement(session -> session.sessionCreationPolicy(
-//                SessionCreationPolicy.STATELESS));
-
-//        return http.build();
     }
+
 }
 

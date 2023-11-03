@@ -14,37 +14,29 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
 @Configuration
-public class CorsConfig implements WebMvcConfigurer {
+public class CorsConfig {
 
-    @Override
+  /*  @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/*")
-                .allowedOrigins("https://localhost:5173/")
-                .allowedMethods("")
+        registry.addMapping("/**")
+                .allowedOrigins("https://localhost:5173/", "http://stadafint.se/")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD")
+                .allowCredentials(true)
                 .allowedHeaders("*")
-//                .allowCredentials(true)
+                .exposedHeaders("Authorization")
                 .maxAge(3600);
     }
-
-
-//    @Override
-//    public void addCorsMappings(CorsRegistry registry) {
-//        registry.addMapping("/**")
-//                .allowedOrigins("*")
-//                .allowedMethods("*")
-//                .allowedHeaders("*");
-//    }
-
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowCredentials(true);
-//        configuration.setAllowedOrigins(List.of("https://localhost:5173", "http://localhost:5173", "*"));
-//        configuration.addAllowedMethod("*");
-//        configuration.addAllowedHeader("*");
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/api/**", configuration);
-//        return source;
-//    }
+*/
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+       CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowCredentials(true);
+       configuration.setAllowedOrigins(List.of("https://localhost:5173", "http://localhost:5173"));
+      configuration.addAllowedMethod("*");
+      configuration.addAllowedHeader("*");
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+      source.registerCorsConfiguration("/api/**", configuration);
+        return source;
+   }
 
 }
