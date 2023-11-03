@@ -48,7 +48,6 @@ public class JobService {
     }
 
 
-
     public List<Employee> findUnbookedEmployees(Date date, List<TimeSlots> timeSlot) {
 
         List<Employee> employees = employeeRepository.findUnbookedEmployees(date, timeSlot.get(0));
@@ -220,12 +219,17 @@ public class JobService {
 
     public List<GetJobDTO> getAllJobs() {
         List<Job> allJobs = jobRepository.findAll();
-        if (!allJobs.isEmpty()) {
-            return convertToDTOList(allJobs);
-        } else {
-            throw new JobDoesNotExistException("There are no jobs in the database");
-        }
+        return convertToDTOList(allJobs);
     }
+
+//    public List<GetJobDTO> getAllJobs() {
+//        List<Job> allJobs = jobRepository.findAll();
+//        if (!allJobs.isEmpty()) {
+//            return convertToDTOList(allJobs);
+//        } else {
+//            throw new JobDoesNotExistException("There are no jobs in the database");
+//        }
+//    }
 
     private List<GetJobDTO> convertToDTOList(List<Job> jobs) {
         return jobs.stream()
@@ -256,7 +260,7 @@ public class JobService {
         if (!jobsForEmployee.isEmpty()) {
             return convertToDTOList(jobsForEmployee);
         } else {
-        //returnerar tom lista här istället för throw, annars blir det fel när vi försöker mappa i frontend.
+            //returnerar tom lista här istället för throw, annars blir det fel när vi försöker mappa i frontend.
             return new ArrayList<>();
         }
     }
@@ -289,7 +293,7 @@ public class JobService {
                 jobRepository.deleteById(jobDTO.getJobId());
                 //Date.from(Instant.from(LocalDateTime.parse(jobDTO.getDate())));
                 List<Employee> availableEmployees = findUnbookedEmployees(jobDTO.getDate(), jobDTO.getTimeSlotsList());
-                if(!availableEmployees.isEmpty()) {
+                if (!availableEmployees.isEmpty()) {
                     jobToUpdate.setJobtype(jobDTO.getJobtype());
 
                 } else {
@@ -318,7 +322,7 @@ public class JobService {
             if (jobDTO.getJobStatus() != null && !jobDTO.getJobStatus().equals(jobToUpdate.getJobStatus())) {
 //                jobToUpdate.setJobStatus(jobDTO.getJobStatus());
 
-                jobToUpdate= handleUpdatedJobStatus(jobDTO, jobToUpdate);
+                jobToUpdate = handleUpdatedJobStatus(jobDTO, jobToUpdate);
 
             }
             if (jobDTO.getPaymentOption() != null) {
@@ -469,7 +473,7 @@ public class JobService {
 
         if (!jobsForEmployee.isEmpty()) {
             return convertToDTOList(jobsForEmployee);
-        } else  {
+        } else {
             return new ArrayList<>();
         }
     }
