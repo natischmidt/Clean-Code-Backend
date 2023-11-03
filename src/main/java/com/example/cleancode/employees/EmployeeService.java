@@ -5,6 +5,7 @@ import com.example.cleancode.exceptions.PersonAlreadyExistsException;
 import com.example.cleancode.exceptions.PersonDoesNotExistException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -106,6 +107,32 @@ public class EmployeeService {
         employeeRepository.save(optEmp.get());
         return employeeToGetEmployeeDto(optEmp.get());
     }
+
+//    public SalaryDTO getSalary(Long id) {
+//        Optional<Employee> optEmp = employeeRepository.findById(id);
+//
+//        if (optEmp.isPresent()) {
+//            Employee employee = optEmp.get();
+//            LocalDateTime lastPayrollTimestamp = employee.getLastPayrollTimestamp();
+//            LocalDateTime currentTimestamp = LocalDateTime.now();
+//
+//            if (lastPayrollTimestamp == null || lastPayrollTimestamp.getMonth() != currentTimestamp.getMonth() || lastPayrollTimestamp.getYear() != currentTimestamp.getYear()) {
+//                // Nollställer arbetade timmar och lön eftersom månaden har ändrats, även när 31/12 slår över till 1/1
+//                employee.getSalary().setWorkedHours(0);
+//                employee.getSalary().setHourlySalary(0);
+//                employee.setLastPayrollTimestamp(currentTimestamp);
+//            }
+//
+//            // Hämta arbetade timmar och lön
+//            SalaryDTO salaryDTO = new SalaryDTO(
+//                    employee.getSalary().getWorkedHours(),
+//                    employee.getSalary().getHourlySalary()
+//            );
+//            return salaryDTO;
+//        } else {
+//            return new SalaryDTO();
+//        }
+//    }
 
     public SalaryDTO getSalary(Long id) {
         Optional<Employee> optEmp = employeeRepository.findById(id);
