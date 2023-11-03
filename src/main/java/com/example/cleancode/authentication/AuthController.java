@@ -23,6 +23,11 @@ public class AuthController {
         return authService.loginCustomer(authDTO);
     }
 
+    @GetMapping("/hello")
+    public String hello() {
+        return "hello world!";
+    }
+
 
 //    @PreAuthorize("hasRole('customer')")
     @PostMapping("/logoutCustomer")

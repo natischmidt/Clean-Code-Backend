@@ -45,8 +45,9 @@ public class SecurityConfig {
                     auth.requestMatchers(HttpMethod.POST, "/api/auth/logoutCustomer/").hasRole(CUSTOMER);
                     auth.requestMatchers(HttpMethod.POST, "/api/auth/loginEmployee").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/api/auth/logoutEmployee").hasAnyRole(ADMIN, EMPLOYEE);
+                    auth.requestMatchers(HttpMethod.GET, "/api/auth/hello").hasAnyRole(ADMIN, EMPLOYEE);
 
-                    auth.requestMatchers(HttpMethod.POST,"/api/customer/create").permitAll();
+                    auth.requestMatchers("/api/customer/create").permitAll();
                     auth.requestMatchers(HttpMethod.DELETE,"/api/customer/delete/*").hasRole(ADMIN);
                     auth.requestMatchers(HttpMethod.PATCH,"/api/customer/update/*").hasAnyRole(ADMIN, EMPLOYEE);
                     auth.requestMatchers(HttpMethod.GET,"/api/customer/all").hasAnyRole(ADMIN,EMPLOYEE);
@@ -68,16 +69,11 @@ public class SecurityConfig {
                     auth.requestMatchers(HttpMethod.GET,"/api/jobs/getAllJobsForEmployeeWithStatus/*").hasAnyRole(ADMIN, EMPLOYEE);
                     auth.requestMatchers(HttpMethod.GET,"/api/jobs/getAllJobsForCustomer/*").hasAnyRole(ADMIN, EMPLOYEE, CUSTOMER);
                     auth.requestMatchers("/api/jobs/getAllJobsForCustomerWithStatus/*").hasAnyRole(ADMIN, EMPLOYEE, CUSTOMER);
+//                    auth.requestMatchers("/api/jobs/getAllJobsForCustomerWithStatus/*").permitAll();
                     auth.requestMatchers(HttpMethod.PUT,"/api/jobs/updateJob").hasAnyRole(ADMIN, EMPLOYEE, CUSTOMER);
                     auth.requestMatchers(HttpMethod.GET,"/api/jobs/getByStatus").hasAnyRole(ADMIN, EMPLOYEE, CUSTOMER);
                     auth.requestMatchers(HttpMethod.POST,"/api/jobs/getAvailableEmployees").hasAnyRole(ADMIN);
-
-
-
-
-
-
-                    auth.anyRequest().authenticated();
+//                    auth.anyRequest().authenticated();
                 });
 
         http
