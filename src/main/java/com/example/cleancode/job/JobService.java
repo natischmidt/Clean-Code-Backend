@@ -139,7 +139,8 @@ public class JobService {
                 createJobDTO.getPaymentOption(),
                 assignedEmployee,
                 customerOptional.get(),
-                createJobDTO.getMessage());
+                createJobDTO.getMessage(),
+                0);
         jobRepository.save(job);
         updateAvailability(assignedEmployee, date, createJobDTO.getTimeSlotList(), job);
 
@@ -247,7 +248,8 @@ public class JobService {
                 job.getSquareMeters(),
                 job.getPaymentOption(),
                 job.getMessage(),
-                job.getCustomer()
+                job.getCustomer(),
+                job.getRating()
         );
     }
 
@@ -327,6 +329,10 @@ public class JobService {
             }
             if (jobDTO.getPaymentOption() != null) {
                 jobToUpdate.setPaymentOption(jobDTO.getPaymentOption());
+            }
+
+            if(jobDTO.getRating() != 0){
+                jobToUpdate.setRating(jobDTO.getRating());
             }
 
             jobRepository.save(jobToUpdate);
