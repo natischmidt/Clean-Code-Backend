@@ -46,7 +46,8 @@ public class Employee {
     private List<Job> jobList = new ArrayList<>();
 
     public Employee(String firstName, String lastName, String password, String ssNumber, String email,
-                    String phoneNumber, String address, String city, String postalCode, Role role, Salary salary, List<Job> jobList) {
+                    String phoneNumber, String address, String city, String postalCode, Role role, Salary salary,
+                    List<Job> jobList) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
@@ -61,7 +62,4 @@ public class Employee {
         this.salary = salary;
     }
 
-
-    public Employee(String firstName, String lastName, String password, String ssNumber, String email, String phoneNumber, String address, String city, String postalCode, Role role, int salary, List<Job> jobList) {
-    }
 }
