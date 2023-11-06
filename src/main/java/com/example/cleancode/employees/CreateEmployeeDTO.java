@@ -21,6 +21,6 @@ public class CreateEmployeeDTO {
     private String postalCode;
     private Role role;
     private int salary;
-    private List<Job> jobList = new ArrayList<>();
+//    private List<Job> jobList = new ArrayList<>();
 
 }

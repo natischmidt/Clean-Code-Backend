@@ -9,6 +9,7 @@ import com.example.cleancode.mail.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -207,6 +208,8 @@ public class EmployeeService {
         }
 
         try {
+
+            Salary salary = new Salary(createDTO.getSalary());
             if (!createDTO.getEmail().isEmpty()) {
                 Employee emp = new Employee(
                         createDTO.getFirstName(),
@@ -219,10 +222,11 @@ public class EmployeeService {
                         createDTO.getCity(),
                         createDTO.getPostalCode(),
                         createDTO.getRole(),
-                        createDTO.getSalary(),
-                        createDTO.getJobList()
+                        salary,
+                        List.of()
                 );
 
+                salary.setEmployee(emp);
                 emp.setPassword(createDTO.getPassword());
                 employeeRepository.save(emp);
 
