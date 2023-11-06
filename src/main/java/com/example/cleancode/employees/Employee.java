@@ -1,6 +1,7 @@
 package com.example.cleancode.employees;
 
 import com.example.cleancode.booked.Booked;
+import com.example.cleancode.enums.CustomerType;
 import com.example.cleancode.enums.Role;
 import com.example.cleancode.job.Job;
 import jakarta.persistence.*;
@@ -9,6 +10,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
@@ -42,6 +44,7 @@ public class Employee {
     private Salary salary;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
+
     private List<Job> jobList = new ArrayList<>();
 
 //    @Column(name = "last_payroll_timestamp")
@@ -49,7 +52,6 @@ public class Employee {
 
     public Employee(String firstName, String lastName, String password, String ssNumber, String email,
                     String phoneNumber, String address, String city, String postalCode, Role role, Salary salary, List<Job> jobList) {
-
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
@@ -62,5 +64,9 @@ public class Employee {
         this.role = role;
         this.jobList = jobList;
         this.salary = salary;
+    }
+
+
+    public Employee(String firstName, String lastName, String password, String ssNumber, String email, String phoneNumber, String address, String city, String postalCode, Role role, int salary, List<Job> jobList) {
     }
 }

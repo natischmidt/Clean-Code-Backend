@@ -28,7 +28,10 @@ public class AuthService {
     }
 
     public CustomerAuthenticationResponseDTO loginCustomer(AuthDTO authDTO) {
+
         Optional<Customer> optCustomer = customerRepository.findByEmail(authDTO.getEmail());
+
+        System.out.println("&&&&&&&&&&&&&&&&&&&&" + authDTO.getEmail() + authDTO.getPassword());
 
         if (optCustomer.isEmpty()) {
             throw new PersonDoesNotExistException("Email not found");

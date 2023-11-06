@@ -1,22 +1,29 @@
 package com.example.cleancode.employees;
 
-import com.example.cleancode.exceptions.InvalidRequestException;
-import com.example.cleancode.exceptions.PersonAlreadyExistsException;
-import com.example.cleancode.exceptions.PersonDoesNotExistException;
+import com.example.cleancode.authentication.KeycloakService;
+import com.example.cleancode.authentication.dto.CreateUserDTO;
+import com.example.cleancode.customer.CustomerAuthenticationResponseDTO;
+import com.example.cleancode.enums.CustomerType;
+import com.example.cleancode.exceptions.*;
+import com.example.cleancode.mail.EmailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final KeycloakService keycloakService;
 
-    public EmployeeService(EmployeeRepository employeeRepository) {
+    public EmployeeService(EmployeeRepository employeeRepository, KeycloakService keycloakService) {
         this.employeeRepository = employeeRepository;
+        this.keycloakService = keycloakService;
     }
 
     public Long createEmployee(CreateEmployeeDTO employeeDTO) {
@@ -178,6 +185,9 @@ public class EmployeeService {
                 && dto.getRole() != null;
     }
 
+    @Autowired
+    private EmailService emailService;
+
     private Boolean checkEditEmployeeDTO(EditEmployeeDTO dto) {
         /** Checks so that fields are not null, and that email and phone number are valid formats. Returns true if all fields are ok.*/
         return dto.getFirstName() != null
@@ -190,6 +200,73 @@ public class EmployeeService {
                 && dto.getRole() != null
                 && dto.getHourlySalary() != 0;
     }
+    public EmployeeAuthenticationResponseDTO createEmp(CreateEmployeeDTO createDTO) {
+
+        Optional<Employee> optEmpEmail = employeeRepository.findByEmail(createDTO.getEmail());
 
 
+        if (optEmpEmail.isPresent()) {
+            throw new PersonAlreadyExistsException(createDTO.getEmail());
+        }
+
+        if (createDTO.getFirstName() != "") {
+            if (!checkCreateEmployeeDTO(createDTO)) {
+                throw new InvalidRequestException("Some fields had incorrect or missing information.");
+            }
+        }
+
+        String keycloakResponse = keycloakService.createUser
+                (new CreateUserDTO(
+                        createDTO.getEmail(),
+                        createDTO.getFirstName(),
+                        createDTO.getLastName(),
+                        createDTO.getPassword()));
+        if (!keycloakResponse.equals("201 CREATED")) {
+            throw new HttpRequestFailedException("Failed to create user in keycloak step 1.");
+        }
+
+        String adminToken = keycloakService.getAdminToken();
+
+        try {
+            keycloakService.assignRoleToUser("employee", createDTO.getEmail(), adminToken);
+        } catch (HttpRequestFailedException e) {
+            throw new HttpRequestFailedException("Failed to get userId or failed to assign role to user");
+        }
+
+        try {
+            if (!createDTO.getEmail().isEmpty()) {
+                Employee emp = new Employee(
+                        createDTO.getFirstName(),
+                        createDTO.getLastName(),
+                        createDTO.getPassword(),
+                        createDTO.getSsNumber(),
+                        createDTO.getEmail(),
+                        createDTO.getPhoneNumber(),
+                        createDTO.getAddress(),
+                        createDTO.getCity(),
+                        createDTO.getPostalCode(),
+                        createDTO.getRole(),
+                        createDTO.getSalary(),
+                        createDTO.getJobList()
+                );
+
+                emp.setPassword(createDTO.getPassword());
+                employeeRepository.save(emp);
+
+                emailService.sendEmail(createDTO.getEmail(),
+                        "StädaFint AB",
+                        "You are now a registered employee at StädaFintAB. Welcome!");
+
+                return new EmployeeAuthenticationResponseDTO(keycloakService.getUserToken(
+                        createDTO.getEmail(), createDTO.getPassword()),
+                        String.valueOf(emp.getId())
+                );
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(("An unexpected error occurred."));
+        }
+        //dunno which expection to put here placeholder exception for now
+
+        throw new RuntimeException(("An unexpected error occurred."));
+    }
 }
