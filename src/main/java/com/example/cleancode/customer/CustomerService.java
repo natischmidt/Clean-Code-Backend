@@ -20,7 +20,6 @@ public class CustomerService {
     private final KeycloakService keycloakService;
 
 
-
     public CustomerDTO customerEntityToDTO(Customer customer) {
 
         CustomerDTO customerDTO = new CustomerDTO();

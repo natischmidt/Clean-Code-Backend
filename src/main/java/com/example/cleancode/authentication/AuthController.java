@@ -2,6 +2,7 @@ package com.example.cleancode.authentication;
 
 import com.example.cleancode.customer.CustomerAuthenticationResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
+//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
@@ -16,11 +17,17 @@ public class AuthController {
         this.authService = authService;
     }
 
-
+//    @PreAuthorize("permitAll")
     @PostMapping("/loginCustomer")
     public CustomerAuthenticationResponseDTO loginCustomer(@RequestBody AuthDTO authDTO) {
         return authService.loginCustomer(authDTO);
     }
+
+    @GetMapping("/hello")
+    public String hello() {
+        return "hello world!";
+    }
+
 
 //    @PreAuthorize("hasRole('customer')")
     @PostMapping("/logoutCustomer")

@@ -1,0 +1,66 @@
+
+debug: true
+
+logging:
+    level:
+      org:
+          springframework.security: DEBUG
+
+
+
+jwt:
+    auth:
+        converter:
+            resource-id: ${KEY_CLOAK_RESOURCE:cleanCode}
+            principal-attribute: preferred_username
+
+klarna:
+    password: Iq3RTeaX6Q3dcUjF
+    username: PK131549_0adc87c0057c
+
+server:
+    port: 8080
+    error:
+        include-message: always
+
+spring:
+    datasource:
+        password: postgres
+        url: jdbc:postgresql://localhost:5432/cleancode
+        username: postgres
+    jpa:
+        hibernate:
+            ddl-auto: create-drop
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+                format_sql: true
+        show-sql: true
+    mail:
+        host: smtp.gmail.com
+        password: ywonglxigqfvttlg
+        port: 587
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
+        username: stadafintab@gmail.com
+    security:
+        oauth2:
+            resourceserver:
+                jwt:
+                    issuer-uri: http://stadafint.se/realms/cleanCode
+                    jwk-set-uri: http://stadafint.se/realms/cleanCode/protocol/openid-connect/certs
+#                    jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+#                opaquetoken:
+#                    client-id: cleanCode
+#                    client-secret: Z9ejOes6m4LVvLvBYKfkgUMdQ2MdK9Dn
+#                    introspection-uri: http://stadafint.se/realms/cleanCode/protocol/openid-connect/token/introspect
+
+#app:
+#    cors:
+#        allowed:
+#            - https://localhost:5173
+#            - http://localhost:5173
