@@ -407,6 +407,10 @@ public class JobService {
                 return jobToUpdate;
             }
             case PAID: {
+                emailService.sendEmail(
+                        thisCustomer.get().getEmail(),
+                        "Tack för betalning!",
+                        "Din betalning av ett städ har genomförts, tack för att du valde StädaFint AB!");
                 System.out.println("  ");
                 jobToUpdate.setJobStatus(updateJobDTO.getJobStatus());
                 return jobToUpdate;
