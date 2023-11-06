@@ -46,6 +46,7 @@ public class Job {
     private PaymentOption paymentOption;
     private String message;
 
+    private int rating;
 
     @ManyToMany(mappedBy = "jobs", cascade = CascadeType.ALL)
     @JsonBackReference
@@ -70,7 +71,8 @@ public class Job {
             PaymentOption paymentOption,
             Employee employee,
             Customer customer,
-            String message) {
+            String message,
+            int rating) {
         this.jobtype = jobtype;
         this.date = date;
         this.jobStatus = jobStatus;
@@ -80,6 +82,7 @@ public class Job {
         this.employee = employee;
         this.customer = customer;
         this.message = message;
+        this.rating = rating;
     }
 
     public Job(Jobtype jobtype, Date date, TimeSlots timeSlot, JobStatus jobStatus, int squareMeters, PaymentOption paymentOption, Customer customer) {
@@ -101,7 +104,7 @@ public class Job {
         this.message = message;
         this.customer = customer;
     }
-    public Job(long jobId, Jobtype jobtype, Date date, TimeSlots timeSlot, JobStatus jobStatus, int squareMeters, PaymentOption paymentOption, String message, Customer customer) {
+    public Job(long jobId, Jobtype jobtype, Date date, TimeSlots timeSlot, JobStatus jobStatus, int squareMeters, PaymentOption paymentOption, String message, Customer customer, int rating) {
         this.jobId = jobId;
         this.jobtype = jobtype;
         this.date = date;
@@ -111,5 +114,6 @@ public class Job {
         this.paymentOption = paymentOption;
         this.message = message;
         this.customer = customer;
+        this.rating = rating;
     }
 }

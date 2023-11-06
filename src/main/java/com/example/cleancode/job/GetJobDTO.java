@@ -21,4 +21,5 @@ public class GetJobDTO {
     private PaymentOption paymentOption;
     private String message;
     private Customer customer;
+    private int rating;
 }

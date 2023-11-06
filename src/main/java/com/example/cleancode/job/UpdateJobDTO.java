@@ -22,5 +22,5 @@ public class UpdateJobDTO {
     private PaymentOption paymentOption;
     private String message;
     private UUID customerId;
-
+    private int rating;
 }
