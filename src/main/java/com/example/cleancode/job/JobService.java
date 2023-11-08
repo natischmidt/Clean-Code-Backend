@@ -146,7 +146,7 @@ public class JobService {
 
         System.out.println(customerOptional.get().getEmail());
 
-        String body = "Your booking has been approved and is now entered into our system! The cleaning will take place: " + job.getDate();
+        String body = "Your booking has been approved and logged into our system!";
 
         emailService.sendEmail(customerOptional.get().getEmail(),
                 "StädaFint AB",
@@ -377,10 +377,10 @@ public class JobService {
                     emp.get().getSalary().setWorkedHours(emp.get().getSalary().getWorkedHours() + hours);
                 }
 
-               /* emailService.sendEmail(
+               emailService.sendEmail(
                         thisCustomer.get().getEmail(),
-                        "Din städning har utförts!",
-                        "Din städning har utförts! Gå in på Mina Sidor för att godkänna städningen och komma vidare till betalning.");*/
+                        "Din städning har utförts hos StädaFint AB!",
+                        "Din städning har utförts! Gå in på Mina Sidor för att godkänna städningen och komma vidare till betalning.");
                 jobToUpdate.setJobStatus(updateJobDTO.getJobStatus());
                 return jobToUpdate;
 
@@ -410,7 +410,7 @@ public class JobService {
                 emailService.sendEmail(
                         thisCustomer.get().getEmail(),
                         "Tack för betalning!",
-                        "Din betalning av ett städ har genomförts, tack för att du valde StädaFint AB!");
+                        "Din betalning av ett städ har genomförts. Tack för att du valde StädaFint AB!");
                 System.out.println("  ");
                 jobToUpdate.setJobStatus(updateJobDTO.getJobStatus());
                 return jobToUpdate;
