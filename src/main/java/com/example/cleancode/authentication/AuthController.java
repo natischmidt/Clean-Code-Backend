@@ -12,9 +12,11 @@ import java.util.UUID;
 public class AuthController {
 
     private final AuthService authService;
+    private final KeycloakService keycloakService;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, KeycloakService keycloakService) {
         this.authService = authService;
+        this.keycloakService = keycloakService;
     }
 
 //    @PreAuthorize("permitAll")
@@ -44,5 +46,12 @@ public class AuthController {
     @PostMapping("/logoutEmployee")
     public void logoutEmployee(HttpServletRequest request) {
         request.getSession().invalidate();
+    }
+
+    @GetMapping("/logout/{id}")
+    public String logout(@PathVariable String id) {
+
+        return authService.logout(id);
+
     }
 }
