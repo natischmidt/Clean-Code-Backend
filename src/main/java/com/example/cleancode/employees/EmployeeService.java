@@ -64,8 +64,20 @@ public class EmployeeService {
         /** Deletes the employee with the entered id. If no such employee exist, we throw an exception. Returns the deleted employees id.*/
         Optional<Employee> optEmp = employeeRepository.findById(id);
         if (optEmp.isPresent()) {
-            employeeRepository.deleteById(id);
-            return id;
+
+            String adminToken = keycloakService.getAdminToken();
+            String userId = keycloakService.getUserId(optEmp.get().getEmail(), adminToken);
+
+            String deleteResponse = keycloakService.deleteUser(userId, adminToken);
+
+            System.out.println("****************" + deleteResponse);
+
+            if(deleteResponse.contains("204")) {
+                employeeRepository.deleteById(id);
+                return id;
+            }
+            return 0L;
+
         } else {
             throw new PersonDoesNotExistException("There is no employee with that id in database.");
         }

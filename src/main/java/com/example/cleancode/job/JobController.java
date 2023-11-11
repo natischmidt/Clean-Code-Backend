@@ -106,8 +106,6 @@ public class JobController {
     @PostMapping("/getAvailableEmployees")
     public List<Boolean> getAvailableEmployees(@RequestBody GetAvailableEmployeeDTO getAvailableEmployeeDTO) {
         return jobService.getAvailableEmployees(
-                //LocalDateTime.parse(getAvailableEmployeeDTO.getDate().substring(0,10) + "T00:00:00"),
-//                Date.from(Instant.from(LocalDateTime.parse(getAvailableEmployeeDTO.getDate()))),
                 getAvailableEmployeeDTO.getDate(),
                 getAvailableEmployeeDTO.getLookForAvailableThisManyHours());
     }

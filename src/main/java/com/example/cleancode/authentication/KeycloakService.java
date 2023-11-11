@@ -178,4 +178,51 @@ public class KeycloakService {
         return Objects.requireNonNull(response.getBody()).getAccess_token();
     }
 
+    public String deleteUser(String userId, String adminToken) {
+        restTemplate = new RestTemplate();
+
+        String url = "http://stadafint.se/admin/realms/cleanCode/users/" + userId;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.add("Authorization", "Bearer " + adminToken);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+
+        ResponseEntity<UserInfoObject[]> response = restTemplate.exchange(
+                url,
+                HttpMethod.DELETE,
+                entity,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+        return response.toString();
+    }
+
+    public String logoutUser(String userId) {
+
+        restTemplate = new RestTemplate();
+
+        String url = "http://stadafint.se/admin/realms/cleanCode/users/" + userId + "/logout";
+
+        String adminToken = getAdminToken();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.add("Authorization", "Bearer " + adminToken);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<UserInfoObject[]> response = restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                entity,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+
+        return response.toString();
+
+    }
 }

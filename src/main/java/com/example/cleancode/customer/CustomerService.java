@@ -63,6 +63,8 @@ public class CustomerService {
             }
         }
 
+
+        //KOlla om ifsatsen fungerar!!!!!!!!!!!!!!!!
         String keycloakResponse = keycloakService.createUser(new CreateUserDTO(createDTO.getEmail(), createDTO.getFirstName(), createDTO.getLastName(), createDTO.getPassword()));
         if(!keycloakResponse.equals("201 CREATED")) {
             throw new HttpRequestFailedException("Failed to create user in keycloak step 1.");
@@ -137,9 +139,22 @@ public class CustomerService {
 
     public String deleteCustomer(UUID id) {
         Optional<Customer> optionalCustomer = customerRepository.findById(id);
+
         if (optionalCustomer.isPresent()) {
-            customerRepository.deleteById(id);
-            return "Customer with the ID: " + id + " have been removed";
+
+            String adminToken = keycloakService.getAdminToken();
+            String userId = keycloakService.getUserId(optionalCustomer.get().getEmail(), adminToken);
+
+            String deleteResponse = keycloakService.deleteUser(userId, adminToken);
+
+            if(deleteResponse.contains("204")) {
+                customerRepository.deleteById(id);
+                return "Customer with the ID: " + id + " have been removed";
+            }
+
+            return "Not deleted";
+
+
         } else {
             throw new CustomerDoesNotExistException(id);
         }

@@ -66,4 +66,37 @@ public class AuthService {
                 optEmployee.get().getRole(),
                 jwt);
     }
+
+    public String logout(String id) {
+
+        if(id.length() > 5) {
+         //customer
+
+            Optional<Customer> optCust = customerRepository.findById(UUID.fromString(id));
+            if(optCust.isPresent()) {
+
+                String adminToken = keycloakService.getAdminToken();
+                String userId = keycloakService.getUserId(optCust.get().getEmail(), adminToken);
+                String logoutResponse = keycloakService.logoutUser(userId);
+
+                return logoutResponse + "logged out";
+            } else {
+                return "unknown user";
+            }
+
+        } else {
+            //employee
+            Optional<Employee> optEmp = employeeRepository.findById(Long.valueOf(id));
+
+            if(optEmp.isPresent()) {
+                String adminToken = keycloakService.getAdminToken();
+                String userId = keycloakService.getUserId(optEmp.get().getEmail(), adminToken);
+                String logoutResponse = keycloakService.logoutUser(userId);
+
+                return logoutResponse + "logged out";
+            }else {
+                return "unknown user";
+            }
+        }
+    }
 }

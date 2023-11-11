@@ -47,10 +47,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                 {
                     auth.requestMatchers("/api/auth/loginCustomer").permitAll();
+
                     auth.requestMatchers(HttpMethod.POST, "/api/auth/logoutCustomer/").hasRole(CUSTOMER);
                     auth.requestMatchers(HttpMethod.POST, "/api/auth/loginEmployee").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/api/auth/logoutEmployee").hasAnyRole(ADMIN, EMPLOYEE);
                     auth.requestMatchers(HttpMethod.GET, "/api/auth/hello").hasAnyRole(ADMIN, EMPLOYEE);
+                    auth.requestMatchers(HttpMethod.GET, "/api/auth/logout/*").hasAnyRole(ADMIN, EMPLOYEE,CUSTOMER);
 
                     auth.requestMatchers("/api/customer/create").permitAll();
                     auth.requestMatchers(HttpMethod.DELETE,"/api/customer/delete/*").hasRole(ADMIN);
