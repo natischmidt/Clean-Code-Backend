@@ -114,6 +114,8 @@ public class KeycloakService {
                 }
         );
 
+        System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" + response);
+
         return Objects.requireNonNull(Objects.requireNonNull(response.getBody())[0].getId());
 
     }
@@ -217,6 +219,33 @@ public class KeycloakService {
         ResponseEntity<UserInfoObject[]> response = restTemplate.exchange(
                 url,
                 HttpMethod.POST,
+                entity,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+
+        return response.toString();
+
+    }
+
+    public String updateCustomerInfo(UpdateCustomerInfoKeycloakDTO updateCustomerInfoKeycloakDTO, String email) {
+
+        String adminToken = getAdminToken();
+        String userId = getUserId(email, adminToken);
+
+        restTemplate = new RestTemplate();
+
+        String url = "http://stadafint.se/admin/realms/cleanCode/users/" + userId;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.add("Authorization", "Bearer " + adminToken);
+
+        HttpEntity<UpdateCustomerInfoKeycloakDTO> entity = new HttpEntity<>(updateCustomerInfoKeycloakDTO, headers);
+
+        ResponseEntity<?> response = restTemplate.exchange(
+                url,
+                HttpMethod.PUT,
                 entity,
                 new ParameterizedTypeReference<>() {
                 }

@@ -2,17 +2,21 @@ package com.example.cleancode.customer;
 
 import com.example.cleancode.authentication.KeycloakService;
 import com.example.cleancode.authentication.dto.CreateUserDTO;
+import com.example.cleancode.authentication.dto.CreateUserRequest;
+import com.example.cleancode.authentication.dto.CredentialsUpdate;
+import com.example.cleancode.authentication.dto.UpdateCustomerInfoKeycloakDTO;
 import com.example.cleancode.enums.CustomerType;
 import com.example.cleancode.exceptions.*;
 import com.example.cleancode.mail.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class CustomerService {
@@ -66,7 +70,7 @@ public class CustomerService {
 
         //KOlla om ifsatsen fungerar!!!!!!!!!!!!!!!!
         String keycloakResponse = keycloakService.createUser(new CreateUserDTO(createDTO.getEmail(), createDTO.getFirstName(), createDTO.getLastName(), createDTO.getPassword()));
-        if(!keycloakResponse.equals("201 CREATED")) {
+        if (!keycloakResponse.equals("201 CREATED")) {
             throw new HttpRequestFailedException("Failed to create user in keycloak step 1.");
         }
 
@@ -74,7 +78,7 @@ public class CustomerService {
 
         try {
             keycloakService.assignRoleToUser("customer", createDTO.getEmail(), adminToken);
-        } catch (HttpRequestFailedException e){
+        } catch (HttpRequestFailedException e) {
             throw new HttpRequestFailedException("Failed to get userId or failed to assign role to user");
         }
 
@@ -147,7 +151,7 @@ public class CustomerService {
 
             String deleteResponse = keycloakService.deleteUser(userId, adminToken);
 
-            if(deleteResponse.contains("204")) {
+            if (deleteResponse.contains("204")) {
                 customerRepository.deleteById(id);
                 return "Customer with the ID: " + id + " have been removed";
             }
@@ -161,47 +165,151 @@ public class CustomerService {
     }
 
     @Transactional
-    public CustomerDTO updateCustomerInfo(UUID id, CustomerDTO customerDTO) {
+    public CustomerDTO updateCustomerInfo(UUID id, EditCustomerDTO editCustomerDTO) {
         Optional<Customer> optionalCustomer = customerRepository.findById(id);
+
+        UpdateCustomerInfoKeycloakDTO updateCustomerInfoKeycloakDTO = new UpdateCustomerInfoKeycloakDTO();
+
+        CredentialsUpdate credentials = new CredentialsUpdate();
+
+
+
+        System.out.println(editCustomerDTO.id +
+                "1: " + editCustomerDTO.getFirstName() +
+                "2: " + editCustomerDTO.getLastName() +
+                "3: " + editCustomerDTO.getPassword() +
+                "4: " + editCustomerDTO.getCompanyName() +
+                "5: " + editCustomerDTO.getOrgNumber() +
+                "6: " + editCustomerDTO.getEmail() +
+                "7: " + editCustomerDTO.getPhoneNumber() +
+                "8: " + editCustomerDTO.getAddress() +
+                "9: " + editCustomerDTO.getCity() +
+                "10: " + editCustomerDTO.getPostalCode() +
+                "11: " + editCustomerDTO.getCustomerType()
+        );
+
+        int counter = 0;
+
         if (optionalCustomer.isPresent()) {
             Customer customerUpdate = optionalCustomer.get();
-            if (customerDTO.getFirstName() != null) {
-                customerUpdate.setFirstName(customerDTO.getFirstName());
+
+            String originalEmail = customerUpdate.getEmail();
+
+            if (editCustomerDTO.getFirstName() != null && !editCustomerDTO.getFirstName().equals(customerUpdate.getFirstName())) {
+                customerUpdate.setFirstName(editCustomerDTO.getFirstName());
+                updateCustomerInfoKeycloakDTO.setFirstName(editCustomerDTO.getFirstName());
+                counter++;
+            } else {
+                updateCustomerInfoKeycloakDTO.setFirstName(customerUpdate.getFirstName());
             }
-            if (customerDTO.getLastName() != null) {
-                customerUpdate.setLastName(customerDTO.getLastName());
+
+            if (editCustomerDTO.getLastName() != null && !editCustomerDTO.getLastName().equals(customerUpdate.getLastName())) {
+                customerUpdate.setLastName(editCustomerDTO.getLastName());
+                updateCustomerInfoKeycloakDTO.setLastName(editCustomerDTO.getLastName());
+                counter++;
+            } else {
+                updateCustomerInfoKeycloakDTO.setLastName(customerUpdate.getLastName());
             }
-            if (customerDTO.getCompanyName() != null && customerUpdate.getCustomerType().equals(CustomerType.BUSINESS)) {
-                customerUpdate.setCompanyName(customerDTO.getCompanyName());
+
+            if (!editCustomerDTO.getPassword().isEmpty() && !editCustomerDTO.getPassword().equals(customerUpdate.getPassword())) {
+                customerUpdate.setPassword(editCustomerDTO.getPassword());
+
+                credentials.setValue(editCustomerDTO.getPassword());
+                credentials.setType("password");
+
+                CredentialsUpdate[] credList = new CredentialsUpdate[]{credentials};
+
+                updateCustomerInfoKeycloakDTO.setCredentials(credList);
+
+                counter++;
+            } else {
+                credentials.setValue(customerUpdate.getPassword());
+                credentials.setType("password");
+                CredentialsUpdate[] credList = new CredentialsUpdate[]{credentials};
+
+                updateCustomerInfoKeycloakDTO.setCredentials(credList);
             }
-            if (customerDTO.getOrgNumber() != null && customerUpdate.getCustomerType().equals(CustomerType.BUSINESS)) {
-                customerUpdate.setOrgNumber(customerDTO.getOrgNumber());
+
+
+            if (editCustomerDTO.getCompanyName() != null && customerUpdate.getCustomerType().equals(CustomerType.BUSINESS)) {
+                customerUpdate.setCompanyName(editCustomerDTO.getCompanyName());
             }
-            if (customerDTO.getEmail() != null) {
-                customerUpdate.setEmail(customerDTO.getEmail());
+            if (editCustomerDTO.getOrgNumber() != null && customerUpdate.getCustomerType().equals(CustomerType.BUSINESS)) {
+                customerUpdate.setOrgNumber(editCustomerDTO.getOrgNumber());
             }
-            if (customerDTO.getPhoneNumber() != null) {
-                customerUpdate.setPhoneNumber(customerDTO.getPhoneNumber());
+            if (!editCustomerDTO.getEmail().isEmpty() && !editCustomerDTO.getEmail().equals(customerUpdate.getEmail())) {
+
+                customerUpdate.setEmail(editCustomerDTO.getEmail());
+                updateCustomerInfoKeycloakDTO.setEmail(editCustomerDTO.getEmail());
+                counter++;
+            } else {
+                updateCustomerInfoKeycloakDTO.setEmail(customerUpdate.getEmail());
+
             }
-            if (customerDTO.getAddress() != null) {
-                customerUpdate.setAddress(customerDTO.getAddress());
+
+            if (editCustomerDTO.getPhoneNumber() != null) {
+                customerUpdate.setPhoneNumber(editCustomerDTO.getPhoneNumber());
             }
-            if (customerDTO.getCity() != null) {
-                customerUpdate.setCity(customerDTO.getCity());
+            if (editCustomerDTO.getAddress() != null) {
+                customerUpdate.setAddress(editCustomerDTO.getAddress());
             }
-            if (customerDTO.getPostalCode() != null) {
-                customerUpdate.setPostalCode(customerDTO.getPostalCode());
+            if (editCustomerDTO.getCity() != null) {
+                customerUpdate.setCity(editCustomerDTO.getCity());
             }
-            if (customerDTO.getCustomerType() != null) {
-                customerUpdate.setCustomerType(customerDTO.getCustomerType());
+            if (editCustomerDTO.getPostalCode() != null) {
+                customerUpdate.setPostalCode(editCustomerDTO.getPostalCode());
             }
+            if (editCustomerDTO.getCustomerType() != null) {
+                customerUpdate.setCustomerType(editCustomerDTO.getCustomerType());
+            }
+
             customerRepository.save(customerUpdate);
+
+            if (counter > 0) {
+            keycloakService.updateCustomerInfo(updateCustomerInfoKeycloakDTO, originalEmail);
+
+            }
+
+
             return customerEntityToDTO(customerUpdate);
         } else {
             throw new CustomerDoesNotExistException(id);
         }
     }
 
+
+    /**
+     * Spara det här så länge
+     */
+//    @Transactional
+//    public CustomerDTO updateCustomerInfoo(UUID id, CustomerDTO customerDTO) {
+//        Customer customerUpdate = customerRepository.findById(id)
+//                .orElseThrow(() -> new CustomerDoesNotExistException(id));
+//
+//        Map<Function<CustomerDTO, ?>, Consumer<Object>> updateActions = new HashMap<>();
+//        updateActions.put(CustomerDTO::getFirstName, customerUpdate::setFirstName);
+//        updateActions.put(CustomerDTO::getLastName, customerUpdate::setLastName);
+//        updateActions.put(dto -> dto.getCustomerType() == CustomerType.BUSINESS, dto -> {
+//            updateActions.put(CustomerDTO::getCompanyName, customerUpdate::setCompanyName);
+//            updateActions.put(CustomerDTO::getOrgNumber, customerUpdate::setOrgNumber);
+//        });
+//        updateActions.put(CustomerDTO::getEmail, customerUpdate::setEmail);
+//        updateActions.put(CustomerDTO::getPhoneNumber, customerUpdate::setPhoneNumber);
+//        updateActions.put(CustomerDTO::getAddress, customerUpdate::setAddress);
+//        updateActions.put(CustomerDTO::getCity, customerUpdate::setCity);
+//        updateActions.put(CustomerDTO::getPostalCode, customerUpdate::setPostalCode);
+//        updateActions.put(dto -> dto.getCustomerType() != null, dto -> customerUpdate.setCustomerType(dto.getCustomerType()));
+//
+//        updateActions.forEach((condition, action) -> {
+//            if (condition.apply(customerDTO)) {
+//                action.accept(customerDTO);
+//            }
+//        });
+//
+//        customerRepository.save(customerUpdate);
+//
+//        return customerEntityToDTO(customerUpdate);
+//    }
     public List<CustomerDTO> getAllCustomers() {
         List<Customer> allCustomers = customerRepository.findAll();
         List<CustomerDTO> allCustomersDTO = new ArrayList<>();

@@ -29,8 +29,8 @@ public class CustomerController {
 
     @PatchMapping("/update/{id}")
     public CustomerDTO changeCustomerInfo(@PathVariable String id,
-                                          @RequestBody CustomerDTO customerDTO){
-        return customerService.updateCustomerInfo(UUID.fromString(id), customerDTO);
+                                          @RequestBody EditCustomerDTO editCustomerDTO){
+        return customerService.updateCustomerInfo(UUID.fromString(id), editCustomerDTO);
     }
 
     @GetMapping("/all")
