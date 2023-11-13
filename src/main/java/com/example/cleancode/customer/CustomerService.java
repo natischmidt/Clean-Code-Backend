@@ -172,6 +172,8 @@ public class CustomerService {
 
         CredentialsUpdate credentials = new CredentialsUpdate();
 
+
+
         System.out.println(editCustomerDTO.id +
                 "1: " + editCustomerDTO.getFirstName() +
                 "2: " + editCustomerDTO.getLastName() +
@@ -190,6 +192,8 @@ public class CustomerService {
 
         if (optionalCustomer.isPresent()) {
             Customer customerUpdate = optionalCustomer.get();
+
+            String originalEmail = customerUpdate.getEmail();
 
             if (editCustomerDTO.getFirstName() != null && !editCustomerDTO.getFirstName().equals(customerUpdate.getFirstName())) {
                 customerUpdate.setFirstName(editCustomerDTO.getFirstName());
@@ -234,11 +238,13 @@ public class CustomerService {
                 customerUpdate.setOrgNumber(editCustomerDTO.getOrgNumber());
             }
             if (!editCustomerDTO.getEmail().isEmpty() && !editCustomerDTO.getEmail().equals(customerUpdate.getEmail())) {
+
                 customerUpdate.setEmail(editCustomerDTO.getEmail());
                 updateCustomerInfoKeycloakDTO.setEmail(editCustomerDTO.getEmail());
                 counter++;
             } else {
                 updateCustomerInfoKeycloakDTO.setEmail(customerUpdate.getEmail());
+
             }
 
             if (editCustomerDTO.getPhoneNumber() != null) {
@@ -257,16 +263,12 @@ public class CustomerService {
                 customerUpdate.setCustomerType(editCustomerDTO.getCustomerType());
             }
 
-            String response = keycloakService.updateCustomerInfo(updateCustomerInfoKeycloakDTO, customerUpdate.getEmail());
-            System.out.println("?????????????????????" + response);
-
             customerRepository.save(customerUpdate);
 
+            if (counter > 0) {
+            keycloakService.updateCustomerInfo(updateCustomerInfoKeycloakDTO, originalEmail);
 
-//            if (counter > 0) {
-//                String response = keycloakService.updateCustomerInfo(updateCustomerInfoKeycloakDTO, customerUpdate.getEmail());
-//                System.out.println("**************************" + response);
-//            }
+            }
 
 
             return customerEntityToDTO(customerUpdate);
