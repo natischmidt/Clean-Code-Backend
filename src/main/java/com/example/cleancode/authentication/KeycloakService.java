@@ -228,7 +228,7 @@ public class KeycloakService {
 
     }
 
-    public String updateCustomerInfo(UpdateCustomerInfoKeycloakDTO updateCustomerInfoKeycloakDTO, String email) {
+    public String updateUserInfo(UpdateUserInfoKeycloakDTO updateUserInfoKeycloakDTO, String email) {
 
         String adminToken = getAdminToken();
         String userId = getUserId(email, adminToken);
@@ -241,7 +241,7 @@ public class KeycloakService {
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         headers.add("Authorization", "Bearer " + adminToken);
 
-        HttpEntity<UpdateCustomerInfoKeycloakDTO> entity = new HttpEntity<>(updateCustomerInfoKeycloakDTO, headers);
+        HttpEntity<UpdateUserInfoKeycloakDTO> entity = new HttpEntity<>(updateUserInfoKeycloakDTO, headers);
 
         ResponseEntity<?> response = restTemplate.exchange(
                 url,
