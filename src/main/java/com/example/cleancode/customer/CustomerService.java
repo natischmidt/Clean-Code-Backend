@@ -2,17 +2,12 @@ package com.example.cleancode.customer;
 
 import com.example.cleancode.authentication.KeycloakService;
 import com.example.cleancode.authentication.dto.CreateUserDTO;
-import com.example.cleancode.authentication.dto.CreateUserRequest;
 import com.example.cleancode.authentication.dto.CredentialsUpdate;
 import com.example.cleancode.authentication.dto.UpdateCustomerInfoKeycloakDTO;
 import com.example.cleancode.enums.CustomerType;
 import com.example.cleancode.exceptions.*;
 import com.example.cleancode.mail.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,7 +63,7 @@ public class CustomerService {
         }
 
 
-        //KOlla om ifsatsen fungerar!!!!!!!!!!!!!!!!
+
         String keycloakResponse = keycloakService.createUser(new CreateUserDTO(createDTO.getEmail(), createDTO.getFirstName(), createDTO.getLastName(), createDTO.getPassword()));
         if (!keycloakResponse.equals("201 CREATED")) {
             throw new HttpRequestFailedException("Failed to create user in keycloak step 1.");
