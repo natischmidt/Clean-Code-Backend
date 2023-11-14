@@ -25,7 +25,7 @@ server:
 
 spring:
     datasource:
-        password: postgres
+        password: schmidt
         url: jdbc:postgresql://localhost:5432/cleancode
         username: postgres
     jpa:

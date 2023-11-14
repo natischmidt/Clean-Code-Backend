@@ -2,17 +2,12 @@ package com.example.cleancode.customer;
 
 import com.example.cleancode.authentication.KeycloakService;
 import com.example.cleancode.authentication.dto.CreateUserDTO;
-import com.example.cleancode.authentication.dto.CreateUserRequest;
 import com.example.cleancode.authentication.dto.CredentialsUpdate;
-import com.example.cleancode.authentication.dto.UpdateCustomerInfoKeycloakDTO;
+import com.example.cleancode.authentication.dto.UpdateUserInfoKeycloakDTO;
 import com.example.cleancode.enums.CustomerType;
 import com.example.cleancode.exceptions.*;
 import com.example.cleancode.mail.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,7 +63,7 @@ public class CustomerService {
         }
 
 
-        //KOlla om ifsatsen fungerar!!!!!!!!!!!!!!!!
+
         String keycloakResponse = keycloakService.createUser(new CreateUserDTO(createDTO.getEmail(), createDTO.getFirstName(), createDTO.getLastName(), createDTO.getPassword()));
         if (!keycloakResponse.equals("201 CREATED")) {
             throw new HttpRequestFailedException("Failed to create user in keycloak step 1.");
@@ -168,25 +163,9 @@ public class CustomerService {
     public CustomerDTO updateCustomerInfo(UUID id, EditCustomerDTO editCustomerDTO) {
         Optional<Customer> optionalCustomer = customerRepository.findById(id);
 
-        UpdateCustomerInfoKeycloakDTO updateCustomerInfoKeycloakDTO = new UpdateCustomerInfoKeycloakDTO();
+        UpdateUserInfoKeycloakDTO updateUserInfoKeycloakDTO = new UpdateUserInfoKeycloakDTO();
 
         CredentialsUpdate credentials = new CredentialsUpdate();
-
-
-
-        System.out.println(editCustomerDTO.id +
-                "1: " + editCustomerDTO.getFirstName() +
-                "2: " + editCustomerDTO.getLastName() +
-                "3: " + editCustomerDTO.getPassword() +
-                "4: " + editCustomerDTO.getCompanyName() +
-                "5: " + editCustomerDTO.getOrgNumber() +
-                "6: " + editCustomerDTO.getEmail() +
-                "7: " + editCustomerDTO.getPhoneNumber() +
-                "8: " + editCustomerDTO.getAddress() +
-                "9: " + editCustomerDTO.getCity() +
-                "10: " + editCustomerDTO.getPostalCode() +
-                "11: " + editCustomerDTO.getCustomerType()
-        );
 
         int counter = 0;
 
@@ -197,18 +176,18 @@ public class CustomerService {
 
             if (editCustomerDTO.getFirstName() != null && !editCustomerDTO.getFirstName().equals(customerUpdate.getFirstName())) {
                 customerUpdate.setFirstName(editCustomerDTO.getFirstName());
-                updateCustomerInfoKeycloakDTO.setFirstName(editCustomerDTO.getFirstName());
+                updateUserInfoKeycloakDTO.setFirstName(editCustomerDTO.getFirstName());
                 counter++;
             } else {
-                updateCustomerInfoKeycloakDTO.setFirstName(customerUpdate.getFirstName());
+                updateUserInfoKeycloakDTO.setFirstName(customerUpdate.getFirstName());
             }
 
             if (editCustomerDTO.getLastName() != null && !editCustomerDTO.getLastName().equals(customerUpdate.getLastName())) {
                 customerUpdate.setLastName(editCustomerDTO.getLastName());
-                updateCustomerInfoKeycloakDTO.setLastName(editCustomerDTO.getLastName());
+                updateUserInfoKeycloakDTO.setLastName(editCustomerDTO.getLastName());
                 counter++;
             } else {
-                updateCustomerInfoKeycloakDTO.setLastName(customerUpdate.getLastName());
+                updateUserInfoKeycloakDTO.setLastName(customerUpdate.getLastName());
             }
 
             if (!editCustomerDTO.getPassword().isEmpty() && !editCustomerDTO.getPassword().equals(customerUpdate.getPassword())) {
@@ -219,7 +198,7 @@ public class CustomerService {
 
                 CredentialsUpdate[] credList = new CredentialsUpdate[]{credentials};
 
-                updateCustomerInfoKeycloakDTO.setCredentials(credList);
+                updateUserInfoKeycloakDTO.setCredentials(credList);
 
                 counter++;
             } else {
@@ -227,7 +206,7 @@ public class CustomerService {
                 credentials.setType("password");
                 CredentialsUpdate[] credList = new CredentialsUpdate[]{credentials};
 
-                updateCustomerInfoKeycloakDTO.setCredentials(credList);
+                updateUserInfoKeycloakDTO.setCredentials(credList);
             }
 
 
@@ -240,10 +219,10 @@ public class CustomerService {
             if (!editCustomerDTO.getEmail().isEmpty() && !editCustomerDTO.getEmail().equals(customerUpdate.getEmail())) {
 
                 customerUpdate.setEmail(editCustomerDTO.getEmail());
-                updateCustomerInfoKeycloakDTO.setEmail(editCustomerDTO.getEmail());
+                updateUserInfoKeycloakDTO.setEmail(editCustomerDTO.getEmail());
                 counter++;
             } else {
-                updateCustomerInfoKeycloakDTO.setEmail(customerUpdate.getEmail());
+                updateUserInfoKeycloakDTO.setEmail(customerUpdate.getEmail());
 
             }
 
@@ -266,7 +245,7 @@ public class CustomerService {
             customerRepository.save(customerUpdate);
 
             if (counter > 0) {
-            keycloakService.updateCustomerInfo(updateCustomerInfoKeycloakDTO, originalEmail);
+            keycloakService.updateUserInfo(updateUserInfoKeycloakDTO, originalEmail);
 
             }
 

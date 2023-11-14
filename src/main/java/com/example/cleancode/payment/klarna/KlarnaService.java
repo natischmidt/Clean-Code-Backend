@@ -11,7 +11,7 @@ public class KlarnaService {
     private EntityManager entityManager;
 
     public void saveKlarnaJobMapping(Job job, String klaranaOrderId){
-        MapklarnWithJob mapping = new MapklarnWithJob(job, klaranaOrderId);
+        MapKlarnaWithJob mapping = new MapKlarnaWithJob(job, klaranaOrderId);
         entityManager.persist(mapping);
     }
 }
