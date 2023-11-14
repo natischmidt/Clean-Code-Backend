@@ -6,7 +6,6 @@ import com.example.cleancode.enums.Role;
 import com.example.cleancode.job.Job;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,9 +46,6 @@ public class Employee {
 
     private List<Job> jobList = new ArrayList<>();
 
-//    @Column(name = "last_payroll_timestamp")
-//    private LocalDateTime lastPayrollTimestamp;
-
     public Employee(String firstName, String lastName, String password, String ssNumber, String email,
                     String phoneNumber, String address, String city, String postalCode, Role role, Salary salary,
                     List<Job> jobList) {
@@ -66,5 +62,4 @@ public class Employee {
         this.jobList = jobList;
         this.salary = salary;
     }
-
 }
