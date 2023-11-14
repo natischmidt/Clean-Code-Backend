@@ -7,21 +7,14 @@ import com.example.cleancode.customer.CustomerRepository;
 import com.example.cleancode.employees.Employee;
 import com.example.cleancode.employees.EmployeeRepository;
 import com.example.cleancode.enums.JobStatus;
-import com.example.cleancode.enums.Jobtype;
 import com.example.cleancode.enums.Role;
 import com.example.cleancode.enums.TimeSlots;
 import com.example.cleancode.exceptions.*;
 import com.example.cleancode.mail.EmailService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.sql.Time;
-import java.time.Instant;
 import java.util.*;
-import java.time.LocalDateTime;
 import java.util.stream.Collectors;
-
-import static com.example.cleancode.enums.JobStatus.CANCELLED;
 import static com.example.cleancode.enums.Jobtype.*;
 import static com.example.cleancode.enums.Role.EMPLOYEE;
 
@@ -86,18 +79,16 @@ public class JobService {
         List<Boolean> boolList = new ArrayList<>(List.of(false, false, false, false, false, false, false, false, false));
 
         for (int i = 0; i < employeeListList.size(); i++) {
-            /**
-             Loopar igenom yttersta listan, som innehåller listor med tillgängliga employees ett visst klockslag och datum
-             **/
+
+       //  Loopar igenom yttersta listan, som innehåller listor med tillgängliga employees ett visst klockslag och datum
+
             for (int j = 0; j < employeeListList.get(i).size(); j++) {
-                /**
-                 Loopar igenom inre listorna, som innehåller tillgängliga employees ett visst klockslag och datum
-                 **/
+
+                 //Loopar igenom inre listorna, som innehåller tillgängliga employees ett visst klockslag och datum
                 for (int k = 0; k < lookForAvailableThisManyHours; k++) {
 
-                    /**
-                     loopar lookForAvailableThisManyHours gånger, kollar så många listor framåt
-                     **/
+                     //loopar lookForAvailableThisManyHours gånger, kollar så många listor framåt
+
                     if (employeeListList.get(i + k).contains(employeeListList.get(i).get(j))) {
                         boolList.set(i, true);
                     }
@@ -156,8 +147,8 @@ public class JobService {
     }
 
     public void updateAvailability(Employee selectedEmployee, Date date, List<TimeSlots> timeSlotList, Job job) {
-        /** Denna metod anropas från createJob. Den lägger till rader i BookedRepository med de uppbokade tiderna, så
-         * att vi inte kan boka fler städningar än vi har städare. */
+        /* Denna metod anropas från createJob. Den lägger till rader i BookedRepository med de uppbokade tiderna, så
+         att vi inte kan boka fler städningar än vi har städare. */
 
         for (int i = 0; i < timeSlotList.size(); i++) {
 
@@ -223,15 +214,6 @@ public class JobService {
         return convertToDTOList(allJobs);
     }
 
-//    public List<GetJobDTO> getAllJobs() {
-//        List<Job> allJobs = jobRepository.findAll();
-//        if (!allJobs.isEmpty()) {
-//            return convertToDTOList(allJobs);
-//        } else {
-//            throw new JobDoesNotExistException("There are no jobs in the database");
-//        }
-//    }
-
     private List<GetJobDTO> convertToDTOList(List<Job> jobs) {
         return jobs.stream()
                 .map(this::convertToDTO)
@@ -289,8 +271,8 @@ public class JobService {
 
             // Update properties from the dto
             if (jobDTO.getJobtype() != null && !jobDTO.getJobtype().equals(optionalJob.get().getJobtype())) {
-                /** Om jobbtyp har ändrats behöver vi boka om
-                 * Vi kollar så att det finns lediga timeslots på det efterfrågade datumet*/
+                /* Om jobbtyp har ändrats behöver vi boka om
+                  Vi kollar så att det finns lediga timeslots på det efterfrågade datumet */
                 Optional<Job> currentJob = jobRepository.findById(jobDTO.getJobId());
                 jobRepository.deleteById(jobDTO.getJobId());
                 //Date.from(Instant.from(LocalDateTime.parse(jobDTO.getDate())));
@@ -304,25 +286,8 @@ public class JobService {
                 }
             }
 
-           /* if ((jobDTO.getDate() != null
-                    && !jobDTO.getDate().equals(optionalJob.get().getDate()))
-                        || (jobDTO.getJobtype() != null
-                            && jobDTO.getJobtype() != optionalJob.get().getJobtype())) {
-                List<TimeSlots> oldTimeSlots = List.of(jobRepository.findById(jobDTO.getJobId()).get().getTimeSlot());
-                jobRepository.deleteById(jobDTO.getJobId());
-                newJobId = createJob(new CreateJobDTO(
-                        jobDTO.getJobtype(),
-                        jobDTO.getDate(),
-                        //jobDTO.getTimeSlotsList(),
-                        oldTimeSlots,
-                        jobDTO.getSquareMeters(),
-                        jobDTO.getPaymentOption(),
-                        jobDTO.getCustomerId()));
-                jobToUpdate.setJobId(newJobId);
-            }*/
 
             if (jobDTO.getJobStatus() != null && !jobDTO.getJobStatus().equals(jobToUpdate.getJobStatus())) {
-//                jobToUpdate.setJobStatus(jobDTO.getJobStatus());
 
                 jobToUpdate = handleUpdatedJobStatus(jobDTO, jobToUpdate);
 
@@ -390,13 +355,12 @@ public class JobService {
                         thisCustomer.get().getEmail(),
                         "Nytt status på din bokning hos StädaFint!",
                         "Din bokning är nu godkänt och reda att betalas hos StädaFint AB!");
-                //i dunno
+
                 System.out.println("printar nåt bara för att annars är intelliJ skitstörigt och markerar allt som 'duplicate branches'.");
                 jobToUpdate.setJobStatus(updateJobDTO.getJobStatus());
                 return jobToUpdate;
             }
             case UNAPPROVED: {
-                //här skickar vi kanske ett mail till admin, men det finns bara en mailadress i företaget, så kanske skippa det?
                 System.out.println(" ");
                 jobToUpdate.setJobStatus(updateJobDTO.getJobStatus());
                 return jobToUpdate;
@@ -431,34 +395,6 @@ public class JobService {
             default: {
                 return jobToUpdate;
             }
-
-
-//            case CANCELLED: {
-//                String message = updateJobDTO.getMessage();
-//
-//                if(updateJobDTO.getMessage() == null || updateJobDTO.getMessage().isEmpty()) {
-//                    message = jobToUpdate.getMessage();
-//                }
-//                jobRepository.deleteById(updateJobDTO.getJobId());
-//
-//                jobToUpdate.getBooked().clear();
-//                jobToUpdate.setJobStatus(CANCELLED);
-////                Job cancelledJob = new Job(
-////                        updateJobDTO.getJobId(),
-////                        updateJobDTO.getJobtype(),
-////                        updateJobDTO.getDate(),
-////                        TimeSlots.SIXTEEN,
-////                        updateJobDTO.getJobStatus(),
-////                        updateJobDTO.getSquareMeters(),
-////                        updateJobDTO.getPaymentOption(),
-////                        message,
-////                        customerRepository.findById(updateJobDTO.getCustomerId()).get());
-//
-//                return jobToUpdate;
-//            }
-//            default: {
-//                return jobToUpdate;
-//            }
         }
     }
 
@@ -474,7 +410,6 @@ public class JobService {
             return new ArrayList<>();
         }
     }
-
     public List<GetJobDTO> getAllJobsForEmployeeWithStatus(Long empId, List<JobStatus> status) {
         List<Job> jobsForEmployee = jobRepository.findAll()
                 .stream()

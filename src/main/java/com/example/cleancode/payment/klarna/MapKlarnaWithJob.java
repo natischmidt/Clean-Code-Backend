@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class MapklarnWithJob {
+public class MapKlarnaWithJob {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,7 +23,7 @@ public class MapklarnWithJob {
     public String klarnaOrderId;
 
 
-    public MapklarnWithJob(Job job, String klaranaOrderId) {
+    public MapKlarnaWithJob(Job job, String klaranaOrderId) {
         this.job = job;
         this.klarnaOrderId = klaranaOrderId;
     }

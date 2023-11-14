@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtDecoders;
@@ -40,7 +41,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
         .cors(x -> x.configurationSource(corsConfigurationSource) );
 
         http
@@ -76,7 +77,6 @@ public class SecurityConfig {
                     auth.requestMatchers(HttpMethod.GET,"/api/jobs/getAllJobsForEmployeeWithStatus/*").hasAnyRole(ADMIN, EMPLOYEE);
                     auth.requestMatchers(HttpMethod.GET,"/api/jobs/getAllJobsForCustomer/*").hasAnyRole(ADMIN, EMPLOYEE, CUSTOMER);
                     auth.requestMatchers("/api/jobs/getAllJobsForCustomerWithStatus/*").hasAnyRole(ADMIN, EMPLOYEE, CUSTOMER);
-//                    auth.requestMatchers("/api/jobs/getAllJobsForCustomerWithStatus/*").permitAll();
                     auth.requestMatchers(HttpMethod.PUT,"/api/jobs/updateJob").hasAnyRole(ADMIN, EMPLOYEE, CUSTOMER);
                     auth.requestMatchers(HttpMethod.GET,"/api/jobs/getByStatus").hasAnyRole(ADMIN, EMPLOYEE, CUSTOMER);
                     auth.requestMatchers(HttpMethod.POST,"/api/jobs/getAvailableEmployees").hasAnyRole(ADMIN, CUSTOMER);

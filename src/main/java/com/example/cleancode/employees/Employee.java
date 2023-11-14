@@ -1,14 +1,12 @@
 package com.example.cleancode.employees;
 
 import com.example.cleancode.booked.Booked;
-import com.example.cleancode.enums.CustomerType;
 import com.example.cleancode.enums.Role;
 import com.example.cleancode.job.Job;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @AllArgsConstructor

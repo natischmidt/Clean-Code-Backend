@@ -63,7 +63,7 @@ public class CustomerService {
         }
 
 
-        //KOlla om ifsatsen fungerar!!!!!!!!!!!!!!!!
+
         String keycloakResponse = keycloakService.createUser(new CreateUserDTO(createDTO.getEmail(), createDTO.getFirstName(), createDTO.getLastName(), createDTO.getPassword()));
         if (!keycloakResponse.equals("201 CREATED")) {
             throw new HttpRequestFailedException("Failed to create user in keycloak step 1.");

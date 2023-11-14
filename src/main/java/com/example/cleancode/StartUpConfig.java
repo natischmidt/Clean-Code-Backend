@@ -7,15 +7,10 @@ import com.example.cleancode.employees.EmployeeRepository;
 import com.example.cleancode.employees.Salary;
 import com.example.cleancode.enums.*;
 import com.example.cleancode.job.CreateJobDTO;
-//import com.example.cleancode.job.Job;
-//import com.example.cleancode.job.JobRepository;
 import com.example.cleancode.job.JobService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-//import java.text.DateFormat;
-//import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
