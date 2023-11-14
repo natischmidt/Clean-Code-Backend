@@ -2,17 +2,13 @@ package com.example.cleancode.employees;
 
 import com.example.cleancode.authentication.KeycloakService;
 import com.example.cleancode.authentication.dto.CreateUserDTO;
-import com.example.cleancode.customer.CustomerAuthenticationResponseDTO;
-import com.example.cleancode.enums.CustomerType;
 import com.example.cleancode.exceptions.*;
 import com.example.cleancode.mail.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,40 +20,6 @@ public class EmployeeService {
     public EmployeeService(EmployeeRepository employeeRepository, KeycloakService keycloakService) {
         this.employeeRepository = employeeRepository;
         this.keycloakService = keycloakService;
-    }
-
-    public Long createEmployee(CreateEmployeeDTO employeeDTO) {
-
-        /** First calls checkDTO method to verify entered information. If something is wrong, we throw an exception.
-         *...
-         * Then creates the employee, and returns the id. If an employee with that id already exists, we throw an exception. */
-
-        if (!checkCreateEmployeeDTO(employeeDTO)) {
-            throw new InvalidRequestException("One or more fields have invalid or missing content.");
-        }
-
-        Optional<Employee> optEmp = employeeRepository.findBySsNumber(employeeDTO.getSsNumber());
-        if (optEmp.isEmpty()) {
-            Salary salary = new Salary(employeeDTO.getSalary());
-            Employee employee = new Employee(
-                    employeeDTO.getFirstName(),
-                    employeeDTO.getLastName(),
-                    employeeDTO.getPassword(),
-                    employeeDTO.getSsNumber(),
-                    employeeDTO.getEmail(),
-                    employeeDTO.getPhoneNumber(),
-                    employeeDTO.getAddress(),
-                    employeeDTO.getCity(),
-                    employeeDTO.getPostalCode(),
-                    employeeDTO.getRole(),
-                    salary,
-                    List.of());
-            salary.setEmployee(employee);
-            employeeRepository.save(employee);
-            return employee.getId();
-        } else {
-            throw new PersonAlreadyExistsException("That person is already registered as an employee.");
-        }
     }
 
     public Long deleteEmployee(Long id) {
@@ -160,7 +122,8 @@ public class EmployeeService {
     }
 
     private Boolean checkCreateEmployeeDTO(CreateEmployeeDTO dto) {
-        /** Checks so that fields are not null, and that email and phone number are valid formats. Returns true if all fields are ok.*/
+        /* Checks so that fields are not null, and that email and phone number are valid formats.
+         Returns true if all fields are ok.*/
         return dto.getFirstName() != null
                 && dto.getLastName() != null
                 && dto.getPassword() != null
@@ -175,7 +138,8 @@ public class EmployeeService {
     private EmailService emailService;
 
     private Boolean checkEditEmployeeDTO(EditEmployeeDTO dto) {
-        /** Checks so that fields are not null, and that email and phone number are valid formats. Returns true if all fields are ok.*/
+        /* Checks so that fields are not null, and that email and phone number are valid formats.
+          Returns true if all fields are ok.*/
         return dto.getFirstName() != null
                 && dto.getLastName() != null
                 && dto.getPassword() != null
@@ -254,8 +218,6 @@ public class EmployeeService {
         } catch (Exception e) {
             throw new RuntimeException(("An unexpected error occurred."));
         }
-        //dunno which expection to put here placeholder exception for now
-
         throw new RuntimeException(("An unexpected error occurred."));
     }
 }
