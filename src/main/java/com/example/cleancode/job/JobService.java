@@ -296,6 +296,10 @@ public class JobService {
                 jobToUpdate.setPaymentOption(jobDTO.getPaymentOption());
             }
 
+            if(jobDTO.getSquareMeters() != 0 && jobDTO.getSquareMeters() != jobToUpdate.getSquareMeters()) {
+                jobToUpdate.setSquareMeters(jobDTO.getSquareMeters());
+            }
+
             if(jobDTO.getRating() != 0){
                 jobToUpdate.setRating(jobDTO.getRating());
             }
