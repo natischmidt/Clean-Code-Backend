@@ -5,6 +5,7 @@ import com.example.cleancode.enums.Role;
 import com.example.cleancode.job.Job;
 import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,5 +60,4 @@ public class Employee {
         this.jobList = jobList;
         this.salary = salary;
     }
-
 }
