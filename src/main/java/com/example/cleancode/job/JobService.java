@@ -297,7 +297,9 @@ public class JobService {
             if(jobDTO.getSquareMeters() != 0 && jobDTO.getSquareMeters() != jobToUpdate.getSquareMeters()) {
                 jobToUpdate.setSquareMeters(jobDTO.getSquareMeters());
             }
-
+            if(!jobDTO.getMessage().equals(jobToUpdate.getMessage())){
+                jobToUpdate.setMessage(jobDTO.getMessage());
+            }
             if(jobDTO.getRating() != 0){
                 jobToUpdate.setRating(jobDTO.getRating());
             }
