@@ -36,7 +36,6 @@ public class EmployeeService {
 
             String deleteResponse = keycloakService.deleteUser(userId, adminToken);
 
-            System.out.println("****************" + deleteResponse);
 
             if (deleteResponse.contains("204")) {
                 employeeRepository.deleteById(id);
@@ -102,7 +101,6 @@ public class EmployeeService {
                 updateUserInfoKeycloakDTO.setCredentials(credList);
 
                 String response = keycloakService.updateUserInfo(updateUserInfoKeycloakDTO, optEmp.get().getEmail());
-                System.out.println("*******************" + response);
             }
 
 

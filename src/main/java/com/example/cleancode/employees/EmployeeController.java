@@ -17,7 +17,6 @@ public class EmployeeController {
 
     @PostMapping("/createEmployee")
     public EmployeeAuthenticationResponseDTO createEmp(@RequestBody CreateEmployeeDTO createDTO){
-        System.out.println(createDTO);
         return employeeService.createEmp(createDTO);
     }
 

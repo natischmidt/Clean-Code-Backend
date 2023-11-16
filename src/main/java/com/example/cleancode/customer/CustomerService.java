@@ -318,13 +318,6 @@ public class CustomerService {
     }
 
     private boolean checkCreateCustomerDTO(CreateCustomerDTO createCustomerDTO) {
-        System.out.println(createCustomerDTO.getFirstName());
-        System.out.println(createCustomerDTO.getLastName());
-        System.out.println(createCustomerDTO.getPassword());
-        System.out.println(createCustomerDTO.getEmail());
-        System.out.println(createCustomerDTO.getPhoneNumber());
-        System.out.println(createCustomerDTO.getAddress());
-
         return createCustomerDTO.getFirstName() != null
                 && createCustomerDTO.getLastName() != null
                 && (createCustomerDTO.getPassword() != null && createCustomerDTO.getPassword().length() >= 8)

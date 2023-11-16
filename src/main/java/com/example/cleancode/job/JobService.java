@@ -135,8 +135,6 @@ public class JobService {
         jobRepository.save(job);
         updateAvailability(assignedEmployee, date, createJobDTO.getTimeSlotList(), job);
 
-        System.out.println(customerOptional.get().getEmail());
-
         String body = "Your booking has been approved and logged into our system!";
 
         emailService.sendEmail(customerOptional.get().getEmail(),
@@ -360,17 +358,14 @@ public class JobService {
                         "Nytt status på din bokning hos StädaFint!",
                         "Din bokning är nu godkänt och reda att betalas hos StädaFint AB!");
 
-                System.out.println("printar nåt bara för att annars är intelliJ skitstörigt och markerar allt som 'duplicate branches'.");
                 jobToUpdate.setJobStatus(updateJobDTO.getJobStatus());
                 return jobToUpdate;
             }
             case UNAPPROVED: {
-                System.out.println(" ");
                 jobToUpdate.setJobStatus(updateJobDTO.getJobStatus());
                 return jobToUpdate;
             }
             case PROCESSING: {
-                System.out.println(" Måste va nått me' klockan ");
                 jobToUpdate.setJobStatus(updateJobDTO.getJobStatus());
                 return jobToUpdate;
             }
@@ -379,7 +374,6 @@ public class JobService {
                         thisCustomer.get().getEmail(),
                         "Tack för betalning!",
                         "Din betalning av ett städ har genomförts. Tack för att du valde StädaFint AB!");
-                System.out.println("  ");
                 jobToUpdate.setJobStatus(updateJobDTO.getJobStatus());
                 return jobToUpdate;
             }
