@@ -52,11 +52,9 @@ public class AuthService {
         System.out.println(authDTO.getEmail() + "  :::::::  " + authDTO.getPassword());
 
         ResponseEntity<TokenRequestObject> response;
-        String jwt;
         try {
             response = keycloakService.getUserToken(authDTO.getEmail(), authDTO.getPassword());
 
-            jwt = Objects.requireNonNull(keycloakService.getUserToken(authDTO.getEmail(), authDTO.getPassword()).getBody()).getAccess_token();
         } catch (HttpRequestFailedException e) {
             throw new HttpRequestFailedException("Something went wrong logging in");
         }

@@ -11,11 +11,9 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
-    private final KeycloakService keycloakService;
 
-    public AuthController(AuthService authService, KeycloakService keycloakService) {
+    public AuthController(AuthService authService) {
         this.authService = authService;
-        this.keycloakService = keycloakService;
     }
 
     @PostMapping("/loginCustomer")

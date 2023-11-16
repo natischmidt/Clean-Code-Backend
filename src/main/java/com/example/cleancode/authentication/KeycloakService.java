@@ -16,7 +16,6 @@ public class KeycloakService {
 
 
     RestTemplate restTemplate;
-    String cleanCodeClientId = "16b58469-6ca4-46ea-b4bf-2b15600c5dd9";
     String customerRoleId = "1bdc1c3c-4cc2-44fc-9c3c-9c630a71ea15";
     String employeeRoleId = "d05f878c-1dc9-401a-bc46-38957fc7f7f4";
     String adminRoleId = "f3c54b32-9d24-4d05-9fd3-3a326a5be6eb";
@@ -176,7 +175,6 @@ public class KeycloakService {
                 new ParameterizedTypeReference<>() {
                 });
 
-//        return Objects.requireNonNull(response.getBody()).getAccess_token();
         return response;
     }
 
