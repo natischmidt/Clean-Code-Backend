@@ -41,11 +41,6 @@ public class AuthService {
         String userId = optCustomer.get().getId().toString();
 
         return new CustomerAuthenticationResponseDTO(jwt, userId);
-//        if (optCustomer.get().getPassword().equals(authDTO.getPassword())) {
-//            return optCustomer.get().getId();
-//        } else {
-//            throw new InvalidRequestException("The given password was incorrect");
-//        }
     }
 
     public AuthResponseDTO loginEmployee(AuthDTO authDTO) {
