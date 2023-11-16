@@ -50,7 +50,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/api/auth/loginCustomer").permitAll();
 
                     auth.requestMatchers(HttpMethod.POST, "/api/auth/logoutCustomer/").hasRole(CUSTOMER);
-                    auth.requestMatchers(HttpMethod.POST, "/api/auth/loginEmployee").permitAll();
+                    auth.requestMatchers( "/api/auth/loginEmployee").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/api/auth/logoutEmployee").hasAnyRole(ADMIN, EMPLOYEE);
                     auth.requestMatchers(HttpMethod.GET, "/api/auth/hello").hasAnyRole(ADMIN, EMPLOYEE);
                     auth.requestMatchers(HttpMethod.GET, "/api/auth/logout/*").hasAnyRole(ADMIN, EMPLOYEE,CUSTOMER);

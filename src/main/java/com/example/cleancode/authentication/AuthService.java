@@ -47,6 +47,8 @@ public class AuthService {
         if (optEmployee.isEmpty()) {
             throw new PersonDoesNotExistException("Email not found");
         }
+        System.out.println(authDTO.getEmail() + "  :::::::  " + authDTO.getPassword());
+
         String jwt;
         try {
             jwt = keycloakService.getUserToken(authDTO.getEmail(), authDTO.getPassword());
