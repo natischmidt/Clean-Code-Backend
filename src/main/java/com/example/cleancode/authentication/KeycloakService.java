@@ -152,7 +152,7 @@ public class KeycloakService {
         return response.toString();
     }
 
-    public String getUserToken(String username, String password) {
+    public ResponseEntity<TokenRequestObject> getUserToken(String username, String password) {
         restTemplate = new RestTemplate();
 
         String url = "http://stadafint.se/realms/cleanCode/protocol/openid-connect/token";
@@ -176,7 +176,8 @@ public class KeycloakService {
                 new ParameterizedTypeReference<>() {
                 });
 
-        return Objects.requireNonNull(response.getBody()).getAccess_token();
+//        return Objects.requireNonNull(response.getBody()).getAccess_token();
+        return response;
     }
 
     public String deleteUser(String userId, String adminToken) {

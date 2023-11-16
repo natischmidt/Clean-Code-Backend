@@ -474,7 +474,7 @@ public class StartUpConfig {
                     30,
                     PaymentOption.KLARNA,
                     UUID.fromString("e7b043d9-0264-429a-8073-c5524e914c53"),
-                    "Jag har förskräckligt mycket tandsten, hjälp mig snälla Städafint AB   "));
+                    "Jag har förskräckligt mycket tandsten, hjälp mig snälla Städafint AB"));
 
             String dateInString7 = "2024-03-24";
             LocalDate localDate7 = LocalDate.parse(dateInString7);

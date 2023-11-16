@@ -258,7 +258,7 @@ public class EmployeeService {
                         "You are now a registered employee at StädaFintAB. Welcome!");
 
                 return new EmployeeAuthenticationResponseDTO(keycloakService.getUserToken(
-                        createDTO.getEmail(), createDTO.getPassword()),
+                        createDTO.getEmail(), createDTO.getPassword()).getBody().getAccess_token(),
                         String.valueOf(emp.getId())
                 );
             }

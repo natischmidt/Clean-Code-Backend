@@ -2,6 +2,8 @@ package com.example.cleancode.authentication;
 
 import com.example.cleancode.authentication.dto.AssignRoleDTO;
 import com.example.cleancode.authentication.dto.CreateUserDTO;
+import com.example.cleancode.authentication.dto.TokenRequestObject;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("api/auth/keycloak")
@@ -42,7 +44,7 @@ public class KeycloakController {
     }
 
     @PostMapping("/getUserToken")
-    public String getUserToken(@RequestHeader String username, @RequestHeader String password) {
+    public ResponseEntity<TokenRequestObject> getUserToken(@RequestHeader String username, @RequestHeader String password) {
         return keycloakService.getUserToken(username, password);
     }
 }

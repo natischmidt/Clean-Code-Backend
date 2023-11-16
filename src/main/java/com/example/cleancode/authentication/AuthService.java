@@ -1,5 +1,6 @@
 package com.example.cleancode.authentication;
 
+import com.example.cleancode.authentication.dto.TokenRequestObject;
 import com.example.cleancode.customer.Customer;
 import com.example.cleancode.customer.CustomerAuthenticationResponseDTO;
 import com.example.cleancode.customer.CustomerRepository;
@@ -8,9 +9,11 @@ import com.example.cleancode.employees.EmployeeRepository;
 import com.example.cleancode.exceptions.HttpRequestFailedException;
 import com.example.cleancode.exceptions.InvalidRequestException;
 import com.example.cleancode.exceptions.PersonDoesNotExistException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -35,10 +38,11 @@ public class AuthService {
             throw new PersonDoesNotExistException("Email not found");
         }
 
-        String jwt = keycloakService.getUserToken(authDTO.getEmail(), authDTO.getPassword());
+        ResponseEntity<TokenRequestObject> response = keycloakService.getUserToken(authDTO.getEmail(), authDTO.getPassword());
+//        String jwt = keycloakService.getUserToken(authDTO.getEmail(), authDTO.getPassword());
         String userId = optCustomer.get().getId().toString();
 
-        return new CustomerAuthenticationResponseDTO(jwt, userId);
+        return new CustomerAuthenticationResponseDTO(response, userId);
     }
 
     public AuthResponseDTO loginEmployee(AuthDTO authDTO) {
@@ -49,9 +53,12 @@ public class AuthService {
         }
         System.out.println(authDTO.getEmail() + "  :::::::  " + authDTO.getPassword());
 
+        ResponseEntity<TokenRequestObject> response;
         String jwt;
         try {
-            jwt = keycloakService.getUserToken(authDTO.getEmail(), authDTO.getPassword());
+            response = keycloakService.getUserToken(authDTO.getEmail(), authDTO.getPassword());
+
+            jwt = Objects.requireNonNull(keycloakService.getUserToken(authDTO.getEmail(), authDTO.getPassword()).getBody()).getAccess_token();
         } catch (HttpRequestFailedException e) {
             throw new HttpRequestFailedException("Something went wrong logging in");
         }
@@ -59,7 +66,7 @@ public class AuthService {
         return new AuthResponseDTO(
                 optEmployee.get().getId(),
                 optEmployee.get().getRole(),
-                jwt);
+                response);
     }
 
     public String logout(String id) {
