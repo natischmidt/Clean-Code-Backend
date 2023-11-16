@@ -66,7 +66,7 @@ public class SecurityConfig {
                     auth.requestMatchers(HttpMethod.DELETE,"/api/employee/deleteEmployee").hasRole(ADMIN);
                     auth.requestMatchers(HttpMethod.GET,"/api/employee/getEmployee").hasAnyRole(ADMIN,EMPLOYEE);
                     auth.requestMatchers(HttpMethod.GET,"/api/employee/getAllEmployees").hasRole(ADMIN);
-                    auth.requestMatchers(HttpMethod.PUT,"/api/employee/editEmployee").hasRole(ADMIN);
+                    auth.requestMatchers(HttpMethod.PUT,"/api/employee/editEmployee").hasAnyRole(ADMIN, EMPLOYEE);
                     auth.requestMatchers(HttpMethod.GET,"/api/employee/getSalary/*").hasAnyRole(ADMIN,EMPLOYEE);
 
                     auth.requestMatchers(HttpMethod.POST,"/api/jobs/createJob").hasAnyRole(ADMIN, EMPLOYEE, CUSTOMER);
