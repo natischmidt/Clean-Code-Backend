@@ -54,6 +54,7 @@ public class SecurityConfig {
                     auth.requestMatchers(HttpMethod.POST, "/api/auth/logoutEmployee").hasAnyRole(ADMIN, EMPLOYEE);
                     auth.requestMatchers(HttpMethod.GET, "/api/auth/hello").hasAnyRole(ADMIN, EMPLOYEE);
                     auth.requestMatchers(HttpMethod.GET, "/api/auth/logout/*").hasAnyRole(ADMIN, EMPLOYEE,CUSTOMER);
+                    auth.requestMatchers(HttpMethod.GET, "/api/auth/refresh").permitAll();
 
                     auth.requestMatchers("/api/customer/create").permitAll();
                     auth.requestMatchers(HttpMethod.DELETE,"/api/customer/delete/*").hasRole(ADMIN);

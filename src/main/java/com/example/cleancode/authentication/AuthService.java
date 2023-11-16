@@ -7,11 +7,9 @@ import com.example.cleancode.customer.CustomerRepository;
 import com.example.cleancode.employees.Employee;
 import com.example.cleancode.employees.EmployeeRepository;
 import com.example.cleancode.exceptions.HttpRequestFailedException;
-import com.example.cleancode.exceptions.InvalidRequestException;
 import com.example.cleancode.exceptions.PersonDoesNotExistException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -100,5 +98,12 @@ public class AuthService {
                 return "unknown user";
             }
         }
+    }
+
+    public TokenRequestObject getUserTokenRefresh(String refreshToken) {
+
+        return keycloakService.getUserTokenRefresh(refreshToken).getBody();
+
+
     }
 }

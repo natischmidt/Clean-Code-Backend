@@ -180,6 +180,34 @@ public class KeycloakService {
         return response;
     }
 
+    public ResponseEntity<TokenRequestObject> getUserTokenRefresh(String refresh_token) {
+        restTemplate = new RestTemplate();
+
+        String url = "http://stadafint.se/realms/cleanCode/protocol/openid-connect/token";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("grant_type", "refresh_token");
+        map.add("client_secret", client_secret);
+        map.add("client_id", "cleanCode");
+        map.add("refresh_token", refresh_token);
+
+
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
+
+        ResponseEntity<TokenRequestObject> response = restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                entity,
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response;
+    }
+
+
     public String deleteUser(String userId, String adminToken) {
         restTemplate = new RestTemplate();
 

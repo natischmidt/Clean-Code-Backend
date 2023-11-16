@@ -1,5 +1,6 @@
 package com.example.cleancode.authentication;
 
+import com.example.cleancode.authentication.dto.TokenRequestObject;
 import com.example.cleancode.customer.CustomerAuthenticationResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
@@ -44,8 +45,11 @@ public class AuthController {
 
     @GetMapping("/logout/{id}")
     public String logout(@PathVariable String id) {
-
         return authService.logout(id);
+    }
 
+    @GetMapping("/refresh")
+    public TokenRequestObject refreshToken(@RequestHeader String refresh_token) {
+        return authService.getUserTokenRefresh(refresh_token);
     }
 }
