@@ -57,7 +57,7 @@ public class SecurityConfig {
 
                     auth.requestMatchers("/api/customer/create").permitAll();
                     auth.requestMatchers(HttpMethod.DELETE,"/api/customer/delete/*").hasRole(ADMIN);
-                    auth.requestMatchers(HttpMethod.PATCH,"/api/customer/update/*").hasAnyRole(ADMIN, EMPLOYEE);
+                    auth.requestMatchers(HttpMethod.PATCH,"/api/customer/update/*").hasAnyRole(ADMIN, CUSTOMER);
                     auth.requestMatchers(HttpMethod.GET,"/api/customer/all").hasAnyRole(ADMIN,EMPLOYEE);
                     auth.requestMatchers("/api/customer/*").hasAnyRole(ADMIN,EMPLOYEE, CUSTOMER);
                     auth.requestMatchers(HttpMethod.GET,"/api/customer/getIdByEmail/*").hasAnyRole(ADMIN, EMPLOYEE, CUSTOMER);
