@@ -1,5 +1,5 @@
 package com.example.cleancode.customer;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.example.cleancode.enums.CustomerType;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -29,6 +29,16 @@ public class Customer {
     @Enumerated(EnumType.STRING)
     @Column(name = "customer_type")
     private CustomerType customerType;
+
+    public void setPassword(String rawPassword) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        this.password = passwordEncoder.encode(rawPassword);
+    }
+
+    @PrePersist
+    public void encryptPassword() {
+        setPassword(this.password);
+    }
 
     public Customer(UUID id, String firstName, String lastName, String password, String companyName, String orgNumber, String email, String phoneNumber, String address, String city, String postalCode, CustomerType customerType) {
         this.id = id;

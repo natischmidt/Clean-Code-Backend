@@ -5,6 +5,8 @@ import com.example.cleancode.enums.Role;
 import com.example.cleancode.job.Job;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,16 @@ public class Employee {
     private String address;
     private String city;
     private String postalCode;
+
+    public void setPassword(String rawPassword) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        this.password = passwordEncoder.encode(rawPassword);
+    }
+
+    @PrePersist
+    public void encryptPassword() {
+        setPassword(this.password);
+    }
 
     @Enumerated(EnumType.STRING)
     private Role role;

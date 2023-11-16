@@ -30,9 +30,7 @@ public class BookedService {
         // Fetch all Booked records for the specific date
         List<Booked> availabilitiesForDate = bookedRepository.findByDate(targetDate.atStartOfDay());
 
-        //int maxEmployees = 2;
         int maxEmployees = employeeRepository.findByRole(Role.EMPLOYEE).size();
-        System.out.println(maxEmployees);
         // Loop through each availability and remove time slots from the freeSlots list if they are fully booked
         for (Booked booked : availabilitiesForDate) {
             if (booked.getEmployees().size() >= maxEmployees) {

@@ -114,7 +114,6 @@ public class KeycloakService {
                 }
         );
 
-        System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" + response);
 
         return Objects.requireNonNull(Objects.requireNonNull(response.getBody())[0].getId());
 
