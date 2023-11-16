@@ -33,15 +33,15 @@ public class Employee {
     private String city;
     private String postalCode;
 
-    public void setPassword(String rawPassword) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        this.password = passwordEncoder.encode(rawPassword);
-    }
-
-    @PrePersist
-    public void encryptPassword() {
-        setPassword(this.password);
-    }
+//    public void setPassword(String rawPassword) {
+//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//        this.password = passwordEncoder.encode(rawPassword);
+//    }
+//
+//    @PrePersist
+//    public void encryptPassword() {
+//        setPassword(this.password);
+//    }
 
     @Enumerated(EnumType.STRING)
     private Role role;

@@ -9,6 +9,7 @@ import com.example.cleancode.enums.CustomerType;
 import com.example.cleancode.exceptions.*;
 import com.example.cleancode.mail.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -78,8 +79,17 @@ public class EmployeeService {
         if (optEmp.isPresent()) {
 
             String tempPassword;
-            if(employeeDTO.getPassword() == null || employeeDTO.getPassword().isEmpty()) {
+
+            if(employeeDTO.getPassword() == null || employeeDTO.getPassword().isEmpty() || employeeDTO.getPassword().length() < 2) {
                 tempPassword = optEmp.get().getPassword();
+
+
+                /** Gör en koll om password stämmer med de t i databasen. Gör det det, skicka in en DTO utan Credentials*/
+
+//                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//                boolean test;
+//                test = passwordEncoder.matches(employeeDTO.getPassword(), optEmp.get().getPassword());
+
             } else {
                 tempPassword = employeeDTO.getPassword();
             }
@@ -94,9 +104,13 @@ public class EmployeeService {
                 updateUserInfoKeycloakDTO.setFirstName(employeeDTO.getFirstName());
                 updateUserInfoKeycloakDTO.setLastName(employeeDTO.getLastName());
                 updateUserInfoKeycloakDTO.setEmail(employeeDTO.getEmail());
+
                 CredentialsUpdate credentials = new CredentialsUpdate();
+
+
                 credentials.setType("password");
                 credentials.setValue(tempPassword);
+
                 CredentialsUpdate[] credList = new CredentialsUpdate[]{credentials};
                 updateUserInfoKeycloakDTO.setCredentials(credList);
 
