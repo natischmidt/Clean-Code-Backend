@@ -16,7 +16,6 @@ public class MonthlyResetService {
             if (employee.getSalary() != null) {
                 Salary salary = employee.getSalary();
                 salary.setWorkedHours(0);
-                salary.setHourlySalary(0);
             }
         }
         employeeRepository.saveAll(employees);
