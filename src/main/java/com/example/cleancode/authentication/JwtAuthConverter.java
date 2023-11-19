@@ -26,15 +26,19 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
         this.jwtAuthConverterProperties = jwtAuthConverterProperties;
     }
 
+    /* Converts a Jwt into an AbstractAuthenticationToken, combining authorities from
+     JwtGrantedAuthoritiesConverter and resource roles extracted from the Jwt */
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
         Collection<GrantedAuthority> authorities = Stream.concat(
                 jwtGrantedAuthoritiesConverter.convert(jwt).stream(),
                 extractResourceRoles(jwt).stream()).collect(Collectors.toSet());
 
+        // Creates a JwtAuthenticationToken with Jwt, authorities, and the principal claim name
         return new JwtAuthenticationToken(jwt, authorities, getPrincipalClaimName(jwt));
     }
 
+    // Retrieves the principal claim name from Jwt based on the configured attribute
     private String getPrincipalClaimName(Jwt jwt) {
         String claimName = JwtClaimNames.SUB;
         if(jwtAuthConverterProperties.getPrincipalAttribute() != null) {
@@ -43,6 +47,7 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
         return jwt.getClaim(claimName);
     }
 
+    // Extracts resource roles from the Jwt's "resource_access" claim
     private Collection<? extends GrantedAuthority> extractResourceRoles(Jwt jwt) {
         Map<String, Object> resourceAccess = jwt.getClaim("resource_access");
         Map<String, Object> resource;
@@ -51,9 +56,10 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
         if(resourceAccess == null
                 || (resource = (Map<String, Object>) resourceAccess.get(jwtAuthConverterProperties.getResourceId())) == null
                 || (resourceRoles = (Collection<String>) resource.get("roles")) == null ){
-            return  Set.of();
+            return  Set.of(); // Returns an empty set if no resource roles are found.
         }
 
+        // Maps resource roles to SimpleGrantedAuthority with "ROLE_" prefix
         return resourceRoles.stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                 .collect(Collectors.toList());

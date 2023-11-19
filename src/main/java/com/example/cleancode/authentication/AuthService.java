@@ -37,9 +37,7 @@ public class AuthService {
         }
 
         ResponseEntity<TokenRequestObject> response = keycloakService.getUserToken(authDTO.getEmail(), authDTO.getPassword());
-//        String jwt = keycloakService.getUserToken(authDTO.getEmail(), authDTO.getPassword());
         String userId = optCustomer.get().getId().toString();
-
         return new CustomerAuthenticationResponseDTO(response, userId);
     }
 
