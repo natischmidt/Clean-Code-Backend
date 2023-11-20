@@ -10,8 +10,5 @@ public class KlarnaService {
     @Autowired
     private EntityManager entityManager;
 
-    public void saveKlarnaJobMapping(Job job, String klaranaOrderId){
-        MapKlarnaWithJob mapping = new MapKlarnaWithJob(job, klaranaOrderId);
-        entityManager.persist(mapping);
-    }
+
 }

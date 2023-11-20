@@ -33,20 +33,14 @@ public class KlarnaController {
         this.jobRepository = jobRepository;
     }
 
-    @PostMapping("/saveKlarnaJob")
-    public ResponseEntity<String> saveJobKlarnaMap(@RequestParam Long jobId, @RequestParam String klarnaOrderId){
-        Job job = jobRepository.findByJobId(jobId);
-        klarnaService.saveKlarnaJobMapping(job, klarnaOrderId);
-        return ResponseEntity.ok("Job saved with customer");
 
-    }
     @GetMapping("/getOrder/{id}")
     public ResponseEntity<Map<String, Object>> getOrder (@PathVariable String id){
         // Create the headers
         HttpHeaders headers = new HttpHeaders();
         String credentials = username + ":" + password;
         String encodedCredentials = new String(Base64.getEncoder().encode(credentials.getBytes()));
-        headers.set("Authorization", "Basic " + encodedCredentials); // Replace with your Klarna API credentials
+        headers.set("Authorization", "Basic " + encodedCredentials);
         headers.set("Content-Type", "application/json");
 
         // Create the HttpEntity object
@@ -56,7 +50,7 @@ public class KlarnaController {
 
         // Send POST request
         ResponseEntity<Map> response = restTemplate.exchange(
-                "https://api.playground.klarna.com/checkout/v3/orders/" + id, // Replace with actual Klarna API endpoint
+                "https://api.playground.klarna.com/checkout/v3/orders/" + id,
                 HttpMethod.GET,
                 entity,
                 Map.class
@@ -65,7 +59,6 @@ public class KlarnaController {
         if (response.getStatusCode().is2xxSuccessful()) {
             return ResponseEntity.ok(response.getBody());
         } else {
-            // You can also handle errors here
             return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
         }
     }
@@ -75,7 +68,7 @@ public class KlarnaController {
         HttpHeaders headers = new HttpHeaders();
         String credentials = username + ":" + password;
         String encodedCredentials = new String(Base64.getEncoder().encode(credentials.getBytes()));
-        headers.set("Authorization", "Basic " + encodedCredentials); // Replace with your Klarna API credentials
+        headers.set("Authorization", "Basic " + encodedCredentials);
         headers.set("Content-Type", "application/json");
 
         // Create the HttpEntity object
@@ -86,7 +79,7 @@ public class KlarnaController {
 
         // Send POST request
         ResponseEntity<Map> response = restTemplate.exchange(
-                "https://api.playground.klarna.com/checkout/v3/orders", // Replace with actual Klarna API endpoint
+                "https://api.playground.klarna.com/checkout/v3/orders",
                 HttpMethod.POST,
                 entity,
                 Map.class
@@ -106,7 +99,6 @@ public class KlarnaController {
 
             return ResponseEntity.ok(responseBody);
         } else {
-            // You can also handle errors here
             return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
         }
     }
