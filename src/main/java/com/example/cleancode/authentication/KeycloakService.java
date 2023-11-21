@@ -280,4 +280,29 @@ public class KeycloakService {
         return response.toString();
 
     }
+
+    public String updateUserPassword(CredentialsUpdate credentialsUpdate, String email) {
+
+        String adminToken = getAdminToken();
+        String userId = getUserId(email, adminToken);
+
+        restTemplate = new RestTemplate();
+
+        String url = "http://stadafint.se/admin/realms/cleanCode/users/" + userId + "/reset-password";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.add("Authorization", "Bearer " + adminToken);
+
+        HttpEntity<CredentialsUpdate> entity = new HttpEntity<>(credentialsUpdate, headers);
+
+        ResponseEntity<?> response = restTemplate.exchange(
+                url,
+                HttpMethod.PUT,
+                entity,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+        return response.toString();
+    }
 }

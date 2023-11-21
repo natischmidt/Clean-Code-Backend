@@ -8,5 +8,5 @@ public class UpdateUserInfoKeycloakDTO {
     private String firstName;
     private String lastName;
     private String email;
-    private CredentialsUpdate[] credentials;
+//    private CredentialsUpdate[] credentials;
 }

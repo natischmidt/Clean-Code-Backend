@@ -8,6 +8,7 @@ import com.example.cleancode.enums.CustomerType;
 import com.example.cleancode.exceptions.*;
 import com.example.cleancode.mail.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -190,23 +191,18 @@ public class CustomerService {
                 updateUserInfoKeycloakDTO.setLastName(customerUpdate.getLastName());
             }
 
-            if (!editCustomerDTO.getPassword().isEmpty() && !editCustomerDTO.getPassword().equals(customerUpdate.getPassword())) {
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+
+            if (!editCustomerDTO.getPassword().isEmpty() && !encoder.matches(editCustomerDTO.getPassword(), optionalCustomer.get().getPassword())) {
                 customerUpdate.setPassword(editCustomerDTO.getPassword());
 
+                credentials.setType("password");
                 credentials.setValue(editCustomerDTO.getPassword());
-                credentials.setType("password");
 
-                CredentialsUpdate[] credList = new CredentialsUpdate[]{credentials};
+                keycloakService.updateUserPassword(credentials, originalEmail);
 
-                updateUserInfoKeycloakDTO.setCredentials(credList);
 
-                counter++;
-            } else {
-                credentials.setValue(customerUpdate.getPassword());
-                credentials.setType("password");
-                CredentialsUpdate[] credList = new CredentialsUpdate[]{credentials};
-
-                updateUserInfoKeycloakDTO.setCredentials(credList);
             }
 
 

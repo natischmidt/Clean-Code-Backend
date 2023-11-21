@@ -76,6 +76,8 @@ public class EmployeeService {
             throw new InvalidRequestException("Some fields had missing or invalid data");
         }
 
+        System.out.println(employeeDTO);
+
         if (optEmp.isPresent()) {
 
             String tempPassword;
@@ -84,7 +86,7 @@ public class EmployeeService {
                 tempPassword = optEmp.get().getPassword();
 
 
-                /** Gör en koll om password stämmer med de t i databasen. Gör det det, skicka in en DTO utan Credentials*/
+                /** Gör en koll om password stämmer med det i databasen. Gör det det, skicka in en DTO utan Credentials*/
 
 //                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 //                boolean test;
@@ -94,8 +96,7 @@ public class EmployeeService {
                 tempPassword = employeeDTO.getPassword();
             }
 
-            if (employeeDTO.getPassword() != null ||
-                    !employeeDTO.getFirstName().equals(optEmp.get().getFirstName()) ||
+            if (!employeeDTO.getFirstName().equals(optEmp.get().getFirstName()) ||
                     !employeeDTO.getLastName().equals(optEmp.get().getLastName()) ||
                     !employeeDTO.getEmail().equals(optEmp.get().getEmail())) {
 
@@ -105,16 +106,17 @@ public class EmployeeService {
                 updateUserInfoKeycloakDTO.setLastName(employeeDTO.getLastName());
                 updateUserInfoKeycloakDTO.setEmail(employeeDTO.getEmail());
 
-                CredentialsUpdate credentials = new CredentialsUpdate();
+                String response = keycloakService.updateUserInfo(updateUserInfoKeycloakDTO, optEmp.get().getEmail());
+            }
 
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+            if(employeeDTO.getPassword() != null && !employeeDTO.getPassword().isEmpty() && !encoder.matches(employeeDTO.getPassword(), optEmp.get().getPassword())) {
+                CredentialsUpdate credentials = new CredentialsUpdate();
 
                 credentials.setType("password");
                 credentials.setValue(tempPassword);
-
-                CredentialsUpdate[] credList = new CredentialsUpdate[]{credentials};
-                updateUserInfoKeycloakDTO.setCredentials(credList);
-
-                String response = keycloakService.updateUserInfo(updateUserInfoKeycloakDTO, optEmp.get().getEmail());
+                keycloakService.updateUserPassword(credentials, optEmp.get().getEmail());
             }
 
 
@@ -129,10 +131,11 @@ public class EmployeeService {
             optEmp.get().setAddress(employeeDTO.getAddress());
             optEmp.get().setRole(employeeDTO.getRole());
             optEmp.get().getSalary().setHourlySalary(employeeDTO.getHourlySalary());
+            employeeRepository.save(optEmp.get());
         } else {
             throw new PersonDoesNotExistException("No employee with that id was found!");
         }
-        employeeRepository.save(optEmp.get());
+
         return employeeToGetEmployeeDto(optEmp.get());
     }
 
