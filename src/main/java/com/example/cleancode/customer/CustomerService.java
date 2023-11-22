@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
@@ -148,7 +149,20 @@ public class CustomerService {
             String deleteResponse = keycloakService.deleteUser(userId, adminToken);
 
             if (deleteResponse.contains("204")) {
-                customerRepository.deleteById(id);
+
+                optionalCustomer.get().setFirstName("");
+                optionalCustomer.get().setLastName("");
+                optionalCustomer.get().setPassword("");
+                optionalCustomer.get().setCompanyName("");
+                optionalCustomer.get().setOrgNumber("");
+                optionalCustomer.get().setEmail("");
+                optionalCustomer.get().setPhoneNumber("");
+                optionalCustomer.get().setAddress("");
+                optionalCustomer.get().setCity("");
+                optionalCustomer.get().setPostalCode("");
+
+                customerRepository.save(optionalCustomer.get());
+
                 return "Customer with the ID: " + id + " have been removed";
             }
 
@@ -287,8 +301,14 @@ public class CustomerService {
 //    }
     public List<CustomerDTO> getAllCustomers() {
         List<Customer> allCustomers = customerRepository.findAll();
+
+        List<Customer> filteredList = allCustomers
+                .stream()
+                .filter(x -> !x.getEmail().isEmpty())
+                .toList();
+
         List<CustomerDTO> allCustomersDTO = new ArrayList<>();
-        for (Customer customer : allCustomers) {
+        for (Customer customer : filteredList) {
             allCustomersDTO.add(customerEntityToDTO(customer));
         }
         return allCustomersDTO;

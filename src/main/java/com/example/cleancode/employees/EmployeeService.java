@@ -88,9 +88,7 @@ public class EmployeeService {
 
                 /** Gör en koll om password stämmer med det i databasen. Gör det det, skicka in en DTO utan Credentials*/
 
-//                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-//                boolean test;
-//                test = passwordEncoder.matches(employeeDTO.getPassword(), optEmp.get().getPassword());
+
 
             } else {
                 tempPassword = employeeDTO.getPassword();
@@ -123,8 +121,6 @@ public class EmployeeService {
             optEmp.get().setFirstName(employeeDTO.getFirstName());
             optEmp.get().setLastName(employeeDTO.getLastName());
             optEmp.get().setPassword(tempPassword);
-
-
             optEmp.get().setSsNumber(employeeDTO.getSsNumber());
             optEmp.get().setEmail(employeeDTO.getEmail());
             optEmp.get().setPhoneNumber(employeeDTO.getPhoneNumber());

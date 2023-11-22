@@ -53,7 +53,6 @@ public class Employee {
     private Salary salary;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
-
     private List<Job> jobList = new ArrayList<>();
 
     public Employee(String firstName, String lastName, String password, String ssNumber, String email,
