@@ -17,7 +17,7 @@ public class CorsConfig {
         // Allows the sharing of credentials in cross-origin requests
         configuration.setAllowCredentials(true);
         // Specifies the list of allowed origins
-        configuration.setAllowedOrigins(List.of("https://localhost:5173", "http://localhost:5173"));
+        configuration.setAllowedOrigins(List.of("https://localhost:5173", "http://localhost:5173","https://localhost:5174", "http://localhost:5174"));
         // Allows any HTTP method in cross-origin requests.
         configuration.addAllowedMethod("*");
         // Allows any header to be sent in cross-origin requests.
